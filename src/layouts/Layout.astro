@@ -1,0 +1,59 @@
+---
+export interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Third Wave Arcade - Immersive Gaming Without Goggles" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Bowlby+One:wght@400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--color-bg: #1e1e1e;
+		--color-text: #e9e3dc;
+		--color-accent: #d1ef53;
+		--color-secondary: #b3a0cd;
+		--color-white: #ffffff;
+		--font-heading: 'Bowlby One', sans-serif;
+		--font-body: 'Inter', sans-serif;
+	}
+	
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	
+	html {
+		font-family: var(--font-body);
+		background: var(--color-bg);
+		color: var(--color-text);
+		line-height: 1.6;
+	}
+	
+	body {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+</style>

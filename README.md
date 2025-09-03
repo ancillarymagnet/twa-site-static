@@ -1,10 +1,6 @@
-# Astro Starter Kit: Minimal
+# Third Wave Arcade - Static Site
 
-```sh
-npm create astro@latest -- --template minimal
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+A faithful recreation of the Third Wave Arcade Framer site built with Astro and markdown content management.
 
 ## 🚀 Project Structure
 

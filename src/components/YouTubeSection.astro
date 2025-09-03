@@ -1,0 +1,173 @@
+---
+export interface Props {
+	channelUrl: string;
+	title?: string;
+	description?: string;
+}
+
+const { channelUrl, title = "Follow Our Journey", description = "Watch behind-the-scenes content and development updates" } = Astro.props;
+---
+
+<section class="youtube-section">
+	<div class="youtube-content">
+		<h2 class="youtube-title">{title}</h2>
+		<p class="youtube-description">{description}</p>
+		
+		<div class="video-grid">
+			<div class="video-item">
+				<iframe 
+					class="youtube-player"
+					src="https://www.youtube.com/embed/5GKXyOgsR9U"
+					title="Making Games in TouchDesigner?"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
+			</div>
+			<div class="video-item">
+				<iframe 
+					class="youtube-player"
+					src="https://www.youtube.com/embed/sKWCtp8nlfY"
+					title="Noah Norman // Gradient Descent @ TouchDesigner Philly Meetup"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
+			</div>
+			<div class="video-item">
+				<iframe 
+					class="youtube-player"
+					src="https://www.youtube.com/embed/nQT7EhYCVg0"
+					title="How I Build TouchDesigner Apps in 2025"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.youtube-section {
+		padding: 4rem 2rem;
+		text-align: center;
+		animation: fadeInUp 1s ease-out 1.2s both;
+	}
+	
+	.youtube-content {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+	
+	.youtube-title {
+		font-family: var(--font-heading);
+		font-size: clamp(1.5rem, 5vw, 2.5rem);
+		text-transform: uppercase;
+		margin-bottom: 1rem;
+		letter-spacing: 1px;
+		line-height: 0.9;
+	}
+	
+	.youtube-description {
+		font-size: 1.1rem;
+		margin-bottom: 2rem;
+		opacity: 0.9;
+		font-weight: 300;
+	}
+	
+	.video-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		margin-bottom: 2rem;
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	.video-item {
+		position: relative;
+		width: 100%;
+		height: 0;
+		padding-bottom: 56.25%; /* 16:9 aspect ratio */
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	}
+	
+	.youtube-player {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: none;
+	}
+	
+	.channel-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--color-accent);
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 1.1rem;
+		padding: 1rem 1.5rem;
+		border: 2px solid var(--color-accent);
+		border-radius: 25px;
+		transition: all 0.3s ease;
+		background: rgba(209, 239, 83, 0.1);
+	}
+	
+	.channel-link:hover {
+		background: var(--color-accent);
+		color: var(--color-bg);
+		transform: translateY(-2px);
+		box-shadow: 0 5px 15px rgba(209, 239, 83, 0.3);
+	}
+	
+	.channel-link svg {
+		transition: transform 0.3s ease;
+	}
+	
+	.channel-link:hover svg {
+		transform: scale(1.1);
+	}
+	
+	@media (max-width: 768px) {
+		.youtube-section {
+			padding: 3rem 1.5rem;
+		}
+		
+		.youtube-title {
+			margin-bottom: 0.8rem;
+		}
+		
+		.youtube-description {
+			font-size: 1rem;
+			margin-bottom: 1.5rem;
+		}
+		
+		.video-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+		
+		.channel-link {
+			font-size: 1rem;
+			padding: 0.8rem 1.2rem;
+		}
+	}
+	
+	@keyframes fadeInUp {
+		0% {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

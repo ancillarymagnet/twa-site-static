@@ -1,0 +1,43 @@
+---
+export interface Props {
+	copyright: string;
+}
+
+const { copyright } = Astro.props;
+---
+
+<footer class="footer">
+	<div class="footer-content">
+		<p class="copyright">{copyright}</p>
+	</div>
+</footer>
+
+<style>
+	.footer {
+		padding: 2rem;
+		text-align: center;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		margin-top: auto;
+	}
+	
+	.footer-content {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+	
+	.copyright {
+		font-size: 0.875rem;
+		color: rgba(233, 227, 220, 0.6);
+		font-weight: 300;
+	}
+	
+	@media (max-width: 768px) {
+		.footer {
+			padding: 1.5rem;
+		}
+		
+		.copyright {
+			font-size: 0.75rem;
+		}
+	}
+</style>

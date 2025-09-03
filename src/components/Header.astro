@@ -1,0 +1,80 @@
+---
+export interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<header class="header">
+	<div class="header-content">
+		<h1 class="brand">{title}</h1>
+		<a href="#signup" class="signup-link">SIGN UP</a>
+	</div>
+</header>
+
+<style>
+	.header {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 100;
+		padding: 1.5rem 2rem;
+		background: rgba(30, 30, 30, 0.9);
+		backdrop-filter: blur(20px);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+	
+	.header-content {
+		max-width: 1200px;
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.brand {
+		font-family: var(--font-heading);
+		font-size: 1.25rem;
+		font-weight: 400;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: var(--color-text);
+	}
+	
+	.signup-link {
+		font-family: var(--font-heading);
+		font-size: 0.875rem;
+		font-weight: 400;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: var(--color-accent);
+		text-decoration: none;
+		padding: 0.5rem 1rem;
+		border: 1px solid var(--color-accent);
+		border-radius: 4px;
+		transition: all 0.3s ease;
+	}
+	
+	.signup-link:hover {
+		background: var(--color-accent);
+		color: var(--color-bg);
+		transform: translateY(-1px);
+	}
+	
+	@media (max-width: 768px) {
+		.header {
+			padding: 1rem 1.5rem;
+		}
+		
+		.brand {
+			font-size: 1rem;
+		}
+		
+		.signup-link {
+			font-size: 0.75rem;
+			padding: 0.4rem 0.8rem;
+		}
+	}
+</style>

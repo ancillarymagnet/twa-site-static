@@ -1,0 +1,125 @@
+---
+export interface Props {
+	placeholder: string;
+	buttonText: string;
+	description: string;
+}
+
+const { placeholder, buttonText, description } = Astro.props;
+---
+
+<section class="signup">
+	<div class="signup-content">
+		<p class="signup-description">{description}</p>
+		<form class="signup-form" method="POST" data-netlify="true" name="email-signup" id="signup">
+			<div class="form-group">
+				<input 
+					type="email" 
+					name="email" 
+					placeholder={placeholder}
+					required
+					class="email-input"
+				/>
+				<button type="submit" class="submit-btn">{buttonText}</button>
+			</div>
+		</form>
+	</div>
+</section>
+
+<style>
+	.signup {
+		padding: 3rem 2rem;
+		display: flex;
+		justify-content: center;
+		animation: fadeInUp 1s ease-out 0.6s both;
+	}
+	
+	.signup-content {
+		max-width: 500px;
+		width: 100%;
+		text-align: center;
+	}
+	
+	.signup-description {
+		font-size: 1.1rem;
+		margin-bottom: 1.5rem;
+		opacity: 0.9;
+	}
+	
+	.form-group {
+		display: flex;
+		gap: 0.5rem;
+		background: rgba(255, 255, 255, 0.1);
+		padding: 0.5rem;
+		border-radius: 50px;
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+	
+	.email-input {
+		flex: 1;
+		background: transparent;
+		border: none;
+		padding: 0.8rem 1.2rem;
+		color: var(--color-text);
+		font-size: 1rem;
+		outline: none;
+		font-family: var(--font-body);
+	}
+	
+	.email-input::placeholder {
+		color: rgba(255, 255, 255, 0.6);
+	}
+	
+	.submit-btn {
+		background: var(--color-accent);
+		color: var(--color-bg);
+		border: none;
+		padding: 0.8rem 1.5rem;
+		border-radius: 50px;
+		font-weight: 600;
+		font-size: 1rem;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		font-family: var(--font-body);
+		white-space: nowrap;
+	}
+	
+	.submit-btn:hover {
+		background: #b8d63f;
+		transform: translateY(-2px);
+	}
+	
+	@media (max-width: 768px) {
+		.signup {
+			padding: 2rem 1.5rem;
+		}
+		
+		.form-group {
+			flex-direction: column;
+			gap: 0.8rem;
+			border-radius: 15px;
+			padding: 1rem;
+		}
+		
+		.email-input {
+			padding: 1rem 1.2rem;
+		}
+		
+		.submit-btn {
+			padding: 1rem 1.5rem;
+			border-radius: 15px;
+		}
+	}
+	
+	@keyframes fadeInUp {
+		0% {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

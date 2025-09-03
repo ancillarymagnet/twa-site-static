@@ -1,16 +1,57 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import EmailSignup from '../components/EmailSignup.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import YouTubeSection from '../components/YouTubeSection.astro';
+import Footer from '../components/Footer.astro';
 
+// Import content from markdown
+import { getEntry } from 'astro:content';
+
+// Get site data from markdown content
+const siteEntry = await getEntry('site', 'site');
+const siteData = siteEntry.data;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title={siteData.seo.title} description={siteData.seo.description}>
+	<Header title={siteData.header.brand} />
+	
+	<main>
+		<Hero 
+			title={siteData.hero.title}
+			tagline={siteData.hero.tagline}
+			subtitle={siteData.hero.subtitle}
+		/>
+		
+		<EmailSignup 
+			placeholder={siteData.signup.placeholder}
+			buttonText={siteData.signup.buttonText}
+			description={siteData.signup.description}
+		/>
+		
+		<YouTubeSection 
+			channelUrl={siteData.social.youtube}
+			title="Follow our journey"
+			description=""
+		/>
+		
+		<SocialLinks 
+			youtube={siteData.social.youtube}
+			instagram={siteData.social.instagram}
+		/>
+	</main>
+	
+	<Footer copyright={siteData.footer.copyright} />
+</Layout>
+
+<style>
+	main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		padding-top: 5rem;
+	}
+</style>
