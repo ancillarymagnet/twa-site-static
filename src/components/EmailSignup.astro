@@ -11,19 +11,18 @@ const { placeholder, buttonText, description } = Astro.props;
 <section class="signup">
 	<div class="signup-content">
 		<p class="signup-description">{description}</p>
-		<form class="signup-form" method="POST" action="https://api.web3forms.com/submit" id="signup">
-			<input type="hidden" name="access_key" value="0c5683b5-920e-401b-8e9e-a7dc0936c10f">
-			<input type="hidden" name="subject" value="New TWA Email Signup">
+		<form class="signup-form" id="signup">
 			<div class="form-group">
-				<input 
-					type="email" 
-					name="email" 
+				<input
+					type="email"
 					placeholder={placeholder}
 					required
 					class="email-input"
+					id="email-input"
 				/>
-				<button type="submit" class="submit-btn">{buttonText}</button>
+				<button type="submit" class="submit-btn" id="submit-btn">{buttonText}</button>
 			</div>
+			<p class="form-message" id="form-message"></p>
 		</form>
 	</div>
 </section>
@@ -108,4 +107,44 @@ const { placeholder, buttonText, description } = Astro.props;
 			padding: 1rem 1.5rem;
 		}
 	}
+
+	.form-message {
+		margin-top: 1rem;
+		font-size: 0.9rem;
+		color: var(--color-accent);
+	}
 </style>
+
+<script>
+	const form = document.getElementById('signup');
+	const emailInput = document.getElementById('email-input');
+	const submitBtn = document.getElementById('submit-btn');
+	const message = document.getElementById('form-message');
+
+	form.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const email = emailInput.value;
+		submitBtn.textContent = '...';
+		submitBtn.disabled = true;
+
+		try {
+			const formData = new FormData();
+			formData.append('entry.1433064530', email);
+
+			await fetch('https://docs.google.com/forms/d/e/1FAIpQLSeL-lXzhIdCS-3O8nme5Yqlj4d9AoMs-SWRQmFeR7riyAGHTA/formResponse', {
+				method: 'POST',
+				body: formData,
+				mode: 'no-cors',
+			});
+
+			message.textContent = "You're in!";
+			emailInput.value = '';
+		} catch {
+			message.textContent = "You're in!";
+			emailInput.value = '';
+		}
+
+		submitBtn.textContent = 'SUBMIT';
+		submitBtn.disabled = false;
+	});
+</script>
