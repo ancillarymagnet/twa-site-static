@@ -11,9 +11,9 @@ const { title, tagline, subtitle } = Astro.props;
 <section class="hero">
 	<div class="hero-background"></div>
 	<div class="hero-content">
-		<h1 class="hero-title">{title}</h1>
-		<h2 class="hero-tagline">{tagline}</h2>
-		<p class="hero-subtitle">{subtitle}</p>
+		<h1 class="hero-title" set:html={title.replace('GAMING', '<br/>GAMING')} />
+		<h2 class="hero-tagline" set:html={tagline.replace('. ', '.<br/>')} />
+		<p class="hero-subtitle" set:html={subtitle.replace('. ', '.<br/>')} />
 	</div>
 </section>
 
@@ -28,7 +28,7 @@ const { title, tagline, subtitle } = Astro.props;
 		text-align: center;
 		overflow: hidden;
 	}
-	
+
 	.hero-background {
 		position: absolute;
 		top: 0;
@@ -40,97 +40,59 @@ const { title, tagline, subtitle } = Astro.props;
 		background-position: center center;
 		background-repeat: no-repeat;
 		opacity: 0.6;
-		animation: backgroundFloat 20s ease-in-out infinite;
-		z-index: 2;
+		z-index: 1;
 	}
-	
+
 	.hero-content {
 		width: 100%;
-		max-width: none;
 		position: relative;
 		z-index: 2;
-		animation: fadeInUp 1s ease-out 0.2s both;
 		padding: 0 2rem;
 	}
-	
+
 	.hero-title {
 		font-family: var(--font-heading);
 		font-size: clamp(3rem, 12vw, 8rem);
-		text-transform: uppercase;
-		margin-bottom: 8rem;
-		letter-spacing: 0.1em;
-		line-height: 0.85;
-		font-weight: 400;
-		width: 100%;
-		position: relative;
-		z-index: 1;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		line-height: 0.95;
+		margin-bottom: 14rem;
+		color: var(--color-text);
 	}
-	
+
 	.hero-tagline {
 		font-family: var(--font-heading);
 		font-size: clamp(2rem, 8vw, 5rem);
-		color: var(--color-accent);
-		text-transform: uppercase;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		line-height: 0.95;
+		color: var(--color-text);
 		margin: 1rem 0 2rem 0;
-		letter-spacing: 0.05em;
-		line-height: 0.9;
-		font-weight: 400;
-		background: var(--color-accent);
-		color: var(--color-bg);
-		padding: 1rem 2rem;
-		border-radius: 2rem;
-		display: inline-block;
-		width: auto;
-		max-width: 100%;
-		position: relative;
-		z-index: 10;
 	}
-	
+
 	.hero-subtitle {
 		font-size: clamp(1.2rem, 4vw, 1.8rem);
 		font-weight: 400;
-		opacity: 1;
+		color: var(--color-muted);
 		margin-bottom: 3rem;
 		line-height: 1.4;
 		max-width: 800px;
 		margin-left: auto;
 		margin-right: auto;
 	}
-	
+
 	@media (max-width: 768px) {
 		.hero {
 			min-height: 50vh;
 			padding: 1.5rem;
 		}
-		
+
 		.hero-title {
 			margin-bottom: 0.8rem;
 		}
-		
+
 		.hero-tagline {
 			margin-bottom: 1.2rem;
-		}
-	}
-	
-	@keyframes backgroundFloat {
-		0%, 100% {
-			transform: translateY(0) rotate(0deg);
-			opacity: 0.6;
-		}
-		50% {
-			transform: translateY(-10px) rotate(1deg);
-			opacity: 0.8;
-		}
-	}
-	
-	@keyframes fadeInUp {
-		0% {
-			opacity: 0;
-			transform: translateY(30px);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0);
 		}
 	}
 </style>

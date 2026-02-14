@@ -34,70 +34,42 @@ const { youtube, instagram } = Astro.props;
 		padding: 2rem;
 		display: flex;
 		justify-content: center;
-		animation: fadeInUp 1s ease-out 1s both;
 	}
-	
+
 	.social-links {
 		display: flex;
 		gap: 2rem;
 		align-items: center;
 	}
-	
+
 	.social-link {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 		color: var(--color-text);
 		text-decoration: none;
-		padding: 0.8rem 1.2rem;
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 25px;
-		transition: all 0.3s ease;
-		font-weight: 500;
-		backdrop-filter: blur(10px);
-		background: rgba(255, 255, 255, 0.05);
+		font-family: var(--font-heading);
+		font-weight: 600;
+		font-size: 1rem;
+		transition: color 0.2s ease;
 	}
-	
+
 	.social-link:hover {
 		color: var(--color-accent);
-		border-color: var(--color-accent);
-		transform: translateY(-2px);
-		background: rgba(209, 239, 83, 0.1);
 	}
-	
-	.social-link svg {
-		transition: transform 0.3s ease;
-	}
-	
-	.social-link:hover svg {
-		transform: scale(1.1);
-	}
-	
+
 	@media (max-width: 768px) {
 		.social {
 			padding: 1.5rem;
 		}
-		
+
 		.social-links {
 			flex-direction: column;
 			gap: 1rem;
 		}
-		
+
 		.social-link {
-			width: 100%;
 			justify-content: center;
-			padding: 1rem 1.5rem;
-		}
-	}
-	
-	@keyframes fadeInUp {
-		0% {
-			opacity: 0;
-			transform: translateY(30px);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0);
 		}
 	}
 </style>

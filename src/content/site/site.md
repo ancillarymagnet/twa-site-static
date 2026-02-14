@@ -6,9 +6,9 @@ description: "Third Wave Arcade is developing an innovative roomscale gaming exp
 
 # Hero Section
 hero:
-  title: "IMMERSIVE ROOMSCALE GAMING"
+  title: "BIG SCREEN GAMING"
   tagline: "No goggles. No controllers."
-  subtitle: "We're building a self-operating, multiplayer, immersive, roomscale, body-tracking arcade. Follow along as we invent a new medium."
+  subtitle: "We're making theaters playable. Follow along as we invent a new medium."
   
 # Email Signup
 signup:

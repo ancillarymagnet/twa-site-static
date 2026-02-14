@@ -20,7 +20,7 @@ const { title, description = "Third Wave Arcade - Immersive Gaming Without Goggl
 		<!-- Google Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Bowlby+One:wght@400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap" rel="stylesheet">
 	</head>
 	<body>
 		<slot />
@@ -29,28 +29,27 @@ const { title, description = "Third Wave Arcade - Immersive Gaming Without Goggl
 
 <style is:global>
 	:root {
-		--color-bg: #1e1e1e;
-		--color-text: #e9e3dc;
-		--color-accent: #d1ef53;
-		--color-secondary: #b3a0cd;
-		--color-white: #ffffff;
-		--font-heading: 'Bowlby One', sans-serif;
-		--font-body: 'Inter', sans-serif;
+		--color-bg: #111111;
+		--color-text: #f0ede8;
+		--color-accent: #b3a0cd;
+		--color-muted: rgba(240, 237, 232, 0.5);
+		--font-heading: 'Lexend', sans-serif;
+		--font-body: 'Lexend', sans-serif;
 	}
-	
+
 	* {
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
 	}
-	
+
 	html {
 		font-family: var(--font-body);
 		background: var(--color-bg);
 		color: var(--color-text);
-		line-height: 1.6;
+		line-height: 1.5;
 	}
-	
+
 	body {
 		min-height: 100vh;
 		display: flex;
