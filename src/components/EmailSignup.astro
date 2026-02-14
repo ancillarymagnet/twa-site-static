@@ -128,20 +128,15 @@ const { placeholder, buttonText, description } = Astro.props;
 		submitBtn.disabled = true;
 
 		try {
-			const formData = new FormData();
-			formData.append('entry.1433064530', email);
-
-			await fetch('https://docs.google.com/forms/d/e/1FAIpQLSeL-lXzhIdCS-3O8nme5Yqlj4d9AoMs-SWRQmFeR7riyAGHTA/formResponse', {
+			const res = await fetch('https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec', {
 				method: 'POST',
-				body: formData,
-				mode: 'no-cors',
+				body: JSON.stringify({ email }),
 			});
 
 			message.textContent = "You're in!";
 			emailInput.value = '';
 		} catch {
-			message.textContent = "You're in!";
-			emailInput.value = '';
+			message.textContent = 'Something went wrong. Try again.';
 		}
 
 		submitBtn.textContent = 'SUBMIT';
