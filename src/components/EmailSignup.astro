@@ -132,10 +132,14 @@ const { placeholder, buttonText, description } = Astro.props;
 	const isPlausibleEmail = (value) => /[^@\s]+@[^@\s]+\.[^@\s]+/.test(value); // Basic shape check.
 
 	if (!form || !emailInput || !submitBtn || !message) {
-		console.error('Email signup initialization failed: required DOM elements not found.');
+		const err = new Error('Email signup initialization failed: required DOM elements not found.');
+		if (import.meta.env?.DEV) throw err;
+		console.error(err);
+		if (message) message.textContent = 'Signup is currently unavailable. Please try again later.';
 	} else {
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
+			message.textContent = '';
 			const email = emailInput.value.trim();
 
 			if (!isPlausibleEmail(email)) {
@@ -174,6 +178,10 @@ const { placeholder, buttonText, description } = Astro.props;
 				submitBtn.textContent = previousButtonText;
 				submitBtn.disabled = false;
 			}
+		});
+
+		emailInput.addEventListener('input', () => {
+			message.textContent = '';
 		});
 	}
 </script>
