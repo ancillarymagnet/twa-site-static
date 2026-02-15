@@ -23,8 +23,8 @@ const { title, tagline, subtitle } = Astro.props;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 80vh;
-		padding: 4rem 2rem;
+		min-height: 70vh;
+		padding: 3rem 2rem;
 		text-align: center;
 		overflow: hidden;
 	}
@@ -56,7 +56,7 @@ const { title, tagline, subtitle } = Astro.props;
 		font-weight: 600;
 		letter-spacing: -0.02em;
 		line-height: 0.95;
-		margin-bottom: 14rem;
+		margin-bottom: clamp(2.5rem, 6vw, 7rem);
 		color: var(--color-text);
 	}
 
@@ -74,7 +74,7 @@ const { title, tagline, subtitle } = Astro.props;
 		font-size: clamp(1.2rem, 4vw, 1.8rem);
 		font-weight: 400;
 		color: var(--color-muted);
-		margin-bottom: 3rem;
+		margin-bottom: 2rem;
 		line-height: 1.4;
 		max-width: 800px;
 		margin-left: auto;

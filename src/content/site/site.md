@@ -12,7 +12,7 @@ hero:
   
 # Email Signup
 signup:
-  placeholder: "threedee@gamenight.biz"
+  placeholder: "your@email.com"
   buttonText: "SUBMIT"
   description: "Sign up for invites to parties and demos"
 
