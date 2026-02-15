@@ -131,10 +131,10 @@ const { placeholder, buttonText, description } = Astro.props;
 	const message = document.getElementById('form-message');
 
 	// Lightweight client-side check to catch obvious typos; backend does real validation.
-	const isPlausibleEmail = (value) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value);
+	const isPlausibleEmail = (value) => /^[^@\s]+@[^@\s]+$/.test(value);
 
 	if (!form || !emailInput || !submitBtn || !message) {
-		console.error(new Error('Email signup initialization failed: required DOM elements not found.'));
+		console.error('Email signup initialization failed: required DOM elements not found.');
 		if (submitBtn) {
 			submitBtn.disabled = true;
 			submitBtn.textContent = 'Unavailable';
@@ -142,7 +142,8 @@ const { placeholder, buttonText, description } = Astro.props;
 		if (message) {
 			message.textContent = 'Signup is temporarily unavailable.';
 		}
-	} else {
+	} else if (!form.dataset.signupBound) {
+		form.dataset.signupBound = 'true';
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
 			message.textContent = '';
@@ -166,6 +167,9 @@ const { placeholder, buttonText, description } = Astro.props;
 					'https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec',
 					{
 						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
 						body: JSON.stringify({ email }),
 					}
 				);
