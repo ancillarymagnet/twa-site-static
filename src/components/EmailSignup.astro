@@ -19,6 +19,7 @@ const { placeholder, buttonText, description } = Astro.props;
 					required
 					class="email-input"
 					id="email-input"
+					aria-describedby="form-message"
 				/>
 				<button type="submit" class="submit-btn" id="submit-btn">{buttonText}</button>
 			</div>
@@ -130,7 +131,7 @@ const { placeholder, buttonText, description } = Astro.props;
 	const message = document.getElementById('form-message');
 
 	// Lightweight client-side check to catch obvious typos; backend does real validation.
-	const isPlausibleEmail = (value) => /[^@\s]+@[^@\s]+\.[^@\s]+/.test(value);
+	const isPlausibleEmail = (value) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value);
 
 	if (!form || !emailInput || !submitBtn || !message) {
 		console.error(new Error('Email signup initialization failed: required DOM elements not found.'));
@@ -141,9 +142,12 @@ const { placeholder, buttonText, description } = Astro.props;
 			const email = emailInput.value.trim();
 
 			if (!isPlausibleEmail(email)) {
+				emailInput.setAttribute('aria-invalid', 'true');
 				message.textContent = 'Enter a valid email address.';
 				return;
 			}
+
+			emailInput.removeAttribute('aria-invalid');
 
 			message.textContent = 'Submitting your email...';
 			const previousButtonText = submitBtn.textContent ?? '';
@@ -170,6 +174,7 @@ const { placeholder, buttonText, description } = Astro.props;
 
 				message.textContent = "You're in!";
 				emailInput.value = '';
+				emailInput.removeAttribute('aria-invalid');
 			} catch (err) {
 				console.error('Network error during signup', err);
 				message.textContent = 'Network error. Check your connection and try again.';
@@ -180,6 +185,7 @@ const { placeholder, buttonText, description } = Astro.props;
 		});
 
 		emailInput.addEventListener('focus', () => {
+			emailInput.removeAttribute('aria-invalid');
 			message.textContent = '';
 		});
 	}
