@@ -124,24 +124,23 @@ const { placeholder, buttonText, description } = Astro.props;
 </style>
 
 <script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const form = document.getElementById('signup');
-		const emailInput = document.getElementById('email-input');
-		const submitBtn = document.getElementById('submit-btn');
-		const message = document.getElementById('form-message');
+	const form = document.getElementById('signup');
+	const emailInput = document.getElementById('email-input');
+	const submitBtn = document.getElementById('submit-btn');
+	const message = document.getElementById('form-message');
 
-		if (!form || !emailInput || !submitBtn || !message) {
-			console.error('Email signup initialization failed: required DOM elements not found.');
-			return;
-		}
+	const isPlausibleEmail = (value) => /[^@\s]+@[^@\s]+\.[^@\s]+/.test(value);
 
+	if (!form || !emailInput || !submitBtn || !message) {
+		console.error('Email signup initialization failed: required DOM elements not found.');
+	} else {
 		const initialButtonText = submitBtn.textContent ?? '';
 
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
 			const email = emailInput.value.trim();
 
-			if (!email || !email.includes('@')) {
+			if (!isPlausibleEmail(email)) {
 				message.textContent = 'Enter a valid email address.';
 				return;
 			}
@@ -154,24 +153,31 @@ const { placeholder, buttonText, description } = Astro.props;
 					'https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec',
 					{
 						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
 						body: JSON.stringify({ email }),
 					}
 				);
 
 				if (!res.ok) {
 					console.error('Signup failed', { status: res.status, statusText: res.statusText });
-					message.textContent = 'Something went wrong. Try again.';
+					message.textContent =
+						res.status >= 500
+							? 'Our signup service is having issues. Please try again later.'
+							: 'We could not process your signup. Please check your email and try again.';
 					return;
 				}
 
 				message.textContent = "You're in!";
 				emailInput.value = '';
-			} catch {
-				message.textContent = 'Something went wrong. Try again.';
+			} catch (err) {
+				console.error('Network error during signup', err);
+				message.textContent = 'Network error. Check your connection and try again.';
 			} finally {
 				submitBtn.textContent = initialButtonText;
 				submitBtn.disabled = false;
 			}
 		});
-	});
+	}
 </script>
