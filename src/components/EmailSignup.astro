@@ -19,17 +19,18 @@ const { placeholder, buttonText, description } = Astro.props;
 					required
 					class="email-input"
 					id="email-input"
+					aria-describedby="form-message"
 				/>
 				<button type="submit" class="submit-btn" id="submit-btn">{buttonText}</button>
 			</div>
-			<p class="form-message" id="form-message"></p>
+			<p class="form-message" id="form-message" role="status" aria-live="polite"></p>
 		</form>
 	</div>
 </section>
 
 <style>
 	.signup {
-		padding: 3rem 2rem;
+		padding: 2rem 2rem;
 		display: flex;
 		justify-content: center;
 	}
@@ -48,6 +49,7 @@ const { placeholder, buttonText, description } = Astro.props;
 
 	.form-group {
 		display: flex;
+		align-items: stretch;
 		gap: 0.5rem;
 		padding: 0.5rem;
 		border-radius: 8px;
@@ -76,6 +78,7 @@ const { placeholder, buttonText, description } = Astro.props;
 		border: none;
 		padding: 0.8rem 1.5rem;
 		border-radius: 4px;
+		flex-shrink: 0;
 		font-weight: 600;
 		font-size: 1rem;
 		cursor: pointer;
@@ -90,7 +93,7 @@ const { placeholder, buttonText, description } = Astro.props;
 
 	@media (max-width: 768px) {
 		.signup {
-			padding: 2rem 1.5rem;
+			padding: 1.5rem 1.5rem;
 		}
 
 		.form-group {
@@ -102,14 +105,16 @@ const { placeholder, buttonText, description } = Astro.props;
 		}
 
 		.email-input {
-			padding: 0.8rem 0.5rem;
-			border-bottom: 1px solid rgba(240, 237, 232, 0.3);
+			padding: 0.8rem 1rem;
+			border: 1px solid rgba(240, 237, 232, 0.3);
+			border-radius: 8px;
 		}
 
 		.submit-btn {
 			padding: 0.8rem 1.5rem;
 			margin-top: 1rem;
 			border-radius: 8px;
+			width: 100%;
 		}
 	}
 
@@ -126,25 +131,76 @@ const { placeholder, buttonText, description } = Astro.props;
 	const submitBtn = document.getElementById('submit-btn');
 	const message = document.getElementById('form-message');
 
-	form.addEventListener('submit', async (e) => {
-		e.preventDefault();
-		const email = emailInput.value;
-		submitBtn.textContent = '...';
-		submitBtn.disabled = true;
+	// Lightweight client-side check to catch obvious typos; backend does real validation.
+	const isPlausibleEmail = (value) => /^[^@\s]+@[^@\s]+$/.test(value);
 
-		try {
-			const res = await fetch('https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec', {
-				method: 'POST',
-				body: JSON.stringify({ email }),
-			});
-
-			message.textContent = "You're in!";
-			emailInput.value = '';
-		} catch {
-			message.textContent = 'Something went wrong. Try again.';
+	if (!form || !emailInput || !submitBtn || !message) {
+		console.error('Email signup initialization failed: required DOM elements not found.');
+		if (submitBtn) {
+			submitBtn.disabled = true;
+			submitBtn.textContent = 'Unavailable';
 		}
+		if (message) {
+			message.textContent = 'Signup is temporarily unavailable.';
+		}
+	} else if (!form.dataset.signupBound) {
+		form.dataset.signupBound = 'true';
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			message.textContent = '';
+			const email = emailInput.value.trim();
 
-		submitBtn.textContent = 'SUBMIT';
-		submitBtn.disabled = false;
-	});
+			if (!isPlausibleEmail(email)) {
+				emailInput.setAttribute('aria-invalid', 'true');
+				message.textContent = 'Enter a valid email address.';
+				return;
+			}
+
+			emailInput.removeAttribute('aria-invalid');
+
+			message.textContent = 'Submitting your email...';
+			const previousButtonText = submitBtn.textContent ?? '';
+			submitBtn.textContent = '...';
+			submitBtn.disabled = true;
+
+			try {
+				const res = await fetch(
+					'https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec',
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ email }),
+					}
+				);
+
+				if (!res.ok) {
+					console.error('Signup failed', { status: res.status, statusText: res.statusText });
+					message.textContent =
+						res.status >= 500
+							? 'Our signup service is having issues. Please try again later.'
+							: 'We could not process your signup. Please check your email and try again.';
+					return;
+				}
+
+				message.textContent = "You're in!";
+				emailInput.value = '';
+				emailInput.removeAttribute('aria-invalid');
+			} catch (err) {
+				console.error('Network error during signup', err);
+				message.textContent = 'Network error. Check your connection and try again.';
+			} finally {
+				submitBtn.textContent = previousButtonText;
+				submitBtn.disabled = false;
+			}
+		});
+
+		emailInput.addEventListener('focus', () => {
+			emailInput.removeAttribute('aria-invalid');
+			if (message.textContent !== "You're in!") {
+				message.textContent = '';
+			}
+		});
+	}
 </script>
