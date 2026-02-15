@@ -143,14 +143,12 @@ const { placeholder, buttonText, description } = Astro.props;
 					'https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec',
 					{
 						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
 						body: JSON.stringify({ email }),
 					}
 				);
 
 				if (!res.ok) {
+					console.error('Signup failed', { status: res.status, statusText: res.statusText });
 					message.textContent = 'Something went wrong. Try again.';
 					return;
 				}
@@ -164,5 +162,7 @@ const { placeholder, buttonText, description } = Astro.props;
 				submitBtn.disabled = false;
 			}
 		});
+	} else {
+		console.error('Email signup initialization failed: required DOM elements not found.');
 	}
 </script>
