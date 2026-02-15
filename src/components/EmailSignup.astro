@@ -129,13 +129,11 @@ const { placeholder, buttonText, description } = Astro.props;
 	const submitBtn = document.getElementById('submit-btn');
 	const message = document.getElementById('form-message');
 
-	const isPlausibleEmail = (value) => /[^@\s]+@[^@\s]+\.[^@\s]+/.test(value);
+	const isPlausibleEmail = (value) => /[^@\s]+@[^@\s]+\.[^@\s]+/.test(value); // Basic shape check.
 
 	if (!form || !emailInput || !submitBtn || !message) {
 		console.error('Email signup initialization failed: required DOM elements not found.');
 	} else {
-		const initialButtonText = submitBtn.textContent ?? '';
-
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
 			const email = emailInput.value.trim();
@@ -145,6 +143,7 @@ const { placeholder, buttonText, description } = Astro.props;
 				return;
 			}
 
+			const previousButtonText = submitBtn.textContent ?? '';
 			submitBtn.textContent = '...';
 			submitBtn.disabled = true;
 
@@ -153,9 +152,6 @@ const { placeholder, buttonText, description } = Astro.props;
 					'https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec',
 					{
 						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
 						body: JSON.stringify({ email }),
 					}
 				);
@@ -175,7 +171,7 @@ const { placeholder, buttonText, description } = Astro.props;
 				console.error('Network error during signup', err);
 				message.textContent = 'Network error. Check your connection and try again.';
 			} finally {
-				submitBtn.textContent = initialButtonText;
+				submitBtn.textContent = previousButtonText;
 				submitBtn.disabled = false;
 			}
 		});
