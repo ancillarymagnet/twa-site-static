@@ -133,7 +133,6 @@ const { placeholder, buttonText, description } = Astro.props;
 
 	if (!form || !emailInput || !submitBtn || !message) {
 		const err = new Error('Email signup initialization failed: required DOM elements not found.');
-		if (import.meta.env?.DEV) throw err;
 		console.error(err);
 		if (message) message.textContent = 'Signup is currently unavailable. Please try again later.';
 	} else {
@@ -147,6 +146,7 @@ const { placeholder, buttonText, description } = Astro.props;
 				return;
 			}
 
+			message.textContent = 'Submitting your email...';
 			const previousButtonText = submitBtn.textContent ?? '';
 			submitBtn.textContent = '...';
 			submitBtn.disabled = true;
