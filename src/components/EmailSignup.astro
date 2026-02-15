@@ -124,17 +124,28 @@ const { placeholder, buttonText, description } = Astro.props;
 </style>
 
 <script>
-	const form = document.getElementById('signup');
-	const emailInput = document.getElementById('email-input');
-	const submitBtn = document.getElementById('submit-btn');
-	const message = document.getElementById('form-message');
+	document.addEventListener('DOMContentLoaded', () => {
+		const form = document.getElementById('signup');
+		const emailInput = document.getElementById('email-input');
+		const submitBtn = document.getElementById('submit-btn');
+		const message = document.getElementById('form-message');
 
-	if (form && emailInput && submitBtn && message) {
+		if (!form || !emailInput || !submitBtn || !message) {
+			console.error('Email signup initialization failed: required DOM elements not found.');
+			return;
+		}
+
 		const initialButtonText = submitBtn.textContent ?? '';
 
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
-			const email = emailInput.value;
+			const email = emailInput.value.trim();
+
+			if (!email || !email.includes('@')) {
+				message.textContent = 'Enter a valid email address.';
+				return;
+			}
+
 			submitBtn.textContent = '...';
 			submitBtn.disabled = true;
 
@@ -162,7 +173,5 @@ const { placeholder, buttonText, description } = Astro.props;
 				submitBtn.disabled = false;
 			}
 		});
-	} else {
-		console.error('Email signup initialization failed: required DOM elements not found.');
-	}
+	});
 </script>
