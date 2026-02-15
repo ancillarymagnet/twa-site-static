@@ -129,12 +129,11 @@ const { placeholder, buttonText, description } = Astro.props;
 	const submitBtn = document.getElementById('submit-btn');
 	const message = document.getElementById('form-message');
 
-	const isPlausibleEmail = (value) => /[^@\s]+@[^@\s]+\.[^@\s]+/.test(value); // Basic shape check.
+	// Lightweight client-side check to catch obvious typos; backend does real validation.
+	const isPlausibleEmail = (value) => /[^@\s]+@[^@\s]+\.[^@\s]+/.test(value);
 
 	if (!form || !emailInput || !submitBtn || !message) {
-		const err = new Error('Email signup initialization failed: required DOM elements not found.');
-		console.error(err);
-		if (message) message.textContent = 'Signup is currently unavailable. Please try again later.';
+		console.error(new Error('Email signup initialization failed: required DOM elements not found.'));
 	} else {
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
@@ -180,7 +179,7 @@ const { placeholder, buttonText, description } = Astro.props;
 			}
 		});
 
-		emailInput.addEventListener('input', () => {
+		emailInput.addEventListener('focus', () => {
 			message.textContent = '';
 		});
 	}
