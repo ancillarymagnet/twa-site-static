@@ -22,7 +22,7 @@ const { placeholder, buttonText, description } = Astro.props;
 				/>
 				<button type="submit" class="submit-btn" id="submit-btn">{buttonText}</button>
 			</div>
-			<p class="form-message" id="form-message"></p>
+			<p class="form-message" id="form-message" role="status" aria-live="polite"></p>
 		</form>
 	</div>
 </section>
