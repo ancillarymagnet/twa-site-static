@@ -128,27 +128,41 @@ const { placeholder, buttonText, description } = Astro.props;
 	const emailInput = document.getElementById('email-input');
 	const submitBtn = document.getElementById('submit-btn');
 	const message = document.getElementById('form-message');
-	const initialButtonText = submitBtn.textContent ?? '';
 
-	form.addEventListener('submit', async (e) => {
-		e.preventDefault();
-		const email = emailInput.value;
-		submitBtn.textContent = '...';
-		submitBtn.disabled = true;
+	if (form && emailInput && submitBtn && message) {
+		const initialButtonText = submitBtn.textContent ?? '';
 
-		try {
-			const res = await fetch('https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec', {
-				method: 'POST',
-				body: JSON.stringify({ email }),
-			});
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const email = emailInput.value;
+			submitBtn.textContent = '...';
+			submitBtn.disabled = true;
 
-			message.textContent = "You're in!";
-			emailInput.value = '';
-		} catch {
-			message.textContent = 'Something went wrong. Try again.';
-		}
+			try {
+				const res = await fetch(
+					'https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec',
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ email }),
+					}
+				);
 
-		submitBtn.textContent = initialButtonText;
-		submitBtn.disabled = false;
-	});
+				if (!res.ok) {
+					message.textContent = 'Something went wrong. Try again.';
+					return;
+				}
+
+				message.textContent = "You're in!";
+				emailInput.value = '';
+			} catch {
+				message.textContent = 'Something went wrong. Try again.';
+			} finally {
+				submitBtn.textContent = initialButtonText;
+				submitBtn.disabled = false;
+			}
+		});
+	}
 </script>
