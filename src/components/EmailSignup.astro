@@ -135,6 +135,13 @@ const { placeholder, buttonText, description } = Astro.props;
 
 	if (!form || !emailInput || !submitBtn || !message) {
 		console.error(new Error('Email signup initialization failed: required DOM elements not found.'));
+		if (submitBtn) {
+			submitBtn.disabled = true;
+			submitBtn.textContent = 'Unavailable';
+		}
+		if (message) {
+			message.textContent = 'Signup is temporarily unavailable.';
+		}
 	} else {
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
@@ -186,7 +193,9 @@ const { placeholder, buttonText, description } = Astro.props;
 
 		emailInput.addEventListener('focus', () => {
 			emailInput.removeAttribute('aria-invalid');
-			message.textContent = '';
+			if (message.textContent !== "You're in!") {
+				message.textContent = '';
+			}
 		});
 	}
 </script>
