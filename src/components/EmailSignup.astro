@@ -164,25 +164,14 @@ const { placeholder, buttonText, description } = Astro.props;
 			submitBtn.disabled = true;
 
 			try {
-				const res = await fetch(
+				await fetch(
 					'https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec',
 					{
 						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
 						body: JSON.stringify({ email }),
+						mode: 'no-cors',
 					}
 				);
-
-				if (!res.ok) {
-					console.error('Signup failed', { status: res.status, statusText: res.statusText });
-					message.textContent =
-						res.status >= 500
-							? 'Our signup service is having issues. Please try again later.'
-							: 'We could not process your signup. Please check your email and try again.';
-					return;
-				}
 
 				message.textContent = "You're in!";
 				emailInput.value = '';
