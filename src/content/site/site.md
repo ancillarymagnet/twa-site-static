@@ -33,7 +33,7 @@ social:
 seo:
   title: "Third Wave - Big Screen Gaming"
   description: "We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium."
-  keywords: "gaming, big screen, immersive, roomscale, theater, third wave, no VR"
+  keywords: "gaming, big screen, immersive, multiplayer, theater, third wave, no VR"
 ---
 
 # About Third Wave

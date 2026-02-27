@@ -4,7 +4,11 @@ export interface Props {
 	description?: string;
 }
 
-const { title, description = "Third Wave - Big Screen Gaming" } = Astro.props;
+const {
+	title,
+	description =
+		"We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium.",
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
