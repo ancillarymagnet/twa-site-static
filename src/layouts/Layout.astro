@@ -16,9 +16,15 @@ if (import.meta.env.MODE !== 'production') {
 	}
 }
 
-const safeTitle = typeof rawTitle === 'string' ? rawTitle.trim() : '';
+if (typeof rawTitle !== 'string') {
+	throw new Error(
+		`Layout.astro requires \`title\` prop to be a string; received: ${typeof rawTitle}`
+	);
+}
+
+const safeTitle = rawTitle.trim();
 if (!safeTitle) {
-	throw new Error('Layout.astro requires a non-empty string `title` prop');
+	throw new Error('Layout.astro requires a non-empty `title` prop');
 }
 
 const title = safeTitle;
@@ -31,15 +37,14 @@ if (!description) {
 		throw new Error(
 			'Missing content entry: site/site (while resolving layout meta description)'
 		);
-	} else {
-		description =
-			siteEntry.data.seo?.description?.trim() ||
-			siteEntry.data.description?.trim() ||
-			siteEntry.data.title?.trim() ||
-			siteEntry.data.tagline?.trim();
 	}
 
-	description = description || title;
+	description =
+		siteEntry.data.seo?.description?.trim() ||
+		siteEntry.data.description?.trim() ||
+		siteEntry.data.title?.trim() ||
+		siteEntry.data.tagline?.trim() ||
+		title;
 }
 ---
 
