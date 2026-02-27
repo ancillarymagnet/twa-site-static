@@ -7,9 +7,11 @@ export interface Props {
 }
 
 const siteEntry = await getEntry('site', 'site');
-const defaultDescription =
-	siteEntry?.data.seo.description ??
-	"We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium.";
+if (!siteEntry) {
+	throw new Error('Missing content entry: site/site');
+}
+
+const defaultDescription = siteEntry.data.seo.description;
 
 const {
 	title,
