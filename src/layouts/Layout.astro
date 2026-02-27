@@ -6,17 +6,24 @@ export interface Props {
 	description?: string;
 }
 
-const { title: rawTitle, description: providedDescription } = Astro.props;
+const { title: rawTitle, description: rawDescription } = Astro.props;
 
-if (import.meta.env.MODE !== 'production' && typeof rawTitle !== 'string') {
-	throw new Error('Layout.astro requires a string `title` prop');
+if (import.meta.env.MODE !== 'production') {
+	if (typeof rawTitle !== 'string') {
+		throw new Error('Layout.astro requires a string `title` prop');
+	}
+	if (rawDescription != null && typeof rawDescription !== 'string') {
+		console.warn(
+			'Layout.astro received a non-string `description` prop; it will be ignored.'
+		);
+	}
 }
 
 const safeTitle = (typeof rawTitle === 'string' ? rawTitle : '').trim();
 const title = safeTitle || 'Third Wave';
 
 let description =
-	typeof providedDescription === 'string' ? providedDescription.trim() : undefined;
+	typeof rawDescription === 'string' ? rawDescription.trim() : undefined;
 if (!description) {
 	const siteEntry = await getEntry('site', 'site');
 
@@ -26,10 +33,14 @@ if (!description) {
 			siteEntry.data.description?.trim() ||
 			siteEntry.data.title?.trim() ||
 			siteEntry.data.tagline?.trim();
-	} else if (import.meta.env.MODE !== 'production') {
-		console.warn(
-			'Missing content entry: site/site (while resolving layout meta description); falling back to page title.'
-		);
+	} else {
+		const message =
+			'Missing content entry: site/site (while resolving layout meta description); falling back to page title.';
+		if (import.meta.env.MODE !== 'production') {
+			console.warn(message);
+		} else {
+			console.error(message);
+		}
 	}
 
 	description = description || title;
