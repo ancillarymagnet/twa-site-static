@@ -15,7 +15,11 @@ const siteEntry = await getEntry('site', 'site');
 const siteData = siteEntry.data;
 ---
 
-<Layout title={siteData.seo.title} description={siteData.seo.description}>
+<Layout
+	title={siteData.seo.title}
+	description={siteData.seo.description}
+	socialDescription={siteData.seo.socialDescription}
+>
 	<Header title={siteData.header.brand} />
 	
 	<main>
@@ -43,7 +47,7 @@ const siteData = siteEntry.data;
 		/>
 	</main>
 	
-	<Footer copyright={siteData.footer.copyright} />
+	<Footer copyrightHolder={siteData.footer.copyrightHolder} />
 </Layout>
 
 <style>
