@@ -1,13 +1,19 @@
 ---
+import { getEntry } from 'astro:content';
+
 export interface Props {
 	title: string;
 	description?: string;
 }
 
+const siteEntry = await getEntry('site', 'site');
+const defaultDescription =
+	siteEntry?.data.seo.description ??
+	"We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium.";
+
 const {
 	title,
-	description =
-		"We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium.",
+	description = defaultDescription,
 } = Astro.props;
 ---
 
