@@ -1,8 +1,8 @@
 ---
-title: "Third Wave Arcade"
+title: "Third Wave"
 tagline: "No goggles. No controllers."
 subtitle: "Follow along as we invent a new medium"
-description: "Third Wave Arcade is developing an innovative roomscale gaming experience"
+description: "Third Wave is developing an innovative big-screen gaming experience"
 
 # Hero Section
 hero:
@@ -31,11 +31,11 @@ social:
 
 # SEO
 seo:
-  title: "Third Wave Arcade - Immersive Gaming Without Goggles"
-  description: "Revolutionary roomscale gaming experience. No VR headsets, no controllers. Just pure immersive gameplay."
-  keywords: "gaming, immersive, roomscale, arcade, third wave, no VR"
+  title: "Third Wave - Big Screen Gaming"
+  description: "We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium."
+  keywords: "gaming, big screen, immersive, roomscale, theater, third wave, no VR"
 ---
 
-# About Third Wave Arcade
+# About Third Wave
 
-Third Wave Arcade is pioneering a new form of immersive multiplayer gaming that doesn't require traditional VR equipment like headsets or controllers. We're creating experiences that transform physical spaces into interactive gaming environments.
+Third Wave is pioneering a new form of immersive multiplayer gaming that doesn't require traditional VR equipment like headsets or controllers. We're creating experiences that transform physical spaces into interactive gaming environments.
