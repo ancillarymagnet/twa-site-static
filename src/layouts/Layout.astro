@@ -8,6 +8,10 @@ export interface Props {
 
 const { title: rawTitle, description: providedDescription } = Astro.props;
 
+if (import.meta.env.MODE !== 'production' && typeof rawTitle !== 'string') {
+	throw new Error('Layout.astro requires a string `title` prop');
+}
+
 const safeTitle = (typeof rawTitle === 'string' ? rawTitle : '').trim();
 const title = safeTitle || 'Third Wave';
 
@@ -22,6 +26,10 @@ if (!description) {
 			siteEntry.data.description?.trim() ||
 			siteEntry.data.title?.trim() ||
 			siteEntry.data.tagline?.trim();
+	} else if (import.meta.env.MODE !== 'production') {
+		console.warn(
+			'Missing content entry: site/site (while resolving layout meta description); falling back to page title.'
+		);
 	}
 
 	description = description || title;
