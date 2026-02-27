@@ -6,25 +6,25 @@ export interface Props {
 	description?: string;
 }
 
-const { title, description: providedDescription } = Astro.props;
+const { title: rawTitle, description: providedDescription } = Astro.props;
 
-let description = providedDescription?.trim();
+const safeTitle = (typeof rawTitle === 'string' ? rawTitle : '').trim();
+const title = safeTitle || 'Third Wave';
+
+let description =
+	typeof providedDescription === 'string' ? providedDescription.trim() : undefined;
 if (!description) {
 	const siteEntry = await getEntry('site', 'site');
-	if (!siteEntry) {
-		throw new Error(
-			'Missing content entry: site/site (while resolving layout meta description)'
-		);
+
+	if (siteEntry) {
+		description =
+			siteEntry.data.seo?.description?.trim() ||
+			siteEntry.data.description?.trim() ||
+			siteEntry.data.title?.trim() ||
+			siteEntry.data.tagline?.trim();
 	}
 
-	const safeTitle = title.trim();
-
-	description =
-		siteEntry.data.seo?.description?.trim() ||
-		siteEntry.data.description?.trim() ||
-		siteEntry.data.title?.trim() ||
-		siteEntry.data.tagline?.trim() ||
-		safeTitle;
+	description = description || title;
 }
 ---
 
