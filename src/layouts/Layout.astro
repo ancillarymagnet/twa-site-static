@@ -6,17 +6,26 @@ export interface Props {
 	description?: string;
 }
 
-const siteEntry = await getEntry('site', 'site');
-if (!siteEntry) {
-	throw new Error('Missing content entry: site/site');
+const { title, description: providedDescription } = Astro.props;
+
+let description = providedDescription?.trim();
+if (!description) {
+	const siteEntry = await getEntry('site', 'site');
+	if (!siteEntry) {
+		throw new Error(
+			'Missing content entry: site/site (while resolving layout meta description)'
+		);
+	}
+
+	const safeTitle = title.trim();
+
+	description =
+		siteEntry.data.seo?.description?.trim() ||
+		siteEntry.data.description?.trim() ||
+		siteEntry.data.title?.trim() ||
+		safeTitle ||
+		'Third Wave';
 }
-
-const defaultDescription = siteEntry.data.seo.description;
-
-const {
-	title,
-	description = defaultDescription,
-} = Astro.props;
 ---
 
 <!DOCTYPE html>
