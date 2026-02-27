@@ -23,8 +23,8 @@ if (!description) {
 		siteEntry.data.seo?.description?.trim() ||
 		siteEntry.data.description?.trim() ||
 		siteEntry.data.title?.trim() ||
-		safeTitle ||
-		'Third Wave';
+		siteEntry.data.tagline?.trim() ||
+		safeTitle;
 }
 ---
 
