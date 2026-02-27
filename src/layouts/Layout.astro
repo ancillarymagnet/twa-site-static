@@ -1,10 +1,47 @@
 ---
+import { getEntry } from 'astro:content';
+
 export interface Props {
 	title: string;
 	description?: string;
 }
 
-const { title, description = "Third Wave Arcade - Immersive Gaming Without Goggles" } = Astro.props;
+const { title: rawTitle, description: rawDescription } = Astro.props;
+
+if (rawDescription != null && typeof rawDescription !== 'string') {
+	throw new Error(
+		`Layout.astro requires \`description\` prop to be a string when provided; received: ${typeof rawDescription}`
+	);
+}
+
+if (typeof rawTitle !== 'string') {
+	throw new Error(
+		`Layout.astro requires \`title\` prop to be a string; received: ${typeof rawTitle}`
+	);
+}
+
+const title = rawTitle.trim();
+if (!title) {
+	throw new Error('Layout.astro requires a non-empty `title` prop');
+}
+
+let description =
+	typeof rawDescription === 'string' ? rawDescription.trim() : undefined;
+if (!description) {
+	const siteEntry = await getEntry('site', 'site');
+	if (!siteEntry) {
+		throw new Error(
+			'Missing content entry: site/site (while resolving layout meta description)'
+		);
+	}
+
+	description =
+		siteEntry.data.seo?.description?.trim() ||
+		siteEntry.data.description?.trim() ||
+		siteEntry.data.title?.trim() ||
+		siteEntry.data.tagline?.trim() ||
+		title;
+}
 ---
 
 <!DOCTYPE html>
