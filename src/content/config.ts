@@ -21,7 +21,7 @@ const siteCollection = defineCollection({
       brand: z.string(),
     }),
     footer: z.object({
-      copyright: z.string(),
+      copyrightHolder: z.string().trim().min(1),
     }),
     social: z.object({
       youtube: z.string().optional(),
@@ -30,6 +30,7 @@ const siteCollection = defineCollection({
     seo: z.object({
       title: z.string(),
       description: z.string(),
+      socialDescription: z.string().trim().min(1).optional(),
       keywords: z.string(),
     }),
   }),

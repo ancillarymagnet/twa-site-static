@@ -4,29 +4,45 @@ import { getEntry } from 'astro:content';
 export interface Props {
 	title: string;
 	description?: string;
+	socialDescription?: string;
 }
 
-const { title: rawTitle, description: rawDescription } = Astro.props;
+function normalizeStringProp(
+	name: string,
+	value: unknown,
+	options: { optional?: boolean } = {}
+): string | undefined {
+	if (value == null) {
+		if (options.optional) return undefined;
+		throw new Error(`Layout.astro requires \`${name}\` prop to be provided`);
+	}
 
-if (rawDescription != null && typeof rawDescription !== 'string') {
-	throw new Error(
-		`Layout.astro requires \`description\` prop to be a string when provided; received: ${typeof rawDescription}`
-	);
+	if (typeof value !== 'string') {
+		throw new Error(
+			`Layout.astro requires \`${name}\` prop to be a string${options.optional ? ' when provided' : ''}; received: ${typeof value}`
+		);
+	}
+
+	const trimmed = value.trim();
+	if (!trimmed) {
+		if (options.optional) return undefined;
+		throw new Error(`Layout.astro requires a non-empty \`${name}\` prop`);
+	}
+
+	return trimmed;
 }
 
-if (typeof rawTitle !== 'string') {
-	throw new Error(
-		`Layout.astro requires \`title\` prop to be a string; received: ${typeof rawTitle}`
-	);
-}
+const { title: rawTitle, description: rawDescription, socialDescription: rawSocialDescription } =
+	Astro.props;
 
-const title = rawTitle.trim();
+const title = normalizeStringProp('title', rawTitle);
 if (!title) {
 	throw new Error('Layout.astro requires a non-empty `title` prop');
 }
 
-let description =
-	typeof rawDescription === 'string' ? rawDescription.trim() : undefined;
+let description = normalizeStringProp('description', rawDescription, {
+	optional: true,
+});
 if (!description) {
 	const siteEntry = await getEntry('site', 'site');
 	if (!siteEntry) {
@@ -42,6 +58,30 @@ if (!description) {
 		siteEntry.data.tagline?.trim() ||
 		title;
 }
+
+let socialDescription = normalizeStringProp('socialDescription', rawSocialDescription, {
+	optional: true,
+});
+if (!socialDescription) socialDescription = description;
+
+const ogImagePath = '/images/hero-bg.png';
+
+let siteUrl: string | undefined;
+try {
+	siteUrl = Astro.site ? new URL(Astro.site).origin : undefined;
+} catch (error) {
+	const message =
+		'Invalid Astro.site URL; OG/Twitter absolute URLs will be omitted. Please fix `site` in astro.config.mjs.';
+	if (import.meta.env.DEV) {
+		console.warn(message, error);
+	} else {
+		console.error(message, error);
+	}
+	siteUrl = undefined;
+}
+const pathname = Astro.url?.pathname;
+const pageUrl = siteUrl && pathname ? new URL(pathname, siteUrl).toString() : undefined;
+const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefined;
 ---
 
 <!DOCTYPE html>
@@ -49,6 +89,19 @@ if (!description) {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
+		<meta property="og:type" content="website" />
+		{pageUrl && <meta property="og:url" content={pageUrl} />}
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={socialDescription} />
+		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+		{ogImageUrl ? (
+			<meta name="twitter:card" content="summary_large_image" />
+		) : (
+			<meta name="twitter:card" content="summary" />
+		)}
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={socialDescription} />
+		{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
