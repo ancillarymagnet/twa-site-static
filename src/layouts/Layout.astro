@@ -11,7 +11,7 @@ const { title: rawTitle, description: rawDescription } = Astro.props;
 if (import.meta.env.MODE !== 'production') {
 	if (rawDescription != null && typeof rawDescription !== 'string') {
 		console.warn(
-			'Layout.astro received a non-string `description` prop; it will be ignored.'
+			'Layout.astro received a non-string `description` prop; it will be ignored and the layout will fall back to site metadata/title.'
 		);
 	}
 }
@@ -22,12 +22,10 @@ if (typeof rawTitle !== 'string') {
 	);
 }
 
-const safeTitle = rawTitle.trim();
-if (!safeTitle) {
+const title = rawTitle.trim();
+if (!title) {
 	throw new Error('Layout.astro requires a non-empty `title` prop');
 }
-
-const title = safeTitle;
 
 let description =
 	typeof rawDescription === 'string' ? rawDescription.trim() : undefined;
