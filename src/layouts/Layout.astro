@@ -9,9 +9,6 @@ export interface Props {
 const { title: rawTitle, description: rawDescription } = Astro.props;
 
 if (import.meta.env.MODE !== 'production') {
-	if (typeof rawTitle !== 'string') {
-		throw new Error('Layout.astro requires a string `title` prop');
-	}
 	if (rawDescription != null && typeof rawDescription !== 'string') {
 		console.warn(
 			'Layout.astro received a non-string `description` prop; it will be ignored.'
@@ -19,28 +16,36 @@ if (import.meta.env.MODE !== 'production') {
 	}
 }
 
-const safeTitle = (typeof rawTitle === 'string' ? rawTitle : '').trim();
+const safeTitle = typeof rawTitle === 'string' ? rawTitle.trim() : '';
+if (!safeTitle) {
+	const message = 'Layout.astro requires a non-empty string `title` prop';
+	if (import.meta.env.MODE !== 'production') {
+		throw new Error(message);
+	} else {
+		console.error(message);
+	}
+}
+
 const title = safeTitle || 'Third Wave';
 
 let description =
 	typeof rawDescription === 'string' ? rawDescription.trim() : undefined;
 if (!description) {
 	const siteEntry = await getEntry('site', 'site');
-
-	if (siteEntry) {
+	if (!siteEntry) {
+		const message =
+			'Missing content entry: site/site (while resolving layout meta description)';
+		if (import.meta.env.MODE !== 'production') {
+			console.warn(`${message}; falling back to page title.`);
+		} else {
+			throw new Error(message);
+		}
+	} else {
 		description =
 			siteEntry.data.seo?.description?.trim() ||
 			siteEntry.data.description?.trim() ||
 			siteEntry.data.title?.trim() ||
 			siteEntry.data.tagline?.trim();
-	} else {
-		const message =
-			'Missing content entry: site/site (while resolving layout meta description); falling back to page title.';
-		if (import.meta.env.MODE !== 'production') {
-			console.warn(message);
-		} else {
-			console.error(message);
-		}
 	}
 
 	description = description || title;
