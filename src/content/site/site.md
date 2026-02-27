@@ -2,7 +2,7 @@
 title: "Third Wave"
 tagline: "No goggles. No controllers."
 subtitle: "Follow along as we invent a new medium"
-description: "Third Wave is developing an innovative big-screen gaming experience"
+description: "We're making theaters playable. Follow along as we invent a new medium."
 
 # Hero Section
 hero:
@@ -33,7 +33,7 @@ social:
 seo:
   title: "Third Wave - Big Screen Gaming"
   description: "We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium."
-  keywords: "gaming, big screen, immersive, multiplayer, theater, third wave, no VR"
+  keywords: "gaming, big screen, immersive, multiplayer, theater, third wave"
 ---
 
 # About Third Wave
