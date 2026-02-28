@@ -72,10 +72,21 @@ let socialDescription = normalizeStringProp('socialDescription', rawSocialDescri
 });
 if (!socialDescription) socialDescription = description;
 
-const ogImagePath =
-	normalizeStringProp('socialImagePath', rawSocialImagePath, {
-		optional: true,
-	}) || '/images/tw_og_logo.jpg';
+const socialImagePath = normalizeStringProp('socialImagePath', rawSocialImagePath, {
+	optional: true,
+});
+if (
+	socialImagePath &&
+	!socialImagePath.startsWith('/') &&
+	!socialImagePath.startsWith('https://') &&
+	!socialImagePath.startsWith('http://')
+) {
+	throw new Error(
+		'Layout.astro `socialImagePath` must be an absolute URL or start with `/`'
+	);
+}
+
+const ogImagePath = socialImagePath || '/images/tw_og_logo.jpg';
 
 let siteUrl: string | undefined;
 try {
