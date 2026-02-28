@@ -6,30 +6,15 @@ export interface Props {
 
 const { copyrightHolder } = Astro.props;
 
-const buildYear = new Date().getFullYear();
+const year = new Date().getFullYear();
 const holder = copyrightHolder.trim();
 ---
 
 <footer class="footer">
 	<div class="footer-content">
-		<p class="copyright">
-			©
-			<span class="js-current-year" data-build-year={buildYear}>
-				{buildYear}
-			</span>
-			{holder ? ` ${holder}` : ''}
-		</p>
+		<p class="copyright">© {year}{holder ? ` ${holder}` : ''}</p>
 	</div>
 </footer>
-
-<script is:inline>
-	const currentYear = new Date().getFullYear();
-	for (const element of document.querySelectorAll('.js-current-year')) {
-		const buildYear = Number(element.getAttribute('data-build-year'));
-		if (!Number.isNaN(buildYear) && buildYear === currentYear) continue;
-		element.textContent = String(currentYear);
-	}
-</script>
 
 <style>
 	.footer {

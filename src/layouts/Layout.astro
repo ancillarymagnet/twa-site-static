@@ -5,6 +5,8 @@ export interface Props {
 	title: string;
 	description?: string;
 	socialDescription?: string;
+	ogType?: string;
+	socialImagePath?: string;
 }
 
 function normalizeStringProp(
@@ -32,13 +34,19 @@ function normalizeStringProp(
 	return trimmed;
 }
 
-const { title: rawTitle, description: rawDescription, socialDescription: rawSocialDescription } =
-	Astro.props;
+const {
+	title: rawTitle,
+	description: rawDescription,
+	socialDescription: rawSocialDescription,
+	ogType: rawOgType,
+	socialImagePath: rawSocialImagePath,
+} = Astro.props;
 
 const title = normalizeStringProp('title', rawTitle);
-if (!title) {
-	throw new Error('Layout.astro requires a non-empty `title` prop');
-}
+const ogType =
+	normalizeStringProp('ogType', rawOgType, {
+		optional: true,
+	}) || 'website';
 
 let description = normalizeStringProp('description', rawDescription, {
 	optional: true,
@@ -64,7 +72,10 @@ let socialDescription = normalizeStringProp('socialDescription', rawSocialDescri
 });
 if (!socialDescription) socialDescription = description;
 
-const ogImagePath = '/images/hero-bg.png';
+const ogImagePath =
+	normalizeStringProp('socialImagePath', rawSocialImagePath, {
+		optional: true,
+	}) || '/images/tw_og_logo.jpg';
 
 let siteUrl: string | undefined;
 try {
@@ -89,7 +100,7 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
-		<meta property="og:type" content="website" />
+		<meta property="og:type" content={ogType} />
 		{pageUrl && <meta property="og:url" content={pageUrl} />}
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={socialDescription} />
