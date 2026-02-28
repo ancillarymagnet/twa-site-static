@@ -82,7 +82,7 @@ if (
 	!socialImagePath.startsWith('http://')
 ) {
 	throw new Error(
-		'Layout.astro `socialImagePath` must be an absolute URL or start with `/`'
+		`Layout.astro \`socialImagePath\` must be an absolute URL or start with \`/\`; received: ${socialImagePath}`
 	);
 }
 
