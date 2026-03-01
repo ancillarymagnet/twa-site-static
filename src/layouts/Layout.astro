@@ -1,5 +1,5 @@
 ---
-import { getEntry } from 'astro:content';
+import { getRequiredSiteEntry } from '../lib/content';
 
 export interface Props {
 	title: string;
@@ -34,6 +34,10 @@ function normalizeStringProp(
 	return trimmed;
 }
 
+function normalizeMetaText(value: string): string {
+	return value.replace(/\s+/g, ' ').trim();
+}
+
 const {
 	title: rawTitle,
 	description: rawDescription,
@@ -43,21 +47,30 @@ const {
 } = Astro.props;
 
 const title = normalizeStringProp('title', rawTitle);
-const ogType =
+const OG_TYPE_PATTERN = /^[a-z0-9_]+(?:\.[a-z0-9_]+)*$/;
+const rawOgTypeValue =
 	normalizeStringProp('ogType', rawOgType, {
 		optional: true,
 	}) || 'website';
+const ogTypeCandidate = rawOgTypeValue.toLowerCase();
+let ogType = ogTypeCandidate;
+if (!OG_TYPE_PATTERN.test(ogTypeCandidate)) {
+	const message = `Invalid Layout.astro \`ogType\`; falling back to \`website\`. Received: "${rawOgTypeValue}"`;
+	if (import.meta.env.DEV) {
+		console.warn(message);
+	} else {
+		console.error(message);
+	}
+	ogType = 'website';
+}
 
 let description = normalizeStringProp('description', rawDescription, {
 	optional: true,
 });
 if (!description) {
-	const siteEntry = await getEntry('site', 'site');
-	if (!siteEntry) {
-		throw new Error(
-			'Missing content entry: site/site (while resolving layout meta description)'
-		);
-	}
+	const siteEntry = await getRequiredSiteEntry(
+		'Layout.astro: resolving layout meta description'
+	);
 
 	description =
 		siteEntry.data.seo?.description?.trim() ||
@@ -67,10 +80,11 @@ if (!description) {
 		title;
 }
 
-let socialDescription = normalizeStringProp('socialDescription', rawSocialDescription, {
-	optional: true,
-});
-if (!socialDescription) socialDescription = description;
+const resolvedDescription = description;
+const socialDescription =
+	normalizeStringProp('socialDescription', rawSocialDescription, {
+		optional: true,
+	}) || resolvedDescription;
 
 const socialImagePath = normalizeStringProp('socialImagePath', rawSocialImagePath, {
 	optional: true,
@@ -86,7 +100,16 @@ if (
 	);
 }
 
-const ogImagePath = socialImagePath || '/images/tw_og_logo.jpg';
+let ogImagePath = socialImagePath || '/images/tw_og_logo.jpg';
+if (socialImagePath?.startsWith('http://') || socialImagePath?.startsWith('https://')) {
+	try {
+		ogImagePath = new URL(socialImagePath).toString();
+	} catch {
+		throw new Error(
+			`Layout.astro \`socialImagePath\` must be a valid absolute URL; received: ${socialImagePath}`
+		);
+	}
+}
 
 let siteUrl: string | undefined;
 try {
@@ -103,27 +126,44 @@ try {
 }
 const pathname = Astro.url?.pathname;
 const pageUrl = siteUrl && pathname ? new URL(pathname, siteUrl).toString() : undefined;
-const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefined;
+let ogImage: string | undefined;
+if (siteUrl) {
+	ogImage = new URL(ogImagePath, siteUrl).toString();
+} else if (ogImagePath.startsWith('http://') || ogImagePath.startsWith('https://')) {
+	ogImage = ogImagePath;
+} else {
+	const message =
+		'Layout.astro: Unable to form absolute OG/Twitter image URLs because `Astro.site` is not configured.';
+	if (import.meta.env.DEV) {
+		console.warn(message);
+	} else {
+		console.error(message);
+	}
+}
+const isAbsoluteOgImage = Boolean(ogImage);
+
+const metaDescription = normalizeMetaText(resolvedDescription);
+const metaSocialDescription = normalizeMetaText(socialDescription);
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
+		<meta name="description" content={metaDescription} />
 		<meta property="og:type" content={ogType} />
 		{pageUrl && <meta property="og:url" content={pageUrl} />}
 		<meta property="og:title" content={title} />
-		<meta property="og:description" content={socialDescription} />
-		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
-		{ogImageUrl ? (
+		<meta property="og:description" content={metaSocialDescription} />
+		{ogImage && <meta property="og:image" content={ogImage} />}
+		{isAbsoluteOgImage ? (
 			<meta name="twitter:card" content="summary_large_image" />
 		) : (
 			<meta name="twitter:card" content="summary" />
 		)}
 		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={socialDescription} />
-		{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+		<meta name="twitter:description" content={metaSocialDescription} />
+		{isAbsoluteOgImage && <meta name="twitter:image" content={ogImage} />}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
