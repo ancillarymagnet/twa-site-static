@@ -1,39 +1,76 @@
 ---
-import { getEntry } from 'astro:content';
+import { getRequiredSiteEntry } from '../lib/content';
 
 export interface Props {
 	title: string;
 	description?: string;
+	socialDescription?: string;
+	ogType?: string;
+	socialImagePath?: string;
 }
 
-const { title: rawTitle, description: rawDescription } = Astro.props;
+function normalizeStringProp(
+	name: string,
+	value: unknown,
+	options: { optional?: boolean } = {}
+): string | undefined {
+	if (value == null) {
+		if (options.optional) return undefined;
+		throw new Error(`Layout.astro requires \`${name}\` prop to be provided`);
+	}
 
-if (rawDescription != null && typeof rawDescription !== 'string') {
-	throw new Error(
-		`Layout.astro requires \`description\` prop to be a string when provided; received: ${typeof rawDescription}`
-	);
-}
-
-if (typeof rawTitle !== 'string') {
-	throw new Error(
-		`Layout.astro requires \`title\` prop to be a string; received: ${typeof rawTitle}`
-	);
-}
-
-const title = rawTitle.trim();
-if (!title) {
-	throw new Error('Layout.astro requires a non-empty `title` prop');
-}
-
-let description =
-	typeof rawDescription === 'string' ? rawDescription.trim() : undefined;
-if (!description) {
-	const siteEntry = await getEntry('site', 'site');
-	if (!siteEntry) {
+	if (typeof value !== 'string') {
 		throw new Error(
-			'Missing content entry: site/site (while resolving layout meta description)'
+			`Layout.astro requires \`${name}\` prop to be a string${options.optional ? ' when provided' : ''}; received: ${typeof value}`
 		);
 	}
+
+	const trimmed = value.trim();
+	if (!trimmed) {
+		if (options.optional) return undefined;
+		throw new Error(`Layout.astro requires a non-empty \`${name}\` prop`);
+	}
+
+	return trimmed;
+}
+
+function normalizeMetaText(value: string): string {
+	return value.replace(/\s+/g, ' ').trim();
+}
+
+const {
+	title: rawTitle,
+	description: rawDescription,
+	socialDescription: rawSocialDescription,
+	ogType: rawOgType,
+	socialImagePath: rawSocialImagePath,
+} = Astro.props;
+
+const title = normalizeStringProp('title', rawTitle);
+const OG_TYPE_PATTERN = /^[a-z0-9_]+(?:\.[a-z0-9_]+)*$/;
+const rawOgTypeValue =
+	normalizeStringProp('ogType', rawOgType, {
+		optional: true,
+	}) || 'website';
+const ogTypeCandidate = rawOgTypeValue.toLowerCase();
+let ogType = ogTypeCandidate;
+if (!OG_TYPE_PATTERN.test(ogTypeCandidate)) {
+	const message = `Invalid Layout.astro \`ogType\`; falling back to \`website\`. Received: "${rawOgTypeValue}"`;
+	if (import.meta.env.DEV) {
+		console.warn(message);
+	} else {
+		console.error(message);
+	}
+	ogType = 'website';
+}
+
+let description = normalizeStringProp('description', rawDescription, {
+	optional: true,
+});
+if (!description) {
+	const siteEntry = await getRequiredSiteEntry(
+		'Layout.astro: resolving layout meta description'
+	);
 
 	description =
 		siteEntry.data.seo?.description?.trim() ||
@@ -42,13 +79,91 @@ if (!description) {
 		siteEntry.data.tagline?.trim() ||
 		title;
 }
+
+const resolvedDescription = description;
+const socialDescription =
+	normalizeStringProp('socialDescription', rawSocialDescription, {
+		optional: true,
+	}) || resolvedDescription;
+
+const socialImagePath = normalizeStringProp('socialImagePath', rawSocialImagePath, {
+	optional: true,
+});
+if (
+	socialImagePath &&
+	!socialImagePath.startsWith('/') &&
+	!socialImagePath.startsWith('https://') &&
+	!socialImagePath.startsWith('http://')
+) {
+	throw new Error(
+		`Layout.astro \`socialImagePath\` must be an absolute URL or start with \`/\`; received: ${socialImagePath}`
+	);
+}
+
+let ogImagePath = socialImagePath || '/images/tw_og_logo.jpg';
+if (socialImagePath?.startsWith('http://') || socialImagePath?.startsWith('https://')) {
+	try {
+		ogImagePath = new URL(socialImagePath).toString();
+	} catch {
+		throw new Error(
+			`Layout.astro \`socialImagePath\` must be a valid absolute URL; received: ${socialImagePath}`
+		);
+	}
+}
+
+let siteUrl: string | undefined;
+try {
+	siteUrl = Astro.site ? new URL(Astro.site).origin : undefined;
+} catch (error) {
+	const message =
+		'Invalid Astro.site URL; OG/Twitter absolute URLs will be omitted. Please fix `site` in astro.config.mjs.';
+	if (import.meta.env.DEV) {
+		console.warn(message, error);
+	} else {
+		console.error(message, error);
+	}
+	siteUrl = undefined;
+}
+const pathname = Astro.url?.pathname;
+const pageUrl = siteUrl && pathname ? new URL(pathname, siteUrl).toString() : undefined;
+let ogImage: string | undefined;
+if (siteUrl) {
+	ogImage = new URL(ogImagePath, siteUrl).toString();
+} else if (ogImagePath.startsWith('http://') || ogImagePath.startsWith('https://')) {
+	ogImage = ogImagePath;
+} else {
+	const message =
+		'Layout.astro: Unable to form absolute OG/Twitter image URLs because `Astro.site` is not configured.';
+	if (import.meta.env.DEV) {
+		console.warn(message);
+	} else {
+		console.error(message);
+	}
+}
+const isAbsoluteOgImage = Boolean(ogImage);
+
+const metaDescription = normalizeMetaText(resolvedDescription);
+const metaSocialDescription = normalizeMetaText(socialDescription);
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
+		<meta name="description" content={metaDescription} />
+		<meta property="og:type" content={ogType} />
+		{pageUrl && <meta property="og:url" content={pageUrl} />}
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={metaSocialDescription} />
+		{ogImage && <meta property="og:image" content={ogImage} />}
+		{isAbsoluteOgImage ? (
+			<meta name="twitter:card" content="summary_large_image" />
+		) : (
+			<meta name="twitter:card" content="summary" />
+		)}
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={metaSocialDescription} />
+		{isAbsoluteOgImage && <meta name="twitter:image" content={ogImage} />}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />

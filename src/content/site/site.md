@@ -22,7 +22,7 @@ header:
 
 # Footer  
 footer:
-  copyright: "© 2024 Your Free Call Will End Soon, Co."
+  copyrightHolder: "Your Free Call Will End Soon, Co."
 
 # Social Media
 social:
@@ -31,8 +31,9 @@ social:
 
 # SEO
 seo:
-  title: "Third Wave - Big Screen Gaming"
-  description: "We're making theaters playable. No goggles. No controllers. Follow along as we invent a new medium."
+  title: "Third Wave — Big Screen Gaming"
+  description: "Third Wave is reinventing movie theaters as multiplayer gaming venues. No goggles, no controllers — just your phone and the big screen."
+  socialDescription: "No goggles. No controllers. We're making theaters playable."
   keywords: "gaming, big screen, immersive, multiplayer, theater, third wave"
 ---
 

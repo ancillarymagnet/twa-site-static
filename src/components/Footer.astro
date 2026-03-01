@@ -1,14 +1,18 @@
 ---
 export interface Props {
-	copyright: string;
+	/** Company or rights holder name; the year is rendered automatically. */
+	copyrightHolder: string;
 }
 
-const { copyright } = Astro.props;
+const { copyrightHolder } = Astro.props;
+
+const year = new Date().getFullYear();
+const holder = copyrightHolder.trim();
 ---
 
 <footer class="footer">
 	<div class="footer-content">
-		<p class="copyright">{copyright}</p>
+		<p class="copyright">© {year}{holder ? ` ${holder}` : ''}</p>
 	</div>
 </footer>
 
