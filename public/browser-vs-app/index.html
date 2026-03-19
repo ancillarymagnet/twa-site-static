@@ -81,7 +81,7 @@
       <div class="note pl">Apple blocks this entirely in the browser.</div>
       <div class="note te">navigator.vibrate() not implemented in WebKit. No path to Taptic Engine from the browser. No workaround exists.</div></td>
     <td><span class="pill par">Basic only</span>
-      <div class="note pl">Android phones can vibrate from a browser, but it is blunt: on/off and simple patterns only.</div>
+      <div class="note pl">Android phones can vibrate from a browser, but it is blunt: on/off and simple patterns only. Requires a user gesture (tap or click) to trigger.</div>
       <div class="note te">navigator.vibrate() supported &#8212; on/off and pattern arrays. No amplitude control, no frequency shaping, no semantic effect types.</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">Full access to the Taptic Engine. Every tap, click, and pulse style. Can sync with audio.</div>
@@ -97,7 +97,7 @@
       <div class="note pl">Browser pages on iPhone cannot go edge-to-edge. The status bar is always visible. Works on iPad.</div>
       <div class="note te">Element.requestFullscreen() unsupported on iPhone. Video-only via webkitEnterFullscreen(). Status bar, Dynamic Island, home indicator always visible. iPad: full API since Safari 16.4.</div></td>
     <td><span class="pill yes">Yes</span>
-      <div class="note pl">Full screen works. Status bar and navigation bar both disappear.</div>
+      <div class="note pl">Full screen works. Status bar and navigation bar both disappear. Must be triggered by a user gesture (tap or click).</div>
       <div class="note te">Element.requestFullscreen() fully supported (Chrome 71+, unprefixed). PWA with display:fullscreen hides all system chrome.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Full edge-to-edge. Status bar and home indicator can be hidden.</div>
@@ -128,7 +128,7 @@
   <tr>
     <td><div class="cap-label">Tilt &amp; rotation</div><div class="cap-eg">steering, aiming, physical gesture controls</div></td>
     <td><span class="pill par">Drifts over time</span>
-      <div class="note pl">Tilt and rotation work, but compass direction drifts over time without correction. Fine for simple tilt controls, not reliable for pointing or aiming. If the user denies the permission prompt, you cannot ask again.</div>
+      <div class="note pl">Tilt and rotation work, but compass direction drifts over time without correction. Fine for simple tilt controls, not reliable for pointing or aiming. Requires a permission prompt that can only be shown after a user gesture (tap or click). If the user denies it, you cannot ask again.</div>
       <div class="note te">DeviceOrientationEvent: accel + gyro only. Alpha (yaw) is relative, no magnetometer fusion, drifts over time. absolute always false. Requires DeviceOrientationEvent.requestPermission() (iOS 13+); if denied, origin cannot re-prompt.</div></td>
     <td><span class="pill yes">Accurate and stable</span>
       <div class="note pl">Android browsers combine accelerometer, gyroscope, and compass into a stable, drift-free reading. Direction stays accurate. No permission prompt needed.</div>
@@ -144,7 +144,7 @@
   <tr>
     <td><div class="cap-label">Compass</div><div class="cap-eg">directional gameplay, north-facing mechanics</div></td>
     <td><span class="pill par">Direction only</span>
-      <div class="note pl">Compass direction only. Requires user permission.</div>
+      <div class="note pl">Compass direction only. Requires a permission prompt that can only be shown after a user gesture (tap or click).</div>
       <div class="note te">webkitCompassHeading: bearing 0&#8211;360&#176; relative to magnetic north. No raw x/y/z data. Requires DeviceOrientationEvent permission.</div></td>
     <td><span class="pill par">Direction works; raw data needs enabling</span>
       <div class="note pl">Compass direction works by default. Raw magnetic field data requires a non-standard browser setting most users will not have.</div>
@@ -345,7 +345,7 @@
       <div class="note pl">Not available from a browser tab. Works if the experience is saved to the home screen, except in EU countries where Apple removed this in 2024.</div>
       <div class="note te">No Web Push from browser tab. iOS PWA (Home Screen, display:standalone) supports Web Push since iOS 16.4. EU exception: iOS 17.4 removed PWA standalone mode under DMA &#8212; no push in EU countries.</div></td>
     <td><span class="pill yes">Yes</span>
-      <div class="note pl">Works from any web page, no install needed. Supports images, action buttons, and silent background updates.</div>
+      <div class="note pl">Works from any web page, no install needed. Requires user permission. Supports images, action buttons, and silent background updates.</div>
       <div class="note te">Web Push API since Chrome 42. Rich notifications, silent/data-only push via FCM, background delivery through Service Workers.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Images, action buttons, Live Activities on the lock screen, critical alerts that cut through Do Not Disturb.</div>
@@ -361,7 +361,7 @@
       <div class="note pl">Blocked. Apple has explicitly declined to implement this, and every browser on iOS uses Apple's engine, so there is no workaround.</div>
       <div class="note te">Web Bluetooth API not implemented in WebKit. Apple explicitly declined in 2020, citing fingerprinting concerns. All iOS browsers use WebKit; no alternative engine permitted.</div></td>
     <td><span class="pill par">Can connect to devices; can&#8217;t be one</span>
-      <div class="note pl">Can connect to Bluetooth devices. Cannot advertise itself as one. User must pick from a system chooser each time.</div>
+      <div class="note pl">Can connect to Bluetooth devices. Cannot advertise itself as one. Requires a user gesture to initiate, and the user must pick from a system chooser each time.</div>
       <div class="note te">Web Bluetooth API since Chrome 56: GATT central role, device discovery with filters, characteristic read/write/notifications. No peripheral/advertising, no background scanning, no Bluetooth Classic.</div></td>
     <td><span class="pill yes">Full access</span>
       <div class="note pl">Connect to devices or act as one. Background scanning. Full profile support.</div>
@@ -377,7 +377,7 @@
       <div class="note pl">Blocked. Apple blocked this alongside Bluetooth in 2020.</div>
       <div class="note te">Web NFC not implemented in WebKit. Blocked by Apple in 2020 alongside Web Bluetooth.</div></td>
     <td><span class="pill par">Read and write tags only</span>
-      <div class="note pl">Can read and write NFC tags. Cannot emulate a card (e.g. transit payment).</div>
+      <div class="note pl">Can read and write NFC tags. Cannot emulate a card (e.g. transit payment). Requires a user gesture to start scanning.</div>
       <div class="note te">Web NFC (NDEFReader) since Chrome 89: NDEF read/write/makeReadOnly. No low-level tag access, no Host Card Emulation, foreground only.</div></td>
     <td><span class="pill yes">Read and write tags</span>
       <div class="note pl">Read and write a wide range of tag types. No card emulation (Apple Pay uses a separate chip).</div>
@@ -390,10 +390,10 @@
   <tr>
     <td><div class="cap-label">Live video &amp; audio streaming</div><div class="cap-eg">real-time camera feeds, peer-to-peer audio, video calling</div></td>
     <td><span class="pill par">Works, with caveats</span>
-      <div class="note pl">Works. Cannot share the phone's screen. Streams pause if the user switches to another app.</div>
+      <div class="note pl">Works. Requires camera and/or microphone permission. Cannot share the phone's screen. Streams pause if the user switches to another app.</div>
       <div class="note te">WebRTC supported since Safari 11. H.264 prioritized; VP9 added in Safari 12.2; AV1 experimental. getDisplayMedia() unsupported on iPhone. Streams pause when Safari backgrounded. No simulcast, no Insertable Streams.</div></td>
     <td><span class="pill yes">Full</span>
-      <div class="note pl">Works fully. Screen sharing available. Streams survive briefly when backgrounded.</div>
+      <div class="note pl">Works fully. Requires camera and/or microphone permission. Screen sharing available. Streams survive briefly when backgrounded.</div>
       <div class="note te">Full WebRTC: VP8, VP9/SVC, H.264, AV1, simulcast, getDisplayMedia(), Insertable Streams. Streams survive backgrounding with limits.</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">All codecs. Background operation. Integrates with the phone's call system.</div>
