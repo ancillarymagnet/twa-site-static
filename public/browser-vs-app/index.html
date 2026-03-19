@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browser vs. Native — Capability Comparison</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.5; color: #f0ede8; background: #272727; padding: 2rem; }
+  .header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+  .logo { width: 40px; height: 40px; object-fit: contain; }
+  h1 { font-size: 20px; font-weight: 600; color: #f0ede8; }
+  .subtitle { font-size: 13px; color: #c8c4bc; margin-bottom: 1.25rem; }
+  .toggle-bar { display: inline-flex; background: #333; border-radius: 8px; padding: 3px; margin-bottom: 1.25rem; gap: 2px; }
+  .toggle-btn { padding: 7px 18px; border-radius: 6px; border: none; background: transparent; font-size: 13px; font-weight: 500; color: #c8c4bc; cursor: pointer; font-family: inherit; transition: background 0.15s, color 0.15s; }
+  .toggle-btn.active { background: #444; color: #f0ede8; }
+  .legend { display: flex; gap: 1.25rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #c8c4bc; }
+  .table-wrap { background: #1e1e1e; border-radius: 10px; border: 1px solid #3a3a3a; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  col.cap { width: 15%; }
+  col.plat { width: 21.25%; }
+  thead th { background: #222; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #c0bbb5; padding: 10px 12px; text-align: left; border-bottom: 1px solid #3a3a3a; }
+  thead th:not(:first-child) { border-left: 1px solid #3a3a3a; }
+  tr.sh td { background: #242424; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #b8b4ae; padding: 8px 12px; border-top: 1px solid #3a3a3a; border-bottom: 1px solid #3a3a3a; }
+  tbody tr:not(.sh) td { padding: 11px 12px; vertical-align: top; border-bottom: 1px solid #333; word-break: break-word; overflow-wrap: break-word; }
+  tbody tr:not(.sh) td:not(:first-child) { border-left: 1px solid #333; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:not(.sh):hover td { background: #252525; }
+  .cap-label { font-weight: 600; font-size: 13px; color: #f0ede8; }
+  .cap-eg { font-size: 11px; color: #b8b4ae; margin-top: 3px; line-height: 1.4; font-style: italic; }
+  .pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-bottom: 5px; white-space: nowrap; }
+  .no  { background: #3d1a1a; color: #f28b8b; }
+  .yes { background: #1a2e1a; color: #7ec87e; }
+  .par { background: #332b10; color: #d4a847; }
+  .note { font-size: 12px; color: #c8c4bc; line-height: 1.45; margin-top: 2px; word-break: break-word; overflow-wrap: break-word; }
+  .te { display: none; }
+  .pl { display: block; }
+  body.tech .te { display: block; }
+  body.tech .pl { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img class="logo" src="/images/twa_graphic_logo.jpeg" alt="Third Wave">
+  <h1>Browser vs. native &#8212; capability comparison</h1>
+</div>
+<p class="subtitle">THIRD WAVE &middot; March 2026 &middot; v1.1</p>
+
+<div class="toggle-bar">
+  <button class="toggle-btn active" id="btn-pl" onclick="setMode('plain')">Plain English</button>
+  <button class="toggle-btn" id="btn-te" onclick="setMode('tech')">Technical</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="pill yes">Yes</span>&nbsp;Works well</div>
+  <div class="legend-item"><span class="pill par">Partially</span>&nbsp;Works with limitations</div>
+  <div class="legend-item"><span class="pill no">No</span>&nbsp;Not possible</div>
+</div>
+
+<div class="table-wrap">
+<table>
+  <colgroup><col class="cap"><col class="plat"><col class="plat"><col class="plat"><col class="plat"></colgroup>
+  <thead>
+    <tr>
+      <th></th>
+      <th>iPhone &middot; browser</th>
+      <th>Android &middot; browser</th>
+      <th>iPhone &middot; app</th>
+      <th>Android &middot; app</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  <tr class="sh"><td colspan="5">Feel &amp; feedback</td></tr>
+
+  <tr>
+    <td><div class="cap-label">Vibration &amp; haptics</div><div class="cap-eg">button taps, score pulses, collision rumble</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Apple blocks this entirely in the browser. No taps, pulses, or buzz of any kind.</div>
+      <div class="note te">navigator.vibrate() not implemented in WebKit. No path to Taptic Engine from the browser. No workaround exists.</div></td>
+    <td><span class="pill par">Basic only</span>
+      <div class="note pl">Android phones can vibrate from a browser, but it is blunt: on/off and simple patterns only. No nuanced taps or clicks.</div>
+      <div class="note te">navigator.vibrate() supported &#8212; on/off and pattern arrays. No amplitude control, no frequency shaping, no semantic effect types.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Full access to the Taptic Engine. Every tap, click, and pulse style. Can sync with audio.</div>
+      <div class="note te">Core Haptics (CHHapticEngine, iOS 13+): transients, continuous events, intensity/sharpness 0&#8211;1, parameter curves, AHAP patterns, synchronized audio+haptics.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Full control over strength, rhythm, and type. Varies by device hardware.</div>
+      <div class="note te">VibrationEffect with amplitude control (API 26+); VibrationEffect.Composition with named primitives &#8212; PRIMITIVE_CLICK, PRIMITIVE_LOW_TICK, etc. (API 30+).</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Full screen</div><div class="cap-eg">hiding browser chrome, immersive game UI</div></td>
+    <td><span class="pill no">Not on iPhone</span>
+      <div class="note pl">Browser pages on iPhone cannot go edge-to-edge. The status bar is always visible. Works on iPad.</div>
+      <div class="note te">Element.requestFullscreen() unsupported on iPhone. Video-only via webkitEnterFullscreen(). Status bar, Dynamic Island, home indicator always visible. iPad: full API since Safari 16.4.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Full screen works. Status bar and navigation bar both disappear.</div>
+      <div class="note te">Element.requestFullscreen() fully supported (Chrome 71+, unprefixed). PWA with display:fullscreen hides all system chrome.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Full edge-to-edge. Status bar and home indicator can be hidden.</div>
+      <div class="note te">prefersStatusBarHidden + prefersHomeIndicatorAutoHidden.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Full edge-to-edge. All system bars hidden.</div>
+      <div class="note te">WindowInsetsController.hide(WindowInsets.Type.systemBars()).</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Screen stays on</div><div class="cap-eg">controller visible throughout a show, no sleep during gameplay</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Works. Apple was slow to add this and it had bugs until early 2025, but it is reliable now.</div>
+      <div class="note te">Screen Wake Lock API since Safari 16.4. Broken in installed PWAs until iOS 18.4. Stable in both tab and PWA now.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Works reliably.</div>
+      <div class="note te">Screen Wake Lock API since Chrome 84. Stable in tab and PWA.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Standard. No permission needed.</div>
+      <div class="note te">UIApplication.shared.isIdleTimerDisabled = true.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Standard. No permission needed.</div>
+      <div class="note te">FLAG_KEEP_SCREEN_ON on window, or PowerManager.WakeLock.</div></td>
+  </tr>
+
+  <tr class="sh"><td colspan="5">Sensors</td></tr>
+
+  <tr>
+    <td><div class="cap-label">Tilt &amp; rotation</div><div class="cap-eg">steering, aiming, physical gesture controls</div></td>
+    <td><span class="pill par">Drifts over time</span>
+      <div class="note pl">Tilt and rotation work, but compass direction drifts over time without correction. Fine for simple tilt controls, not reliable for pointing or aiming. If the user denies the permission prompt, you cannot ask again.</div>
+      <div class="note te">DeviceOrientationEvent: accel + gyro only. Alpha (yaw) is relative, no magnetometer fusion, drifts over time. absolute always false. Requires DeviceOrientationEvent.requestPermission() (iOS 13+); if denied, origin cannot re-prompt.</div></td>
+    <td><span class="pill yes">Accurate and stable</span>
+      <div class="note pl">Android browsers combine accelerometer, gyroscope, and compass into a stable, drift-free reading. Direction stays accurate. No permission prompt needed.</div>
+      <div class="note te">Generic Sensor API (Chrome 67+): AbsoluteOrientationSensor fuses accel + gyro + magnetometer into drift-corrected quaternion. No permission prompt. ~60 Hz cap.</div></td>
+    <td><span class="pill yes">Precise and fast</span>
+      <div class="note pl">All sensors fused together. Updates 100+ times per second.</div>
+      <div class="note te">CMDeviceMotion (CoreMotion): full AHRS, quaternion output, 4 reference frames, bias-removed rotation rate, 100+ Hz configurable.</div></td>
+    <td><span class="pill yes">Precise and fast</span>
+      <div class="note pl">Same as iPhone app. Updates hundreds of times per second on high-end hardware.</div>
+      <div class="note te">TYPE_ROTATION_VECTOR (full fusion), TYPE_GAME_ROTATION_VECTOR, quaternion output, up to 200&#8211;500+ Hz. HIGH_SAMPLING_RATE_SENSORS permission above 200 Hz (Android 12+).</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Compass</div><div class="cap-eg">directional gameplay, north-facing mechanics</div></td>
+    <td><span class="pill par">Direction only</span>
+      <div class="note pl">Compass direction only. Requires user permission.</div>
+      <div class="note te">webkitCompassHeading: bearing 0&#8211;360&#176; relative to magnetic north. No raw x/y/z data. Requires DeviceOrientationEvent permission.</div></td>
+    <td><span class="pill par">Direction works; raw data needs enabling</span>
+      <div class="note pl">Compass direction works by default. Raw magnetic field data requires a non-standard browser setting most users will not have.</div>
+      <div class="note te">deviceorientationabsolute provides absolute heading by default. Raw Magnetometer API disabled by default; requires chrome://flags/#enable-generic-sensor-extra-classes. Capped at 10 Hz when enabled.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Full compass and magnetic field data.</div>
+      <div class="note te">CMMotionManager.magnetometerData (raw &#181;T), CMDeviceMotion.magneticField (calibrated), CLLocationManager.heading.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Full magnetic field data. No permission needed.</div>
+      <div class="note te">TYPE_MAGNETIC_FIELD and TYPE_MAGNETIC_FIELD_UNCALIBRATED (API 18+). No runtime permission.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Sensor speed</div><div class="cap-eg">fast motion tracking, low-latency response</div></td>
+    <td><span class="pill par">60 updates/sec &#8212; fixed</span>
+      <div class="note pl">60 updates per second, fixed. Fine for most interactions. Sluggish for fast motion or precision mechanics.</div>
+      <div class="note te">DeviceMotionEvent fixed at ~60 Hz. Not configurable.</div></td>
+    <td><span class="pill par">60 updates/sec &#8212; fixed</span>
+      <div class="note pl">Same 60/sec cap. The compass only updates 10 times per second.</div>
+      <div class="note te">Generic Sensor API accepts frequency parameter but caps at ~60 Hz. Magnetometer hard-capped at 10 Hz.</div></td>
+    <td><span class="pill yes">100&#8211;200+ per sec</span>
+      <div class="note pl">2-3x faster than any browser.</div>
+      <div class="note te">Configurable via deviceMotionUpdateInterval. Hardware supports 100+ Hz; some devices reach 200 Hz+.</div></td>
+    <td><span class="pill yes">Up to 500 per sec</span>
+      <div class="note pl">Fastest available. Well beyond what any browser can offer.</div>
+      <div class="note te">SENSOR_DELAY_FASTEST: 200&#8211;500+ Hz on flagships. HIGH_SAMPLING_RATE_SENSORS install-time permission above 200 Hz (Android 12+).</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Light sensor</div><div class="cap-eg">adapting UI to room brightness</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Not accessible from any browser on iPhone.</div>
+      <div class="note te">AmbientLightSensor (Generic Sensor API) not implemented in WebKit.</div></td>
+    <td><span class="pill par">Not in practice</span>
+      <div class="note pl">Technically possible but requires a non-standard browser setting. Not reliable with general audiences.</div>
+      <div class="note te">AmbientLightSensor behind chrome://flags/#enable-generic-sensor-extra-classes. Disabled by default. 10 Hz when enabled.</div></td>
+    <td><span class="pill no">Not available</span>
+      <div class="note pl">Apple does not expose the light sensor to apps either.</div>
+      <div class="note te">No public API. SRAmbientLightSensor (SensorKit) is research-only with months-long Apple approval process.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Available to apps in lux. No permission needed.</div>
+      <div class="note te">TYPE_LIGHT via SensorManager. Illuminance in lux. No runtime permission.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Barometer</div><div class="cap-eg">altitude detection, floor-level awareness</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">No browser on any phone can access this.</div>
+      <div class="note te">No web API exists for barometric pressure on any browser or platform.</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Same.</div>
+      <div class="note te">No web API exists for barometric pressure on any browser or platform.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Air pressure and altitude changes. Requires user permission since 2024.</div>
+      <div class="note te">CMAltimeter: pressure in kPa, relative altitude. NSMotionUsageDescription + authorization required since iOS 17.4.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Available. No permission needed.</div>
+      <div class="note te">TYPE_PRESSURE via SensorManager. Hectopascals. No runtime permission.</div></td>
+  </tr>
+
+  <tr class="sh"><td colspan="5">Camera, flashlight &amp; AR</td></tr>
+
+  <tr>
+    <td><div class="cap-label">Camera</div><div class="cap-eg">face detection, QR codes, heart rate via PPG, scanning</div></td>
+    <td><span class="pill par">Works, with caveats</span>
+      <div class="note pl">Works, but Safari sometimes forgets permission and re-prompts next session. The green status bar dot is OS-enforced and appears in apps too.</div>
+      <div class="note te">getUserMedia() supported. HTTPS required. Green status bar dot plus Safari-specific browser indicator. Permissions less persistent than Chrome &#8212; may re-prompt across sessions or SPA route transitions. ImageCapture API not supported.</div></td>
+    <td><span class="pill par">Works, with caveats</span>
+      <div class="note pl">Works. Permission is remembered per site, so less re-prompting than iPhone.</div>
+      <div class="note te">getUserMedia() supported. HTTPS required. Green dot (Android 12+). Permissions persist per site. ImageCapture API supported in Chrome.</div></td>
+    <td><span class="pill yes">Full control</span>
+      <div class="note pl">Full control over resolution, frame rate, focus, and exposure. Green dot is always shown by the OS.</div>
+      <div class="note te">AVCaptureSession: full resolution, framerate, focus, exposure control. Green status bar dot OS-enforced.</div></td>
+    <td><span class="pill yes">Full control</span>
+      <div class="note pl">Same as iPhone app.</div>
+      <div class="note te">Camera2 / CameraX: full control over all camera parameters.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Flashlight</div><div class="cap-eg">low-light signaling, attention mechanics</div></td>
+    <td><span class="pill no">Not reliably</span>
+      <div class="note pl">Not reliably possible. Requires activating the camera at the same time, and even then it is inconsistent across devices.</div>
+      <div class="note te">ImageCapture API unsupported in Safari. Torch via applyConstraints({torch:true}) on getUserMedia track is newly possible in some Safari versions but unreliable. Always requires active camera stream.</div></td>
+    <td><span class="pill par">Yes, but camera turns on too</span>
+      <div class="note pl">Works, but the camera must be active simultaneously, so the green privacy dot appears.</div>
+      <div class="note te">applyConstraints({advanced:[{torch:true}]}) on getUserMedia video track (Chrome 59+). Camera stream must be active; green dot appears.</div></td>
+    <td><span class="pill yes">Independently</span>
+      <div class="note pl">On/off with brightness control, without the camera running. Camera permission required but the camera itself stays off.</div>
+      <div class="note te">AVCaptureDevice.torchMode + setTorchModeOn(level:) 0.0&#8211;1.0. Camera permission required; camera session not required to be active.</div></td>
+    <td><span class="pill yes">Independently</span>
+      <div class="note pl">Can control the flashlight without activating the camera. No green privacy dot.</div>
+      <div class="note te">CameraManager.setTorchMode(cameraId, enabled) (API 23+). Can enable torch without opening a camera session.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Augmented reality</div><div class="cap-eg">overlaying graphics on the real world, spatial experiences</div></td>
+    <td><span class="pill no">Not possible</span>
+      <div class="note pl">No AR support in Safari. Apple offers a non-programmable 3D object viewer, but you cannot build on top of it. The main third-party workaround shut down in early 2026.</div>
+      <div class="note te">No WebXR support in Safari (any version). AR Quick Look (USDZ via rel="ar") works as a non-programmable viewer. 8th Wall shut down February 28, 2026. Alternatives: MindAR, Zappar, AR.js (marker-based only).</div></td>
+    <td><span class="pill par">Basic AR only</span>
+      <div class="note pl">Basic AR only: placing objects on surfaces, light detection. No face tracking, image recognition, or location-based AR.</div>
+      <div class="note te">WebXR Device API (Chrome 79+) via ARCore: hit-test, anchors, plane detection, DOM overlay, light estimation, depth sensing. No face/body/image tracking, no cloud anchors, no Geospatial API.</div></td>
+    <td><span class="pill yes">Full AR</span>
+      <div class="note pl">Face and body tracking, object and image recognition, LiDAR room scanning, people occlusion.</div>
+      <div class="note te">ARKit: world/face/body tracking, LiDAR scene reconstruction, image/object detection, people occlusion, location anchors, 4K/HDR AR video.</div></td>
+    <td><span class="pill yes">Full AR</span>
+      <div class="note pl">Full AR including geospatial anchoring to real-world locations. Multiple users can share the same AR space.</div>
+      <div class="note te">ARCore: motion tracking, ML depth, augmented faces/images, Geospatial API with VPS + Streetscape Geometry, scene semantics, cloud anchors.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Hand &amp; body tracking</div><div class="cap-eg">gesture controls, conductor input, physical performance</div></td>
+    <td><span class="pill par">Possible, but slower</span>
+      <div class="note pl">Possible via AI running in the page, but frame rates are lower and battery drain is higher than a native app.</div>
+      <div class="note te">MediaPipe (WebAssembly + WebGL): Hands (21 landmarks/hand), Pose (33 landmarks), Face Mesh (468 points). ~20&#8211;30 FPS. No Neural Engine access.</div></td>
+    <td><span class="pill par">Possible, better than iPhone browser</span>
+      <div class="note pl">Same approach as iPhone browser, but tends to run faster and more efficiently on Android Chrome.</div>
+      <div class="note te">Same MediaPipe stack. Typically higher FPS than iOS Safari due to stronger WebGL/WASM optimization in Chrome.</div></td>
+    <td><span class="pill yes">Fast and precise</span>
+      <div class="note pl">Hardware-accelerated, built into the OS. 21-point hand tracking, full body skeleton. About 10ms response time.</div>
+      <div class="note te">Vision framework: VNDetectHumanHandPoseRequest (21 landmarks, 2 hands), VNDetectHumanBodyPoseRequest (19 joints). ARKit body tracking on A12+. ~5&#8211;14 ms latency.</div></td>
+    <td><span class="pill yes">Fast and precise</span>
+      <div class="note pl">Uses the phone's AI chip. 2-3x faster than the browser equivalent.</div>
+      <div class="note te">ML Kit Pose Detection (33 landmarks, GPU/NNAPI acceleration). ~2&#8211;3&#215; lower latency than browser implementations.</div></td>
+  </tr>
+
+  <tr class="sh"><td colspan="5">Audio</td></tr>
+
+  <tr>
+    <td><div class="cap-label">Playing sound automatically</div><div class="cap-eg">ambient music on load, sound effects timed to show events</div></td>
+    <td><span class="pill no">Can&#8217;t start without a tap</span>
+      <div class="note pl">No audio until the user taps something first. Cannot start audio on page load or on a timer.</div>
+      <div class="note te">WebKit autoplay policy: any audible media (HTMLMediaElement, AudioContext) blocked until user gesture. AudioContext starts suspended; must resume() after interaction. No per-site exemptions. Applies equally to iOS PWAs.</div></td>
+    <td><span class="pill par">Needs a tap first &#8212; unless installed</span>
+      <div class="note pl">Same restriction in the browser tab. If installed to the home screen, the requirement goes away.</div>
+      <div class="note te">Chrome autoplay policy: same gesture requirement in browser tab. Installed Android PWA exempt from autoplay restriction since Chrome 71.</div></td>
+    <td><span class="pill yes">Play whenever</span>
+      <div class="note pl">No restrictions. Sound plays when you tell it to.</div>
+      <div class="note te">AVAudioSession with .playback category. No gesture requirement.</div></td>
+    <td><span class="pill yes">Play whenever</span>
+      <div class="note pl">No restrictions. Sound plays when you tell it to.</div>
+      <div class="note te">MediaPlayer, ExoPlayer, AudioTrack &#8212; no autoplay restrictions.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Speaker vs. earpiece routing</div><div class="cap-eg">private audio to one person, directional sound design</div></td>
+    <td><span class="pill no">Can&#8217;t choose</span>
+      <div class="note pl">The browser decides where audio comes out, and sometimes gets it wrong. If the camera is active (e.g. for heart rate tracking), audio often routes to the earpiece with no way to override.</div>
+      <div class="note te">setSinkId() unreliable/unsupported on iOS Safari. getUserMedia activation triggers PlayAndRecord-like AVAudioSession, defaulting to earpiece. No programmatic override available from web.</div></td>
+    <td><span class="pill par">Limited</span>
+      <div class="note pl">Some control is possible but not comprehensive. Cannot reliably switch between earpiece and speaker.</div>
+      <div class="note te">setSinkId() technically supported but mobile Chrome doesn&#8217;t fully expose output device enumeration. No reliable earpiece/speaker toggle from web.</div></td>
+    <td><span class="pill yes">Full control</span>
+      <div class="note pl">Speaker, earpiece, or Bluetooth, independently of what else is happening.</div>
+      <div class="note te">AVAudioSession: categories, overrideOutputAudioPort(.speaker), defaultToSpeaker, Bluetooth routing options, preferred input/output selection.</div></td>
+    <td><span class="pill yes">Full control</span>
+      <div class="note pl">Full control: speakerphone, earpiece, Bluetooth, per-stream routing.</div>
+      <div class="note te">AudioManager: setSpeakerphoneOn(), setBluetoothScoOn(), device enumeration, AudioAttributes for per-stream routing.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Volume control</div><div class="cap-eg">app-controlled audio levels, show-driven mixing</div></td>
+    <td><span class="pill no">Locked to hardware buttons</span>
+      <div class="note pl">Cannot be controlled from the browser. Always reflects the physical button setting. Can attenuate within the page's own audio mix, but cannot touch system volume.</div>
+      <div class="note te">HTMLMediaElement.volume always reads 1.0, setter ignored. GainNode in Web Audio API works within the processing graph only. System/media volume immutable from web.</div></td>
+    <td><span class="pill par">In-page audio only</span>
+      <div class="note pl">Can control volume for audio within the page. Cannot control system volume.</div>
+      <div class="note te">HTMLMediaElement.volume (0.0&#8211;1.0) settable. GainNode works. System stream volumes inaccessible from web.</div></td>
+    <td><span class="pill par">Limited</span>
+      <div class="note pl">Apps can show a volume slider. Apple discourages direct programmatic control of system volume.</div>
+      <div class="note te">MPVolumeView provides system volume slider UI. Direct volume manipulation via deprecated APIs. AVAudioSession output volume read-only.</div></td>
+    <td><span class="pill yes">Full control</span>
+      <div class="note pl">Full control over any audio stream independently.</div>
+      <div class="note te">AudioManager.setStreamVolume() for STREAM_MUSIC, STREAM_RING, STREAM_ALARM, STREAM_NOTIFICATION, STREAM_VOICE_CALL.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Screen brightness</div><div class="cap-eg">dimming for dark scenes, brightening for dramatic moments</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Not possible from any browser on any phone.</div>
+      <div class="note te">No web API on any browser or platform. Screen Brightness API proposed at WICG, zero browser implementations.</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Same.</div>
+      <div class="note te">No web API on any browser or platform.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Any level, instantly. No permission needed.</div>
+      <div class="note te">UIScreen.main.brightness, 0.0&#8211;1.0. No entitlement or permission required.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Per-window or system-wide.</div>
+      <div class="note te">WindowManager.LayoutParams.screenBrightness (no permission) or Settings.System.SCREEN_BRIGHTNESS (WRITE_SETTINGS permission).</div></td>
+  </tr>
+
+  <tr class="sh"><td colspan="5">Connectivity</td></tr>
+
+  <tr>
+    <td><div class="cap-label">Push notifications</div><div class="cap-eg">pre-show reminders, real-time game alerts, follow-up messages</div></td>
+    <td><span class="pill no">Not from a browser tab</span>
+      <div class="note pl">Not available from a browser tab. Works if the experience is saved to the home screen, except in EU countries where Apple removed this in 2024.</div>
+      <div class="note te">No Web Push from browser tab. iOS PWA (Home Screen, display:standalone) supports Web Push since iOS 16.4. EU exception: iOS 17.4 removed PWA standalone mode under DMA &#8212; no push in EU countries.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Works from any web page, no install needed. Supports images, action buttons, and silent background updates.</div>
+      <div class="note te">Web Push API since Chrome 42. Rich notifications, silent/data-only push via FCM, background delivery through Service Workers.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Images, action buttons, Live Activities on the lock screen, critical alerts that cut through Do Not Disturb.</div>
+      <div class="note te">APNs: 4 KB payload, rich attachments via Notification Service Extension, Live Activities, Time Sensitive / Critical Alerts, provisional notifications.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Full notification system. Queued for up to 28 days if the device is offline.</div>
+      <div class="note te">FCM: notification channels, topic messaging, silent data messages, 28-day offline delivery queue.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Bluetooth</div><div class="cap-eg">headphones, physical controllers, BLE beacons, wearables</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Blocked. Apple has explicitly declined to implement this, and every browser on iOS uses Apple's engine, so there is no workaround.</div>
+      <div class="note te">Web Bluetooth API not implemented in WebKit. Apple explicitly declined in 2020, citing fingerprinting concerns. All iOS browsers use WebKit; no alternative engine permitted.</div></td>
+    <td><span class="pill par">Can connect to devices; can&#8217;t be one</span>
+      <div class="note pl">Can connect to Bluetooth devices. Cannot advertise itself as one. User must pick from a system chooser each time.</div>
+      <div class="note te">Web Bluetooth API since Chrome 56: GATT central role, device discovery with filters, characteristic read/write/notifications. No peripheral/advertising, no background scanning, no Bluetooth Classic.</div></td>
+    <td><span class="pill yes">Full access</span>
+      <div class="note pl">Connect to devices or act as one. Background scanning. Full profile support.</div>
+      <div class="note te">CoreBluetooth: central + peripheral roles, background BLE, full GATT client/server, L2CAP channels, iBeacon. Bluetooth Classic via ExternalAccessory (MFi required).</div></td>
+    <td><span class="pill yes">Full access</span>
+      <div class="note pl">Connect to devices or act as one. Background scanning. Full Bluetooth Classic and BLE.</div>
+      <div class="note te">android.bluetooth: central + peripheral, background scanning, BLE advertising, Bluetooth Classic &#8212; RFCOMM, A2DP, HFP, L2CAP CoC.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">NFC</div><div class="cap-eg">tap-to-join, physical tickets, contactless triggers</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Blocked. Apple blocked this alongside Bluetooth in 2020.</div>
+      <div class="note te">Web NFC not implemented in WebKit. Blocked by Apple in 2020 alongside Web Bluetooth.</div></td>
+    <td><span class="pill par">Read and write tags only</span>
+      <div class="note pl">Can read and write NFC tags. Cannot emulate a card (e.g. transit payment).</div>
+      <div class="note te">Web NFC (NDEFReader) since Chrome 89: NDEF read/write/makeReadOnly. No low-level tag access, no Host Card Emulation, foreground only.</div></td>
+    <td><span class="pill yes">Read and write tags</span>
+      <div class="note pl">Read and write a wide range of tag types. No card emulation (Apple Pay uses a separate chip).</div>
+      <div class="note te">CoreNFC (iPhone 7+): NDEF read/write (iOS 13+), background scanning (iOS 12+), ISO 7816, ISO 15693, FeliCa, MIFARE. No HCE.</div></td>
+    <td><span class="pill yes">Read, write, and emulate</span>
+      <div class="note pl">Full NFC including card emulation. The phone can act as an NFC card, not just a reader.</div>
+      <div class="note te">Full NDEF, low-level tag protocols (NfcA/B/F/V, IsoDep, MifareClassic/Ultralight), Host Card Emulation (HCE, API 19+), reader mode, background tag dispatch.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Live video &amp; audio streaming</div><div class="cap-eg">real-time camera feeds, peer-to-peer audio, video calling</div></td>
+    <td><span class="pill par">Works, with caveats</span>
+      <div class="note pl">Works. Cannot share the phone's screen. Streams pause if the user switches to another app.</div>
+      <div class="note te">WebRTC supported since Safari 11. H.264 prioritized; VP9 added in Safari 12.2; AV1 experimental. getDisplayMedia() unsupported on iPhone. Streams pause when Safari backgrounded. No simulcast, no Insertable Streams.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Works fully. Screen sharing available. Streams survive briefly when backgrounded.</div>
+      <div class="note te">Full WebRTC: VP8, VP9/SVC, H.264, AV1, simulcast, getDisplayMedia(), Insertable Streams. Streams survive backgrounding with limits.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">All codecs. Background operation. Integrates with the phone's call system.</div>
+      <div class="note te">libWebRTC: all codecs, background operation, CallKit integration, custom processing pipelines.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">All codecs. Background operation. Integrates with Android's call system.</div>
+      <div class="note te">libWebRTC: all codecs, ConnectionService integration, background operation.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Keeping connections alive</div><div class="cap-eg">maintaining live game state, staying connected during a show</div></td>
+    <td><span class="pill no">Drops within ~30 seconds</span>
+      <div class="note pl">Connections drop within about 30 seconds if the user switches apps, even briefly. Applies to home-screen web apps too. A real risk for live show scenarios.</div>
+      <div class="note te">Safari aggressively suspends background tabs and PWAs within ~30s. WebSocket connections drop. No Background Sync API. Service Workers have strict time limits.</div></td>
+    <td><span class="pill par">More forgiving</span>
+      <div class="note pl">More lenient. Connections survive longer when backgrounded. Installed web apps can do limited background work.</div>
+      <div class="note te">More lenient backgrounding; connections may survive several minutes before Doze mode. Background Sync (Chrome 49+), Periodic Background Sync and Background Fetch for installed PWAs.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Connections and background tasks stay alive. Audio, location, and call modes can run indefinitely.</div>
+      <div class="note te">BGTaskScheduler: BGAppRefreshTask (30s), BGProcessingTask. Background modes: audio, location, VoIP, BLE. URLSession background transfers.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Persistent connections, background tasks, foreground services for long-running work.</div>
+      <div class="note te">WorkManager, foreground services with persistent notification, AlarmManager, FCM-triggered background work.</div></td>
+  </tr>
+
+  <tr class="sh"><td colspan="5">Distribution</td></tr>
+
+  <tr>
+    <td><div class="cap-label">Getting there without a full install</div><div class="cap-eg">scan-to-play, tap-to-join, no App Store friction</div></td>
+    <td><span class="pill yes">App Clips</span>
+      <div class="note pl">Scan a QR code or tap an NFC tag and a small native app loads instantly, no App Store or install needed. Size limit for QR/NFC triggers is 15 MB. Full native capabilities: haptics, AR, Bluetooth, accurate sensors, flashlight. Deletes itself after about a month.</div>
+      <div class="note te">App Clips (iOS 14+): 15 MB limit for physical invocations (NFC, QR, App Clip Codes); 50 MB for digital (Safari Smart App Banner, Messages, Maps). Full native APIs available: camera, ARKit, Core Haptics, CoreBluetooth (foreground), NFC read, Apple Pay, Metal, Sign in with Apple. Exclusions: HealthKit, HomeKit, CallKit, SensorKit, background processing, full push notifications. Ephemeral push for 8 hours post-use. Auto-deleted after ~30 days. Requires companion full app in App Store.</div></td>
+    <td><span class="pill no">No equivalent</span>
+      <div class="note pl">Android had an equivalent (Instant Apps) but Google discontinued it in late 2025. A web page or home-screen web app is the current lightweight option.</div>
+      <div class="note te">Android Instant Apps discontinued December 2025. Play Instant APIs no longer functional. PWA is the current recommended lightweight alternative.</div></td>
+    <td>&#8212;</td>
+    <td>&#8212;</td>
+  </tr>
+
+
+  <tr>
+    <td><div class="cap-label">Sensor latency</div><div class="cap-eg">motion controls, real-time input, timing-sensitive mechanics</div></td>
+    <td><span class="pill par">High</span>
+      <div class="note pl">Sensor events go through the browser&#8217;s main thread and are subject to scheduling delays. Expect 50&ndash;100ms of latency in practice. Fine for slow gestures, noticeable for anything timing-sensitive.</div>
+      <div class="note te">DeviceMotionEvent delivered via main thread event loop. Subject to JS scheduling jitter and browser throttling. Typical observed latency 50&ndash;100ms. No way to request lower latency or higher priority from web.</div></td>
+    <td><span class="pill par">High</span>
+      <div class="note pl">Same main-thread bottleneck as iPhone browser. Chrome&#8217;s Generic Sensor API has slightly better architecture but is still meaningfully slower than native.</div>
+      <div class="note te">Generic Sensor API uses a dedicated sensor task runner but data still crosses to the main thread before JS callbacks fire. Latency improved over DeviceMotionEvent but still 30&ndash;80ms in practice.</div></td>
+    <td><span class="pill yes">Low</span>
+      <div class="note pl">Reads directly from hardware with no browser in the way. Typical latency under 5ms. The difference is perceptible for fast motion or precise timing.</div>
+      <div class="note te">CoreMotion delivers data on a dedicated background thread at hardware interrupt frequency. Typical latency 1&ndash;5ms. No main-thread involvement until the app chooses to process.</div></td>
+    <td><span class="pill yes">Low</span>
+      <div class="note pl">Same as iPhone app. Direct hardware access, sub-5ms latency.</div>
+      <div class="note te">SensorManager callbacks on a dedicated SensorThread. Typical latency 1&ndash;5ms at SENSOR_DELAY_FASTEST. No main-thread bottleneck.</div></td>
+  </tr>
+  </tbody>
+</table>
+</div>
+
+<script>
+function setMode(mode) {
+  document.body.classList.toggle('tech', mode === 'tech');
+  document.getElementById('btn-pl').classList.toggle('active', mode === 'plain');
+  document.getElementById('btn-te').classList.toggle('active', mode === 'tech');
+}
+</script>
+</body>
+</html>
