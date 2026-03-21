@@ -250,9 +250,9 @@
 
   <tr>
     <td><div class="cap-label">Augmented reality</div><div class="cap-eg">overlaying graphics on the real world, spatial experiences</div></td>
-    <td><span class="pill no">Not possible</span>
-      <div class="note pl">No AR support in Safari. Apple offers a non-programmable 3D object viewer, but you cannot build on top of it. The main third-party workaround shut down in early 2026.</div>
-      <div class="note te">No WebXR support in Safari (any version). AR Quick Look (USDZ via rel="ar") works as a non-programmable viewer. 8th Wall shut down February 28, 2026. Alternatives: MindAR, Zappar, AR.js (marker-based only).</div></td>
+    <td><span class="pill par">Limited AR</span>
+      <div class="note pl">No WebXR, so no surface detection. But marker tracking, image tracking, and face/hand tracking all work via camera + JavaScript computer vision libraries (MindAR, AR.js, TensorFlow.js).</div>
+      <div class="note te">No WebXR support in Safari (any version). AR Quick Look (USDZ via rel="ar") is a non-programmable viewer. However, getUserMedia() + JS/WASM CV works: MindAR (image tracking), AR.js (marker-based), TensorFlow.js/MediaPipe (face/hand/body tracking), OpenCV.js (custom CV pipelines). No plane detection or world tracking. 8th Wall shut down Feb 28, 2026.</div></td>
     <td><span class="pill par">Basic AR only</span>
       <div class="note pl">Basic AR only: placing objects on surfaces, light detection. No face tracking, image recognition, or location-based AR.</div>
       <div class="note te">WebXR Device API (Chrome 79+) via ARCore: hit-test, anchors, plane detection, DOM overlay, light estimation, depth sensing. No face/body/image tracking, no cloud anchors, no Geospatial API.</div></td>
