@@ -267,11 +267,11 @@
   <tr>
     <td><div class="cap-label">Augmented reality</div><div class="cap-eg">overlaying graphics on the real world, spatial experiences</div></td>
     <td><span class="pill par">Limited AR</span>
-      <div class="note pl">No WebXR, so no surface detection. But marker tracking, image tracking, and face/hand tracking all work via camera + JavaScript computer vision libraries (MindAR, AR.js, TensorFlow.js).</div>
-      <div class="note te">No WebXR support in Safari (any version). AR Quick Look (USDZ via rel="ar") is a non-programmable viewer. However, getUserMedia() + JS/WASM CV works: MindAR (image tracking), AR.js (marker-based), TensorFlow.js/MediaPipe (face/hand/body tracking), OpenCV.js (custom CV pipelines). No plane detection or world tracking. 8th Wall shut down Feb 28, 2026.</div></td>
+      <div class="note pl">No WebXR, so no surface detection or world tracking. Marker-based and image-based AR work via JS computer vision libraries (MindAR, AR.js). 8th Wall shut down in early 2026.</div>
+      <div class="note te">No WebXR support in Safari (any version). AR Quick Look (USDZ via rel="ar") is a non-programmable viewer. getUserMedia() + JS/WASM CV works for marker tracking (AR.js) and image tracking (MindAR). No plane detection or world tracking. 8th Wall shut down Feb 28, 2026.</div></td>
     <td><span class="pill par">Moderate AR</span>
-      <div class="note pl">WebXR provides surface detection, depth sensing, and light estimation. Face, hand, and image tracking work through the same JS computer vision libraries available on iPhone (MindAR, TensorFlow.js), and typically run faster on Android Chrome.</div>
-      <div class="note te">WebXR Device API (Chrome 79+) via ARCore: hit-test, anchors, plane detection, DOM overlay, light estimation, depth sensing. No WebXR face/body/image tracking or cloud anchors or Geospatial API. However, getUserMedia() + JS/WASM CV libraries (MindAR, AR.js, TensorFlow.js/MediaPipe, OpenCV.js) provide face/hand/body tracking and image tracking, generally at higher FPS than iOS Safari.</div></td>
+      <div class="note pl">WebXR provides surface detection, depth sensing, and light estimation. Marker and image tracking also work via JS libraries (MindAR, AR.js), and typically run faster on Android Chrome than iOS Safari.</div>
+      <div class="note te">WebXR Device API (Chrome 79+) via ARCore: hit-test, anchors, plane detection, DOM overlay, light estimation, depth sensing. No WebXR image tracking, cloud anchors, or Geospatial API. JS/WASM CV libraries (MindAR, AR.js, OpenCV.js) provide marker and image tracking, generally at higher FPS than iOS Safari.</div></td>
     <td><span class="pill yes">Full AR</span>
       <div class="note pl">Face and body tracking, object and image recognition, LiDAR room scanning, people occlusion.</div>
       <div class="note te">ARKit: world/face/body tracking, LiDAR scene reconstruction, image/object detection, people occlusion, location anchors, 4K/HDR AR video.</div></td>
@@ -281,19 +281,19 @@
   </tr>
 
   <tr>
-    <td><div class="cap-label">Hand &amp; body tracking</div><div class="cap-eg">gesture controls, conductor input, physical performance</div></td>
+    <td><div class="cap-label">Face, hand &amp; body tracking</div><div class="cap-eg">gesture controls, face filters, conductor input, physical performance</div></td>
     <td><span class="pill par">Possible, but slower</span>
-      <div class="note pl">Possible via AI running in the page, but frame rates are lower and battery drain is higher than a native app.</div>
-      <div class="note te">MediaPipe (WebAssembly + WebGL): Hands (21 landmarks/hand), Pose (33 landmarks), Face Mesh (468 points). ~20&#8211;30 FPS. No Neural Engine access.</div></td>
+      <div class="note pl">Works via AI models running in the page (TensorFlow.js/MediaPipe). Covers face mesh, hand landmarks, and body pose. Frame rates are lower and battery drain is higher than a native app.</div>
+      <div class="note te">MediaPipe (WebAssembly + WebGL): Face Mesh (468 points), Hands (21 landmarks/hand), Pose (33 landmarks). ~20&#8211;30 FPS. No Neural Engine access.</div></td>
     <td><span class="pill par">Possible, better than iPhone browser</span>
-      <div class="note pl">Same approach as iPhone browser, but tends to run faster and more efficiently on Android Chrome.</div>
+      <div class="note pl">Same libraries as iPhone browser, but tends to run faster and more efficiently on Android Chrome.</div>
       <div class="note te">Same MediaPipe stack. Typically higher FPS than iOS Safari due to stronger WebGL/WASM optimization in Chrome.</div></td>
     <td><span class="pill yes">Fast and precise</span>
-      <div class="note pl">Hardware-accelerated, built into the OS. 21-point hand tracking, full body skeleton. About 10ms response time.</div>
-      <div class="note te">Vision framework: VNDetectHumanHandPoseRequest (21 landmarks, 2 hands), VNDetectHumanBodyPoseRequest (19 joints). ARKit body tracking on A12+. ~5&#8211;14 ms latency.</div></td>
+      <div class="note pl">Hardware-accelerated, built into the OS. Face mesh, 21-point hand tracking, full body skeleton. About 10ms response time.</div>
+      <div class="note te">Vision framework: VNDetectFaceLandmarksRequest (76 landmarks), VNDetectHumanHandPoseRequest (21 landmarks, 2 hands), VNDetectHumanBodyPoseRequest (19 joints). ARKit face/body tracking on A12+. ~5&#8211;14 ms latency.</div></td>
     <td><span class="pill yes">Fast and precise</span>
-      <div class="note pl">Uses the phone's AI chip. 2-3x faster than the browser equivalent.</div>
-      <div class="note te">ML Kit Pose Detection (33 landmarks, GPU/NNAPI acceleration). ~2&#8211;3&#215; lower latency than browser implementations.</div></td>
+      <div class="note pl">Uses the phone's AI chip. Face mesh, hand, and body tracking at 2-3x faster than the browser equivalent.</div>
+      <div class="note te">ML Kit Face Mesh Detection (468 landmarks), Pose Detection (33 landmarks), GPU/NNAPI acceleration. ~2&#8211;3&#215; lower latency than browser implementations.</div></td>
   </tr>
 
   <tr class="sh"><td colspan="5">Audio</td></tr>
