@@ -214,6 +214,22 @@
       <div class="note te">TYPE_PRESSURE via SensorManager. Hectopascals. No runtime permission.</div></td>
   </tr>
 
+  <tr>
+    <td><div class="cap-label">Sensor latency</div><div class="cap-eg">motion controls, real-time input, timing-sensitive mechanics</div></td>
+    <td><span class="pill par">High</span>
+      <div class="note pl">Sensor events go through the browser&#8217;s main thread and are subject to scheduling delays. Expect 50&ndash;100ms of latency in practice. Fine for slow gestures, noticeable for anything timing-sensitive.</div>
+      <div class="note te">DeviceMotionEvent delivered via main thread event loop. Subject to JS scheduling jitter and browser throttling. Typical observed latency 50&ndash;100ms. No way to request lower latency or higher priority from web.</div></td>
+    <td><span class="pill par">High</span>
+      <div class="note pl">Same main-thread bottleneck as iPhone browser. Chrome&#8217;s Generic Sensor API has slightly better architecture but is still meaningfully slower than native.</div>
+      <div class="note te">Generic Sensor API uses a dedicated sensor task runner but data still crosses to the main thread before JS callbacks fire. Latency improved over DeviceMotionEvent but still 30&ndash;80ms in practice.</div></td>
+    <td><span class="pill yes">Low</span>
+      <div class="note pl">Reads directly from hardware with no browser in the way. Typical latency under 5ms. The difference is perceptible for fast motion or precise timing.</div>
+      <div class="note te">CoreMotion delivers data on a dedicated background thread at hardware interrupt frequency. Typical latency 1&ndash;5ms. No main-thread involvement until the app chooses to process.</div></td>
+    <td><span class="pill yes">Low</span>
+      <div class="note pl">Same as iPhone app. Direct hardware access, sub-5ms latency.</div>
+      <div class="note te">SensorManager callbacks on a dedicated SensorThread. Typical latency 1&ndash;5ms at SENSOR_DELAY_FASTEST. No main-thread bottleneck.</div></td>
+  </tr>
+
   <tr class="sh"><td colspan="5">Camera, flashlight &amp; AR</td></tr>
 
   <tr>
@@ -253,9 +269,9 @@
     <td><span class="pill par">Limited AR</span>
       <div class="note pl">No WebXR, so no surface detection. But marker tracking, image tracking, and face/hand tracking all work via camera + JavaScript computer vision libraries (MindAR, AR.js, TensorFlow.js).</div>
       <div class="note te">No WebXR support in Safari (any version). AR Quick Look (USDZ via rel="ar") is a non-programmable viewer. However, getUserMedia() + JS/WASM CV works: MindAR (image tracking), AR.js (marker-based), TensorFlow.js/MediaPipe (face/hand/body tracking), OpenCV.js (custom CV pipelines). No plane detection or world tracking. 8th Wall shut down Feb 28, 2026.</div></td>
-    <td><span class="pill par">Basic AR only</span>
-      <div class="note pl">Basic AR only: placing objects on surfaces, light detection. No face tracking, image recognition, or location-based AR.</div>
-      <div class="note te">WebXR Device API (Chrome 79+) via ARCore: hit-test, anchors, plane detection, DOM overlay, light estimation, depth sensing. No face/body/image tracking, no cloud anchors, no Geospatial API.</div></td>
+    <td><span class="pill par">Moderate AR</span>
+      <div class="note pl">WebXR provides surface detection, depth sensing, and light estimation. Face, hand, and image tracking work through the same JS computer vision libraries available on iPhone (MindAR, TensorFlow.js), and typically run faster on Android Chrome.</div>
+      <div class="note te">WebXR Device API (Chrome 79+) via ARCore: hit-test, anchors, plane detection, DOM overlay, light estimation, depth sensing. No WebXR face/body/image tracking or cloud anchors or Geospatial API. However, getUserMedia() + JS/WASM CV libraries (MindAR, AR.js, TensorFlow.js/MediaPipe, OpenCV.js) provide face/hand/body tracking and image tracking, generally at higher FPS than iOS Safari.</div></td>
     <td><span class="pill yes">Full AR</span>
       <div class="note pl">Face and body tracking, object and image recognition, LiDAR room scanning, people occlusion.</div>
       <div class="note te">ARKit: world/face/body tracking, LiDAR scene reconstruction, image/object detection, people occlusion, location anchors, 4K/HDR AR video.</div></td>
@@ -351,8 +367,8 @@
   <tr>
     <td><div class="cap-label">Push notifications</div><div class="cap-eg">pre-show reminders, real-time game alerts, follow-up messages</div></td>
     <td><span class="pill no">Not from a browser tab</span>
-      <div class="note pl">Not available from a browser tab. Works if the experience is saved to the home screen, except in EU countries where Apple removed this in 2024.</div>
-      <div class="note te">No Web Push from browser tab. iOS PWA (Home Screen, display:standalone) supports Web Push since iOS 16.4. EU exception: iOS 17.4 removed PWA standalone mode under DMA &#8212; no push in EU countries.</div></td>
+      <div class="note pl">Not available from a browser tab. Works if the experience is saved to the home screen.</div>
+      <div class="note te">No Web Push from browser tab. iOS PWA (Home Screen, display:standalone) supports Web Push since iOS 16.4. Apple briefly planned to remove PWA support in the EU under the DMA but reversed that decision before iOS 17.4 shipped.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Works from any web page, no install needed. Requires user permission. Supports images, action buttons, and silent background updates.</div>
       <div class="note te">Web Push API since Chrome 42. Rich notifications, silent/data-only push via FCM, background delivery through Service Workers.</div></td>
@@ -400,7 +416,7 @@
     <td><div class="cap-label">Live video &amp; audio streaming</div><div class="cap-eg">real-time camera feeds, peer-to-peer audio, video calling</div></td>
     <td><span class="pill par">Works, with caveats</span>
       <div class="note pl">Works. Requires camera and/or microphone permission. Cannot share the phone's screen. Streams pause if the user switches to another app.</div>
-      <div class="note te">WebRTC supported since Safari 11. H.264 prioritized; VP9 added in Safari 12.2; AV1 experimental. getDisplayMedia() unsupported on iPhone. Streams pause when Safari backgrounded. No simulcast, no Insertable Streams.</div></td>
+      <div class="note te">WebRTC supported since Safari 11. H.264 prioritized; VP8 added in Safari 12.1 (software-decoded); VP9 decode-only since Safari 17.4 (no encode in WebRTC); no AV1 in WebRTC. getDisplayMedia() unsupported on iPhone. Streams pause when Safari backgrounded. Limited simulcast (since 12.1, less capable than Chrome/Firefox). No Insertable Streams.</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">Works fully. Requires camera and/or microphone permission. Screen sharing available. Streams survive briefly when backgrounded.</div>
       <div class="note te">Full WebRTC: VP8, VP9/SVC, H.264, AV1, simulcast, getDisplayMedia(), Insertable Streams. Streams survive backgrounding with limits.</div></td>
@@ -442,22 +458,6 @@
     <td>&#8212;</td>
   </tr>
 
-
-  <tr>
-    <td><div class="cap-label">Sensor latency</div><div class="cap-eg">motion controls, real-time input, timing-sensitive mechanics</div></td>
-    <td><span class="pill par">High</span>
-      <div class="note pl">Sensor events go through the browser&#8217;s main thread and are subject to scheduling delays. Expect 50&ndash;100ms of latency in practice. Fine for slow gestures, noticeable for anything timing-sensitive.</div>
-      <div class="note te">DeviceMotionEvent delivered via main thread event loop. Subject to JS scheduling jitter and browser throttling. Typical observed latency 50&ndash;100ms. No way to request lower latency or higher priority from web.</div></td>
-    <td><span class="pill par">High</span>
-      <div class="note pl">Same main-thread bottleneck as iPhone browser. Chrome&#8217;s Generic Sensor API has slightly better architecture but is still meaningfully slower than native.</div>
-      <div class="note te">Generic Sensor API uses a dedicated sensor task runner but data still crosses to the main thread before JS callbacks fire. Latency improved over DeviceMotionEvent but still 30&ndash;80ms in practice.</div></td>
-    <td><span class="pill yes">Low</span>
-      <div class="note pl">Reads directly from hardware with no browser in the way. Typical latency under 5ms. The difference is perceptible for fast motion or precise timing.</div>
-      <div class="note te">CoreMotion delivers data on a dedicated background thread at hardware interrupt frequency. Typical latency 1&ndash;5ms. No main-thread involvement until the app chooses to process.</div></td>
-    <td><span class="pill yes">Low</span>
-      <div class="note pl">Same as iPhone app. Direct hardware access, sub-5ms latency.</div>
-      <div class="note te">SensorManager callbacks on a dedicated SensorThread. Typical latency 1&ndash;5ms at SENSOR_DELAY_FASTEST. No main-thread bottleneck.</div></td>
-  </tr>
   </tbody>
 </table>
 </div>
