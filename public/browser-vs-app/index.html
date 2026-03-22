@@ -64,7 +64,7 @@
   <img class="logo" src="/images/twa_graphic_logo.jpeg" alt="Third Wave">
   <h1>Browser vs. Native &#8212; Capability Comparison</h1>
 </div>
-<p class="subtitle">THIRD WAVE &middot; March 2026 &middot; v1.3</p>
+<p class="subtitle">THIRD WAVE &middot; March 2026 &middot; v1.3.5</p>
 
 <div class="toggle-bar">
   <button class="toggle-btn active" id="btn-pl" onclick="setMode('plain')">Plain English</button>
@@ -123,6 +123,22 @@
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Full edge-to-edge. All system bars hidden.</div>
       <div class="note te">WindowInsetsController.hide(WindowInsets.Type.systemBars()).</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Orientation lock</div><div class="cap-eg">locking to landscape for gameplay, forcing portrait for a controller UI</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Safari on iPhone does not support locking the screen to landscape or portrait. The page rotates whenever the user rotates the phone.</div>
+      <div class="note te">screen.orientation.lock() not implemented in WebKit on iPhone. No workaround. iPad supports it in Safari 16.4+ for installed PWAs only.</div></td>
+    <td><span class="pill par">Installed apps only</span>
+      <div class="note pl">Works if the experience is installed to the home screen as a PWA. Does not work from a regular browser tab.</div>
+      <div class="note te">screen.orientation.lock() supported in Chrome for installed PWAs with display:fullscreen or display:standalone. Not available in a browser tab.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Lock to any orientation per screen. Can change dynamically.</div>
+      <div class="note te">UIInterfaceOrientationMask per UIViewController. supportedInterfaceOrientations overridable at runtime.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Lock to any orientation. Can change per screen.</div>
+      <div class="note te">android:screenOrientation in manifest or Activity.setRequestedOrientation() at runtime. Full set of orientation constants.</div></td>
   </tr>
 
   <tr>
@@ -237,6 +253,22 @@
     <td><span class="pill yes">Low</span>
       <div class="note pl">Same as iPhone app. Direct hardware access, sub-5ms latency.</div>
       <div class="note te">SensorManager callbacks on a dedicated SensorThread. Typical latency 1&ndash;5ms at SENSOR_DELAY_FASTEST. No main-thread bottleneck.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Geolocation</div><div class="cap-eg">venue check-in, proximity triggers, location-gated content</div></td>
+    <td><span class="pill par">While page is open</span>
+      <div class="note pl">Works while the page is open. If the user denies the permission prompt, you cannot ask again from the same site. No background tracking or geofencing.</div>
+      <div class="note te">Geolocation API (navigator.geolocation) supported. One-shot permission prompt; if denied, origin cannot re-prompt without clearing Safari settings. Foreground only. No Geofencing API.</div></td>
+    <td><span class="pill par">While page is open</span>
+      <div class="note pl">Works while the page is open. Permissions persist per site. No background location or geofencing.</div>
+      <div class="note te">Geolocation API supported. Permissions persist per origin. Foreground only. No background geolocation or Geofencing API from the web.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Foreground and background location. Geofencing with region monitoring. Beacon ranging. Low-power significant-change monitoring.</div>
+      <div class="note te">CLLocationManager: continuous updates, significantLocationChanges, region monitoring (geofencing), iBeacon ranging, visit monitoring. Background location with entitlements.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Foreground and background location. Geofencing. Activity recognition (walking, driving, etc.).</div>
+      <div class="note te">FusedLocationProviderClient: continuous/last-known location, geofencing, activity recognition. Background location with ACCESS_BACKGROUND_LOCATION (API 29+).</div></td>
   </tr>
 
   <tr class="sh"><td colspan="5">Camera, flashlight &amp; AR</td></tr>
@@ -356,6 +388,38 @@
   </tr>
 
   <tr>
+    <td><div class="cap-label">Lock screen playback controls</div><div class="cap-eg">play/pause from lock screen during a show, track info and artwork visible</div></td>
+    <td><span class="pill par">Metadata only</span>
+      <div class="note pl">Song title, artist, and artwork appear on the lock screen. Play/pause works. Skip and seek controls are unreliable or missing.</div>
+      <div class="note te">Media Session API since Safari 15. Metadata (title, artist, album, artwork) displayed. play/pause action handlers work. seekto, previoustrack, nexttrack handlers inconsistently supported.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Full lock screen controls: play, pause, skip, seek. Track info and artwork displayed.</div>
+      <div class="note te">Media Session API since Chrome 73. Full metadata and all action handlers: play, pause, previoustrack, nexttrack, seekbackward, seekforward, seekto, stop.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Full lock screen, Control Center, and CarPlay integration. Artwork, scrubber, custom actions.</div>
+      <div class="note te">MPNowPlayingInfoCenter + MPRemoteCommandCenter. Lock screen, Control Center, CarPlay, AirPlay, Siri integration. Full transport controls.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Full lock screen and notification controls. Android Auto integration.</div>
+      <div class="note te">MediaSession + MediaSessionCompat. Lock screen, notification media controls, Android Auto, Google Assistant. Full transport and custom actions.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Speech recognition</div><div class="cap-eg">voice commands, hands-free interaction, accessible input</div></td>
+    <td><span class="pill par">Browser tab only</span>
+      <div class="note pl">Works in Safari, but breaks when the site is installed to the home screen as a PWA. Only works from a regular browser tab.</div>
+      <div class="note te">webkitSpeechRecognition supported in Safari. Does not function in installed (standalone) PWAs on iOS. Requires microphone permission. Network-dependent &#8212; no on-device processing.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Works in browser tabs and installed PWAs. Microphone permission required.</div>
+      <div class="note te">webkitSpeechRecognition / SpeechRecognition supported in Chrome. Works in both tab and installed PWA contexts. Cloud-processed by default.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">On-device or cloud. 60+ languages. Continuous recognition. Works in the background.</div>
+      <div class="note te">Speech framework (SFSpeechRecognizer). On-device (iOS 13+) or server-side. Streaming audio input, custom language models, 60+ locales.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">On-device or cloud. Continuous recognition. Works in the background.</div>
+      <div class="note te">SpeechRecognizer or ML Kit Speech-to-Text. On-device (offline) or cloud processing. Streaming input supported.</div></td>
+  </tr>
+
+  <tr>
     <td><div class="cap-label">Screen brightness</div><div class="cap-eg">dimming for dark scenes, brightening for dramatic moments</div></td>
     <td><span class="pill no">No</span>
       <div class="note pl">Not possible from any browser on any phone.</div>
@@ -372,6 +436,22 @@
   </tr>
 
   <tr class="sh"><td colspan="5">Connectivity</td></tr>
+
+  <tr>
+    <td><div class="cap-label">Offline caching</div><div class="cap-eg">pre-loading show assets on Wi-Fi, working without signal at a venue</div></td>
+    <td><span class="pill par">Works, but fragile</span>
+      <div class="note pl">Can cache pages and assets for offline use. However, if the user does not visit the site for about a week, Safari may silently delete all cached data. Installed home-screen apps are exempt from this cleanup.</div>
+      <div class="note te">Service Workers and Cache API supported since Safari 11.1. ITP purges all script-writable storage (IndexedDB, Cache API, SW registrations) after ~7 days of non-interaction. Installed PWAs (Home Screen) exempt from ITP eviction. No Background Sync or Background Fetch.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Reliable offline caching. More generous storage limits. Installed apps can sync and fetch data in the background.</div>
+      <div class="note te">Service Workers, Cache API, IndexedDB. Persistent storage via navigator.storage.persist(). Background Sync (Chrome 49+), Background Fetch (Chrome 74+). Storage quotas based on available disk space.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Complete control over local data. No surprise eviction. Can pre-download and manage assets without limits.</div>
+      <div class="note te">Core Data, SQLite, FileManager, URLCache. Full file system access within app sandbox. No storage eviction. NSURLSession background transfers.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Complete control over local data. No surprise eviction. Can pre-download and manage assets without limits.</div>
+      <div class="note te">Room/SQLite, SharedPreferences, file storage. No eviction. WorkManager + DownloadManager for background transfers.</div></td>
+  </tr>
 
   <tr>
     <td><div class="cap-label">Push notifications</div><div class="cap-eg">pre-show reminders, real-time game alerts, follow-up messages</div></td>
@@ -453,6 +533,22 @@
       <div class="note te">WorkManager, foreground services with persistent notification, AlarmManager, FCM-triggered background work.</div></td>
   </tr>
 
+  <tr>
+    <td><div class="cap-label">Network quality detection</div><div class="cap-eg">adapting stream quality to signal strength, warning before data-heavy actions</div></td>
+    <td><span class="pill no">Online/offline only</span>
+      <div class="note pl">Can only detect whether the phone is online or offline. No information about connection speed, type, or quality.</div>
+      <div class="note te">NetworkInformation API not implemented in WebKit. Only navigator.onLine (boolean) and online/offline events available.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Connection type (4G, 3G, Wi-Fi), estimated download speed, round-trip time, and whether the user has enabled data saving.</div>
+      <div class="note te">NetworkInformation API (Chrome 61+): effectiveType (4g/3g/2g/slow-2g), downlink (Mbps estimate), rtt (ms), saveData boolean. Change events via connection.onchange.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Connection type, interface (cellular, Wi-Fi, Ethernet), whether the connection is expensive or constrained.</div>
+      <div class="note te">NWPathMonitor (Network framework): path status, interface type, isExpensive, isConstrained, DNS resolution, supported protocols. Real-time monitoring.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Full network type, capabilities, metered status, link speed. Real-time monitoring of changes.</div>
+      <div class="note te">ConnectivityManager: NetworkCapabilities, LinkProperties, activeNetwork, registerNetworkCallback for real-time changes. Metered status, upstream/downstream bandwidth.</div></td>
+  </tr>
+
   <tr class="sh"><td colspan="5">Distribution</td></tr>
 
   <tr>
@@ -465,6 +561,22 @@
       <div class="note te">Android Instant Apps discontinued December 2025. Play Instant APIs no longer functional. PWA is the current recommended lightweight alternative.</div></td>
     <td>&#8212;</td>
     <td>&#8212;</td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Sharing content</div><div class="cap-eg">share a moment, send a link to a friend, post a score</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Can share text, URLs, and files using the native share sheet. Cannot receive shares from other apps.</div>
+      <div class="note te">navigator.share() supported (Safari 12.1+). Supports text, URL, and files. Web Share Target API not supported &#8212; cannot register as a share receiver.</div></td>
+    <td><span class="pill yes">Yes</span>
+      <div class="note pl">Same native share sheet. Installed PWAs can also receive shares from other apps.</div>
+      <div class="note te">navigator.share() supported (Chrome 61+). Web Share Target API supported for installed PWAs &#8212; can register as a share target via manifest.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Share anything to any app. Can also receive shares via a share extension.</div>
+      <div class="note te">UIActivityViewController: text, URLs, images, files, custom types. Share Extension for receiving. Universal Links for deep linking.</div></td>
+    <td><span class="pill yes">Full</span>
+      <div class="note pl">Share anything to any app. Can also receive shares from other apps.</div>
+      <div class="note te">Intent.ACTION_SEND / ShareCompat. Can share and receive any MIME type. Deep linking via App Links.</div></td>
   </tr>
 
   <tr class="sh"><td colspan="5">Secret sauce</td></tr>
