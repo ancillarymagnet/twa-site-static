@@ -64,7 +64,7 @@
   <img class="logo" src="/images/twa_graphic_logo.jpeg" alt="Third Wave">
   <h1>Browser vs. Native &#8212; Capability Comparison</h1>
 </div>
-<p class="subtitle">THIRD WAVE &middot; March 2026 &middot; v1.3.5</p>
+<p class="subtitle">THIRD WAVE &middot; March 2026 &middot; v1.4</p>
 
 <div class="toggle-bar">
   <button class="toggle-btn active" id="btn-pl" onclick="setMode('plain')">Plain English</button>
@@ -105,8 +105,8 @@
       <div class="note pl">Full access to the Taptic Engine. Every tap, click, and pulse style. Can sync with audio.</div>
       <div class="note te">Core Haptics (CHHapticEngine, iOS 13+): transients, continuous events, intensity/sharpness 0&#8211;1, parameter curves, AHAP patterns, synchronized audio+haptics.</div></td>
     <td><span class="pill yes">Full</span>
-      <div class="note pl">Full control over strength, rhythm, and type. Varies by device hardware.</div>
-      <div class="note te">VibrationEffect with amplitude control (API 26+); VibrationEffect.Composition with named primitives &#8212; PRIMITIVE_CLICK, PRIMITIVE_LOW_TICK, etc. (API 30+).</div></td>
+      <div class="note pl">Full control over strength, rhythm, and type. However, the same haptic command can feel completely different across phone brands due to hardware variation (different actuator types and firmware).</div>
+      <div class="note te">VibrationEffect with amplitude control (API 26+); VibrationEffect.Composition with named primitives &#8212; PRIMITIVE_CLICK, PRIMITIVE_LOW_TICK, etc. (API 30+). Major OEM fragmentation: LRA vs ERM actuators, different HAL implementations. No amplitude interpolation &#8212; smooth ramps require many small steps. Cannot sync haptics with audio through the vibrator API (unlike CoreHaptics).</div></td>
   </tr>
 
   <tr>
@@ -131,8 +131,8 @@
       <div class="note pl">Safari on iPhone does not support locking the screen to landscape or portrait. The page rotates whenever the user rotates the phone.</div>
       <div class="note te">screen.orientation.lock() not implemented in WebKit on iPhone. No workaround. iPad supports it in Safari 16.4+ for installed PWAs only.</div></td>
     <td><span class="pill par">Installed apps only</span>
-      <div class="note pl">Works if the experience is installed to the home screen as a PWA. Does not work from a regular browser tab.</div>
-      <div class="note te">screen.orientation.lock() supported in Chrome for installed PWAs with display:fullscreen or display:standalone. Not available in a browser tab.</div></td>
+      <div class="note pl">Works if the experience is installed to the home screen as a PWA, or if the page is in fullscreen mode. Does not work from a regular browser tab otherwise. Chrome is restricting lock() to phone-sized screens only starting ~M136 &#8212; tablets will reject with an error.</div>
+      <div class="note te">screen.orientation.lock() supported in Chrome for installed PWAs (display:fullscreen or display:standalone) or in fullscreen mode. Not available in a regular tab without fullscreen. Chrome M136+ restricts lock() to phone form factors only; tablets will reject with NotSupportedError. Android 16 (API 36) also removes forced orientation for native apps on large screens (&gt;600dp).</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Lock to any orientation per screen. Can change dynamically.</div>
       <div class="note te">UIInterfaceOrientationMask per UIViewController. supportedInterfaceOrientations overridable at runtime.</div></td>
@@ -144,11 +144,11 @@
   <tr>
     <td><div class="cap-label">Screen stays on</div><div class="cap-eg">controller visible throughout a show, no sleep during gameplay</div></td>
     <td><span class="pill yes">Yes</span>
-      <div class="note pl">Works. Apple was slow to add this and it had bugs until early 2025, but it is reliable now.</div>
-      <div class="note te">Screen Wake Lock API since Safari 16.4. Broken in installed PWAs until iOS 18.4. Stable in both tab and PWA now.</div></td>
+      <div class="note pl">Works. Apple was slow to add this and it had bugs until early 2025, but it is reliable now. Auto-releases when the user switches tabs or apps &#8212; you must re-acquire it when the page becomes visible again.</div>
+      <div class="note te">Screen Wake Lock API since Safari 16.4. Broken in installed PWAs until iOS 18.4 (WebKit bug 254545). Stable now. Auto-releases on visibilitychange (hidden); must re-acquire on visible. OS may refuse when battery is critically low or power saving is active.</div></td>
     <td><span class="pill yes">Yes</span>
-      <div class="note pl">Works reliably.</div>
-      <div class="note te">Screen Wake Lock API since Chrome 84. Stable in tab and PWA.</div></td>
+      <div class="note pl">Works reliably. Same auto-release caveat as iOS &#8212; re-acquire when the page becomes visible after a tab switch.</div>
+      <div class="note te">Screen Wake Lock API since Chrome 84. Stable in tab and PWA. Auto-releases on visibilitychange (hidden); must re-acquire on visible. OS may refuse at critically low battery.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Standard. No permission needed.</div>
       <div class="note te">UIApplication.shared.isIdleTimerDisabled = true.</div></td>
@@ -258,11 +258,11 @@
   <tr>
     <td><div class="cap-label">Geolocation</div><div class="cap-eg">venue check-in, proximity triggers, location-gated content</div></td>
     <td><span class="pill par">While page is open</span>
-      <div class="note pl">Works while the page is open. If the user denies the permission prompt, you cannot ask again from the same site. No background tracking or geofencing.</div>
-      <div class="note te">Geolocation API (navigator.geolocation) supported. One-shot permission prompt; if denied, origin cannot re-prompt without clearing Safari settings. Foreground only. No Geofencing API.</div></td>
+      <div class="note pl">Works while the page is open. If the user denies the permission prompt, you cannot ask again from the same site &#8212; the user must dig into Settings to re-enable it. Options are &#8220;Allow Once&#8221;, &#8220;Allow While Using&#8221;, or &#8220;Don&#8217;t Allow&#8221;. No background tracking or geofencing.</div>
+      <div class="note te">Geolocation API (navigator.geolocation) supported. One-shot permission: Allow Once / Allow While Using / Don&#8217;t Allow. If denied, origin cannot re-prompt &#8212; user must go to Settings &gt; Safari &gt; Location or Settings &gt; Privacy &gt; Location Services &gt; Safari Websites. Foreground only. No Geofencing API. No Geolocation in background.</div></td>
     <td><span class="pill par">While page is open</span>
-      <div class="note pl">Works while the page is open. Permissions persist per site. No background location or geofencing.</div>
-      <div class="note te">Geolocation API supported. Permissions persist per origin. Foreground only. No background geolocation or Geofencing API from the web.</div></td>
+      <div class="note pl">Works while the page is open. Permissions persist per site and survive across sessions. Denied permissions are slightly easier to reverse than on iOS (via site info panel in the address bar). No background location or geofencing.</div>
+      <div class="note te">Geolocation API supported. Permissions persist per origin, survive across sessions. If denied, user can reverse via Chrome&#8217;s site info panel (lock icon &gt; Permissions). Foreground only. No background geolocation or Geofencing API from the web. Android 12+ no longer requires location permission for BLE scanning.</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">Foreground and background location. Geofencing with region monitoring. Beacon ranging. Low-power significant-change monitoring.</div>
       <div class="note te">CLLocationManager: continuous updates, significantLocationChanges, region monitoring (geofencing), iBeacon ranging, visit monitoring. Background location with entitlements.</div></td>
@@ -276,8 +276,8 @@
   <tr>
     <td><div class="cap-label">Camera</div><div class="cap-eg">face detection, QR codes, heart rate via PPG, scanning</div></td>
     <td><span class="pill par">Works, with caveats</span>
-      <div class="note pl">Works, but Safari sometimes forgets permission and re-prompts next session. The green status bar dot is OS-enforced and appears in apps too.</div>
-      <div class="note te">getUserMedia() supported. HTTPS required. Green status bar dot plus Safari-specific browser indicator. Permissions less persistent than Chrome &#8212; may re-prompt across sessions or SPA route transitions. ImageCapture API not supported.</div></td>
+      <div class="note pl">Works, but Safari frequently re-prompts for camera permission &#8212; across sessions, on SPA route changes, and especially in installed PWAs where it is historically broken or unreliable. Resolution is capped at ~720p even if you request higher. No ImageCapture API (no takePhoto or grabFrame).</div>
+      <div class="note te">getUserMedia() supported. HTTPS required. Resolution ceiling ~720p (requests for 1080p/4K silently fall back). Permissions least persistent of any major browser &#8212; re-prompt across sessions, hash/route changes, and inconsistently in PWA standalone mode (WebKit bugs 185448, 215884, 252465). Requires playsinline + muted + autoplay attributes on video element or stream shows black. ImageCapture API not supported. FaceDetector (Shape Detection API) behind flag, broken on iOS 18.</div></td>
     <td><span class="pill par">Works, with caveats</span>
       <div class="note pl">Works. Permission is remembered per site, so less re-prompting than iPhone.</div>
       <div class="note te">getUserMedia() supported. HTTPS required. Green dot (Android 12+). Permissions persist per site. ImageCapture API supported in Chrome.</div></td>
@@ -308,8 +308,8 @@
   <tr>
     <td><div class="cap-label">Augmented reality</div><div class="cap-eg">overlaying graphics on the real world, spatial experiences</div></td>
     <td><span class="pill par">Limited AR</span>
-      <div class="note pl">No WebXR, so no surface detection or world tracking. Marker-based and image-based AR work via JS computer vision libraries (MindAR, AR.js). 8th Wall shut down in early 2026.</div>
-      <div class="note te">No WebXR support in Safari (any version). AR Quick Look (USDZ via rel="ar") is a non-programmable viewer. getUserMedia() + JS/WASM CV works for marker tracking (AR.js) and image tracking (MindAR). No plane detection or world tracking. 8th Wall shut down Feb 28, 2026.</div></td>
+      <div class="note pl">No WebXR, so no surface detection or world tracking. Marker-based and image-based AR work via JS computer vision libraries (MindAR, AR.js). 8th Wall shut down in early 2026. AR Quick Look exists but is non-programmable and broken in in-app browsers (Facebook, Instagram, WeChat). WebGPU in Safari 26 (Fall 2025) may improve JS-based AR performance.</div>
+      <div class="note te">No WebXR support in Safari (any version, including Safari 26). A WebXR AR Module feature flag exists but does nothing. AR Quick Look (USDZ via rel="ar") is a non-programmable viewer; broken in WebViews (social media in-app browsers); requires Content-Type: model/vnd.usdz+zip. getUserMedia() + JS/WASM CV works for marker tracking (AR.js) and image tracking (MindAR). No plane detection or world tracking. 8th Wall shut down Feb 28, 2026; alternatives include Kivicube, Onirix, MindAR. WebGPU (Safari 26) could improve JS CV inference performance.</div></td>
     <td><span class="pill par">Moderate AR</span>
       <div class="note pl">WebXR provides surface detection, depth sensing, and light estimation. Marker and image tracking also work via JS libraries (MindAR, AR.js), and typically run faster on Android Chrome than iOS Safari.</div>
       <div class="note te">WebXR Device API (Chrome 79+) via ARCore: hit-test, anchors, plane detection, DOM overlay, light estimation, depth sensing. No WebXR image tracking, cloud anchors, or Geospatial API. JS/WASM CV libraries (MindAR, AR.js, OpenCV.js) provide marker and image tracking, generally at higher FPS than iOS Safari.</div></td>
@@ -324,11 +324,11 @@
   <tr>
     <td><div class="cap-label">Face, hand &amp; body tracking</div><div class="cap-eg">gesture controls, face filters, conductor input, physical performance</div></td>
     <td><span class="pill par">Possible, but slower</span>
-      <div class="note pl">Works via AI models running in the page (TensorFlow.js/MediaPipe). Covers face mesh, hand landmarks, and body pose. Frame rates are lower and battery drain is higher than a native app.</div>
-      <div class="note te">MediaPipe (WebAssembly + WebGL): Face Mesh (468 points), Hands (21 landmarks/hand), Pose (33 landmarks). ~20&#8211;30 FPS. No Neural Engine access.</div></td>
+      <div class="note pl">Works via AI models running in the page (TensorFlow.js/MediaPipe). Covers face mesh, hand landmarks, and body pose. Frame rates are lower and battery drain is higher than a native app. TensorFlow.js runtime actually outperforms MediaPipe&#8217;s own runtime on iOS specifically. WebGPU (Safari 26) may further narrow the gap with native.</div>
+      <div class="note te">MediaPipe (WebAssembly + WebGL): Face Mesh (468 points), Hands (21 landmarks/hand), Pose (33 landmarks). ~20&#8211;30 FPS for individual tasks; holistic (all three) significantly slower. TF.js runtime faster than MediaPipe runtime on iOS (counter-intuitively). MediaPipe has known WebGL framebuffer bugs on iOS Safari. No Neural Engine access. WebGPU (Safari 26, Fall 2025) could improve inference performance.</div></td>
     <td><span class="pill par">Possible, better than iPhone browser</span>
-      <div class="note pl">Same libraries as iPhone browser, but tends to run faster and more efficiently on Android Chrome.</div>
-      <div class="note te">Same MediaPipe stack. Typically higher FPS than iOS Safari due to stronger WebGL/WASM optimization in Chrome.</div></td>
+      <div class="note pl">Same libraries as iPhone browser, but typically 30&#8211;60+ FPS with GPU delegation enabled. Chrome&#8217;s WebGL and WASM implementations are better optimized for this workload.</div>
+      <div class="note te">Same MediaPipe stack. With GPU delegation: 60+ FPS (vs ~10&#8211;15 FPS CPU-only WASM). Chrome&#8217;s WebGL/WASM significantly outperforms iOS Safari for ML inference. Still no NNAPI access from the browser.</div></td>
     <td><span class="pill yes">Fast and precise</span>
       <div class="note pl">Hardware-accelerated, built into the OS. Face mesh, 21-point hand tracking, full body skeleton. About 10ms response time.</div>
       <div class="note te">Vision framework: VNDetectFaceLandmarksRequest (76 landmarks), VNDetectHumanHandPoseRequest (21 landmarks, 2 hands), VNDetectHumanBodyPoseRequest (19 joints). ARKit face/body tracking on A12+. ~5&#8211;14 ms latency.</div></td>
@@ -342,11 +342,11 @@
   <tr>
     <td><div class="cap-label">Playing sound automatically</div><div class="cap-eg">ambient music on load, sound effects timed to show events</div></td>
     <td><span class="pill no">Can&#8217;t start without a tap</span>
-      <div class="note pl">No audio until the user taps something first. Cannot start audio on page load or on a timer.</div>
-      <div class="note te">WebKit autoplay policy: any audible media (HTMLMediaElement, AudioContext) blocked until user gesture. AudioContext starts suspended; must resume() after interaction. No per-site exemptions. Applies equally to iOS PWAs.</div></td>
+      <div class="note pl">No audio until the user taps something first. Cannot start audio on page load or on a timer. Hidden gotcha: the hardware mute/ringer switch silences Web Audio API output but does not silence &lt;audio&gt; elements &#8212; the two paths behave differently. Libraries like unmute-ios-audio work around this by keeping a silent &lt;audio&gt; element playing. Preloading audio data (decoding buffers) is allowed; only playback initiation is gated.</div>
+      <div class="note te">WebKit autoplay policy: any audible media (HTMLMediaElement, AudioContext) blocked until user gesture. AudioContext starts suspended; must resume() after interaction. No per-site exemptions. Applies equally to iOS PWAs (no installed-app exemption). Mute switch gotcha: Web Audio API honours the ringer switch (silences output); HTMLMediaElement does not (plays through speaker regardless). WebKit bug #237322. Workaround: play a silent &lt;audio&gt; element in parallel to force Web Audio onto the media channel.</div></td>
     <td><span class="pill par">Needs a tap first &#8212; unless installed</span>
-      <div class="note pl">Same restriction in the browser tab. If installed to the home screen, the requirement goes away.</div>
-      <div class="note te">Chrome autoplay policy: same gesture requirement in browser tab. Installed Android PWA exempt from autoplay restriction since Chrome 71.</div></td>
+      <div class="note pl">Same restriction in the browser tab. If installed to the home screen as a PWA, the autoplay requirement goes away entirely &#8212; audio can play on load without any user gesture. No hardware mute switch issue like iOS.</div>
+      <div class="note te">Chrome autoplay policy: same gesture requirement in browser tab. Installed Android PWA exempt from autoplay restriction since Chrome 71 &#8212; AudioContext can resume() on load. No mute switch discrepancy; volume is unified through system streams. Chrome MEI (Media Engagement Index) may grant autoplay on desktop but is less relevant on mobile.</div></td>
     <td><span class="pill yes">Play whenever</span>
       <div class="note pl">No restrictions. Sound plays when you tell it to.</div>
       <div class="note te">AVAudioSession with .playback category. No gesture requirement.</div></td>
@@ -359,10 +359,10 @@
     <td><div class="cap-label">Speaker vs. earpiece routing</div><div class="cap-eg">private audio to one person, directional sound design</div></td>
     <td><span class="pill no">Can&#8217;t choose</span>
       <div class="note pl">The browser decides where audio comes out, and sometimes gets it wrong. If the camera is active (e.g. for heart rate tracking), audio often routes to the earpiece with no way to override.</div>
-      <div class="note te">setSinkId() unreliable/unsupported on iOS Safari. getUserMedia activation triggers PlayAndRecord-like AVAudioSession, defaulting to earpiece. No programmatic override available from web.</div></td>
+      <div class="note te">setSinkId() not supported on iOS Safari (added for macOS only in Safari 18.4, March 2025). getUserMedia activation triggers PlayAndRecord-like AVAudioSession, defaulting to earpiece. No programmatic override available from web. WebKit bug #179415 (open since 2017).</div></td>
     <td><span class="pill par">Limited</span>
-      <div class="note pl">Some control is possible but not comprehensive. Cannot reliably switch between earpiece and speaker.</div>
-      <div class="note te">setSinkId() technically supported but mobile Chrome doesn&#8217;t fully expose output device enumeration. No reliable earpiece/speaker toggle from web.</div></td>
+      <div class="note pl">Some control is possible but not comprehensive. Cannot reliably switch between earpiece and speaker from a web page. Can route to Bluetooth/wired headsets if enumerated.</div>
+      <div class="note te">setSinkId() available (HTMLMediaElement since Chrome 49, AudioContext since Chrome 110), but Android mobile does not fully expose the speaker/earpiece distinction in device enumeration. Can route to Bluetooth or wired outputs. No reliable built-in speaker vs. earpiece toggle from the web.</div></td>
     <td><span class="pill yes">Full control</span>
       <div class="note pl">Speaker, earpiece, or Bluetooth, independently of what else is happening.</div>
       <div class="note te">AVAudioSession: categories, overrideOutputAudioPort(.speaker), defaultToSpeaker, Bluetooth routing options, preferred input/output selection.</div></td>
@@ -390,8 +390,8 @@
   <tr>
     <td><div class="cap-label">Lock screen playback controls</div><div class="cap-eg">play/pause from lock screen during a show, track info and artwork visible</div></td>
     <td><span class="pill par">Metadata only</span>
-      <div class="note pl">Song title, artist, and artwork appear on the lock screen. Play/pause works. Skip and seek controls are unreliable or missing.</div>
-      <div class="note te">Media Session API since Safari 15. Metadata (title, artist, album, artwork) displayed. play/pause action handlers work. seekto, previoustrack, nexttrack handlers inconsistently supported.</div></td>
+      <div class="note pl">Song title, artist, and artwork appear on the lock screen. Play/pause works. Skip and seek controls are unreliable or missing. Artwork was low-resolution before iOS 18 (now fixed). Lock screen controls in installed PWAs are spotty &#8212; audio may stop when the app is minimised.</div>
+      <div class="note te">Media Session API since Safari 15. Metadata (title, artist, album, artwork) displayed. play/pause action handlers work. seekto, previoustrack, nexttrack handlers inconsistently supported. Artwork resolution bug fixed in iOS 18 (previously displayed at low res). PWA lock screen audio may stop on minimise in older iOS versions.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Full lock screen controls: play, pause, skip, seek. Track info and artwork displayed.</div>
       <div class="note te">Media Session API since Chrome 73. Full metadata and all action handlers: play, pause, previoustrack, nexttrack, seekbackward, seekforward, seekto, stop.</div></td>
@@ -406,11 +406,11 @@
   <tr>
     <td><div class="cap-label">Speech recognition</div><div class="cap-eg">voice commands, hands-free interaction, accessible input</div></td>
     <td><span class="pill par">Browser tab only</span>
-      <div class="note pl">Works in Safari, but breaks when the site is installed to the home screen as a PWA. Only works from a regular browser tab.</div>
-      <div class="note te">webkitSpeechRecognition supported in Safari. Does not function in installed (standalone) PWAs on iOS. Requires microphone permission. Network-dependent &#8212; no on-device processing.</div></td>
+      <div class="note pl">Works in Safari, but breaks when the site is installed to the home screen as a PWA &#8212; the API exists (feature detection passes) but calling start() silently fails or errors. Only works from a regular browser tab. Audio is sent to Apple&#8217;s servers for processing; the permission prompt discloses this.</div>
+      <div class="note te">webkitSpeechRecognition supported in Safari. Does not function in installed (standalone) PWAs on iOS &#8212; feature detection passes but start() silently fails (a particularly nasty trap). Requires microphone permission. Network-dependent &#8212; audio sent to Apple servers, no on-device option. No continuous recognition mode that works reliably.</div></td>
     <td><span class="pill yes">Yes</span>
-      <div class="note pl">Works in browser tabs and installed PWAs. Microphone permission required.</div>
-      <div class="note te">webkitSpeechRecognition / SpeechRecognition supported in Chrome. Works in both tab and installed PWA contexts. Cloud-processed by default.</div></td>
+      <div class="note pl">Works in browser tabs and installed PWAs. Since Chrome 139 (August 2025), an on-device mode keeps audio entirely on the phone &#8212; nothing sent to any server. Microphone permission required.</div>
+      <div class="note te">webkitSpeechRecognition / SpeechRecognition supported in Chrome. Works in both tab and installed PWA contexts. Chrome 139+ (August 2025): optional on-device recognition via SODA &#8212; no audio or transcripts leave the device, lower latency. Language packs downloadable. Cloud-processed fallback available. Continuous recognition has a known bug on Android (mic restarts causing beeping sounds; Chromium issue #40324711).</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">On-device or cloud. 60+ languages. Continuous recognition. Works in the background.</div>
       <div class="note te">Speech framework (SFSpeechRecognizer). On-device (iOS 13+) or server-side. Streaming audio input, custom language models, 60+ locales.</div></td>
@@ -428,8 +428,8 @@
       <div class="note pl">Same.</div>
       <div class="note te">No web API on any browser or platform.</div></td>
     <td><span class="pill yes">Yes</span>
-      <div class="note pl">Any level, instantly. No permission needed.</div>
-      <div class="note te">UIScreen.main.brightness, 0.0&#8211;1.0. No entitlement or permission required.</div></td>
+      <div class="note pl">Any level, instantly. No permission needed. Brightness changes persist until the device is locked. Auto-brightness may fight your programmatic setting shortly after you set it.</div>
+      <div class="note te">UIScreen.main.brightness, 0.0&#8211;1.0. No entitlement or permission required. Changes persist until display next turns on (not app lifetime). Auto-brightness may override programmatic value; cannot disable auto-brightness from a third-party app. wantsSoftwareDimming can go below hardware minimum but incurs performance cost.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Per-window or system-wide.</div>
       <div class="note te">WindowManager.LayoutParams.screenBrightness (no permission) or Settings.System.SCREEN_BRIGHTNESS (WRITE_SETTINGS permission).</div></td>
@@ -440,8 +440,8 @@
   <tr>
     <td><div class="cap-label">Offline caching</div><div class="cap-eg">pre-loading show assets on Wi-Fi, working without signal at a venue</div></td>
     <td><span class="pill par">Works, but fragile</span>
-      <div class="note pl">Can cache pages and assets for offline use. However, if the user does not visit the site for about a week, Safari may silently delete all cached data. Installed home-screen apps are exempt from this cleanup.</div>
-      <div class="note te">Service Workers and Cache API supported since Safari 11.1. ITP purges all script-writable storage (IndexedDB, Cache API, SW registrations) after ~7 days of non-interaction. Installed PWAs (Home Screen) exempt from ITP eviction. No Background Sync or Background Fetch.</div></td>
+      <div class="note pl">Can cache pages and assets for offline use. However, if the user does not visit the site for about a week, Safari silently deletes all cached data (the 7-day ITP rule). Installed home-screen apps are exempt from this cleanup. Safari 17 massively increased storage quotas (up to 60% of disk per origin). iOS 26 defaults &#8220;Open as Web App&#8221; for Home Screen additions, which grants the ITP exemption automatically.</div>
+      <div class="note te">Service Workers and Cache API supported since Safari 11.1. ITP purges all script-writable storage (IndexedDB, Cache API, SW registrations) after ~7 days of non-interaction. Installed PWAs (Home Screen) exempt from ITP eviction. Safari 17+: quotas up to 60% of disk per origin / 80% overall for browser. navigator.storage.persist() granted only for Home Screen web apps. No Background Sync or Background Fetch. iOS 26: &#8220;Open as Web App&#8221; toggle defaults on for all Home Screen additions.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Reliable offline caching. More generous storage limits. Installed apps can sync and fetch data in the background.</div>
       <div class="note te">Service Workers, Cache API, IndexedDB. Persistent storage via navigator.storage.persist(). Background Sync (Chrome 49+), Background Fetch (Chrome 74+). Storage quotas based on available disk space.</div></td>
@@ -456,8 +456,8 @@
   <tr>
     <td><div class="cap-label">Push notifications</div><div class="cap-eg">pre-show reminders, real-time game alerts, follow-up messages</div></td>
     <td><span class="pill no">Not from a browser tab</span>
-      <div class="note pl">Not available from a browser tab. Works if the experience is saved to the home screen.</div>
-      <div class="note te">No Web Push from browser tab. iOS PWA (Home Screen, display:standalone) supports Web Push since iOS 16.4. Apple briefly planned to remove PWA support in the EU under the DMA but reversed that decision before iOS 17.4 shipped.</div></td>
+      <div class="note pl">Not available from a browser tab. Works if the experience is saved to the home screen. Safari 18.4 (March 2025) added Declarative Web Push &#8212; the push payload contains the notification directly, no Service Worker needed. Simpler, faster, lower battery. iOS 26 defaults &#8220;Open as Web App&#8221; for Home Screen additions, expanding the pool of users who can receive push.</div>
+      <div class="note te">No Web Push from browser tab. iOS PWA (Home Screen, display:standalone) supports Web Push since iOS 16.4. Declarative Web Push since Safari 18.4 (March 2025) &#8212; push payload contains standardised notification JSON, no SW push event handler needed. No Time Sensitive, no Live Activities, no provisional notifications, no custom sounds, limited badge control vs native APNs. Apple briefly planned to remove PWA support in the EU under the DMA but reversed that decision before iOS 17.4 shipped. iOS 26: &#8220;Open as Web App&#8221; default toggle expands eligible users.</div></td>
     <td><span class="pill yes">Yes</span>
       <div class="note pl">Works from any web page, no install needed. Requires user permission. Supports images, action buttons, and silent background updates.</div>
       <div class="note te">Web Push API since Chrome 42. Rich notifications, silent/data-only push via FCM, background delivery through Service Workers.</div></td>
@@ -486,6 +486,38 @@
   </tr>
 
   <tr>
+    <td><div class="cap-label">UWB (Ultra-Wideband)</div><div class="cap-eg">centimetre-accurate ranging, spatial &#8220;find my friend&#8221;, peer-to-peer positioning</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">No browser API exists for UWB on any platform.</div>
+      <div class="note te">No W3C or WebKit API. Apple has not exposed U1 chip functionality to web content.</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">No browser API exists for UWB on any platform.</div>
+      <div class="note te">No W3C or Chromium API. UWB hardware access requires native code.</div></td>
+    <td><span class="pill par">Yes, but iPhone-only</span>
+      <div class="note pl">Centimetre-accurate distance and direction to nearby iPhones and UWB accessories. Supported on iPhone 11&#8211;14 (U1 chip) and iPhone 15&#8211;16 (U2 chip), but not on iPhone SE or iPhone 16e. Cannot range with Android phones &#8212; there is no cross-platform phone-to-phone UWB protocol. Requires a permission prompt each time the app is relaunched, and a BLE discovery handshake adds a few seconds before ranging starts. Not available in all countries.</div>
+      <div class="note te">Nearby Interaction framework: U1 chip (iPhone 11/12/13/14), U2 chip (iPhone 15/16 &#8212; 7 nm, more power-efficient). No UWB on iPhone SE (any gen) or iPhone 16e. NINearbyObject with distance + direction, background sessions (iOS 16+), third-party accessory sessions via NI Accessory Protocol. No cross-platform phone-to-phone ranging &#8212; Apple&#8217;s session-token exchange is proprietary. Requires NSNearbyInteractionUsageDescription; permission is one-time-per-app-launch (resets on quit). BLE OOB discovery required before UWB session starts. Unavailable in some regions.</div></td>
+    <td><span class="pill par">Hardware-dependent; Android-only</span>
+      <div class="note pl">Available on phones with a UWB chip (Pixel 6 Pro+, Samsung S21 Ultra+, select flagships). Can range with other Android UWB phones and FiRa-compliant accessories. Cannot range with iPhones &#8212; no cross-platform phone-to-phone protocol exists. Requires location and UWB permissions. Must be a foreground app or service.</div>
+      <div class="note te">Android UWB API (androidx.core.uwb, API 31+): FiRa-compliant ranging sessions, controller/controlee roles, distance + angle-of-arrival. No cross-platform phone-to-phone ranging with iOS &#8212; session negotiation protocols are incompatible. Requires UWB_RANGING + ACCESS_FINE_LOCATION + Bluetooth permissions for OOB discovery. Foreground-only for session initiation; background ranging possible once started. Asymmetric controller/controlee model (one device must initiate). Hardware availability varies widely by OEM.</div></td>
+  </tr>
+
+  <tr>
+    <td><div class="cap-label">Ultrasonic communication</div><div class="cap-eg">phone-to-phone data over speaker &amp; mic, cross-device pairing without internet</div></td>
+    <td><span class="pill no">No</span>
+      <div class="note pl">Blocked in practice. Web Audio API and microphone access exist, but the iPhone&#8217;s hardware anti-aliasing filter rolls off above ~20 kHz and the default 48 kHz sample rate caps capture at 24 kHz (Nyquist limit). Even within that range, iOS audio processing attenuates near-ultrasonic content enough to make reliable data transfer impractical. No background mic access.</div>
+      <div class="note te">getUserMedia + Web Audio API are available, but iPhone MEMS mic ADC anti-aliasing rolls off between 20&#8211;24 kHz. Default sample rate is 48 kHz (Nyquist: 24 kHz). iOS audio pipeline processing further attenuates near-ultrasonic frequencies. No background audio capture. Libraries like ggwave have an ultrasonic mode (F0 = 15 kHz, channel width up to 4.5 kHz), but reception is unreliable on iOS Safari.</div></td>
+    <td><span class="pill par">Possible with effort</span>
+      <div class="note pl">Can generate and detect near-ultrasonic tones (~15&#8211;20 kHz) using the Web Audio API and microphone access. Android hardware is more permissive with these frequencies than iOS. Still low-bandwidth (~8&#8211;16 bytes/sec), short-range, and foreground-only. Requires mic permission, which triggers a visible prompt.</div>
+      <div class="note te">Web Audio API (AudioContext + AnalyserNode) for tone generation; getUserMedia at 48 kHz for capture. Android doesn&#8217;t aggressively filter near-ultrasonic frequencies. Libraries like ggwave work in-browser via WASM (ultrasonic protocols at F0 = 15 kHz, FSK modulation, Reed-Solomon ECC, 8&#8211;16 bytes/sec). Foreground-only; no background mic access. Requires user gesture to start AudioContext on first interaction.</div></td>
+    <td><span class="pill par">Yes, with caveats</span>
+      <div class="note pl">Full control over audio hardware. Can generate and capture near-ultrasonic frequencies and run in background audio mode. However, the same 48 kHz default sample rate and hardware anti-aliasing apply &#8212; you&#8217;re working in the 15&#8211;22 kHz band, not true ultrasound. Bandwidth tops out around 8&#8211;16 bytes/sec. The main commercial SDK (Chirp) was acquired by Sonos in 2020 and its public SDK shut down; ggwave is the primary open-source alternative.</div>
+      <div class="note te">AVAudioEngine / AudioUnit: default 48 kHz sample rate (Nyquist: 24 kHz). iPhone MEMS mic anti-aliasing rolls off 20&#8211;24 kHz. Background audio mode available. Chirp SDK discontinued (acquired by Sonos, Feb 2020; SDK removed Mar 2020). ggwave (MIT, actively maintained): FSK modulation, Reed-Solomon ECC, ultrasonic protocols at F0 = 15 kHz, 8&#8211;16 bytes/sec, Swift package available. SoniTalk (open protocol, academic) is another option.</div></td>
+    <td><span class="pill par">Yes, with caveats</span>
+      <div class="note pl">Full control over audio hardware. Can capture near-ultrasonic frequencies and run via foreground service in the background. Same bandwidth and range limits as iOS &#8212; this is fundamentally a low-bandwidth, short-range channel (~8&#8211;16 bytes/sec, a few metres). Works cross-platform with iOS devices since it&#8217;s just sound. Chirp SDK shut down; ggwave is the main open-source option.</div>
+      <div class="note te">AudioRecord / AudioTrack (or Oboe): configurable sample rates up to 48 kHz (Nyquist: 24 kHz). Foreground service for background operation. Chirp SDK discontinued (Sonos acquisition, 2020). ggwave (MIT): FSK modulation, Reed-Solomon ECC, ultrasonic F0 = 15 kHz, 8&#8211;16 bytes/sec. Cross-platform with iOS since the medium is acoustic &#8212; no proprietary protocol negotiation needed. SoniTalk also available.</div></td>
+  </tr>
+
+  <tr>
     <td><div class="cap-label">NFC</div><div class="cap-eg">tap-to-join, physical tickets, contactless triggers</div></td>
     <td><span class="pill no">No</span>
       <div class="note pl">Blocked. Apple blocked this alongside Bluetooth in 2020.</div>
@@ -493,9 +525,9 @@
     <td><span class="pill par">Read and write tags only</span>
       <div class="note pl">Can read and write NFC tags. Cannot emulate a card (e.g. transit payment). Requires a user gesture to start scanning.</div>
       <div class="note te">Web NFC (NDEFReader) since Chrome 89: NDEF read/write/makeReadOnly. No low-level tag access, no Host Card Emulation, foreground only.</div></td>
-    <td><span class="pill yes">Read and write tags</span>
-      <div class="note pl">Read and write a wide range of tag types. No card emulation (Apple Pay uses a separate chip).</div>
-      <div class="note te">CoreNFC (iPhone 7+): NDEF read/write (iOS 13+), background scanning (iOS 12+), ISO 7816, ISO 15693, FeliCa, MIFARE. No HCE.</div></td>
+    <td><span class="pill yes">Read, write, and contactless transactions</span>
+      <div class="note pl">Read and write a wide range of tag types. Since iOS 18.1 (late 2024), third-party apps can perform contactless NFC transactions via the Secure Element &#8212; enabling tap-to-pay, transit cards, car keys, hotel keys, and event tickets. HCE available in the EEA. Requires a commercial agreement with Apple and associated fees.</div>
+      <div class="note te">CoreNFC (iPhone 7+): NDEF read/write (iOS 13+), background scanning (iOS 12+), ISO 7816, ISO 15693, FeliCa, MIFARE. iOS 18.1+: NFC &amp; SE Platform opens Secure Element to third-party developers for contactless transactions (in-store payments, car keys, transit, badges, tickets). HCE-based transactions available in EEA; SE-based in US/UK/AU/CA/JP/NZ/BR. Requires NFC &amp; SE entitlement + commercial agreement with Apple.</div></td>
     <td><span class="pill yes">Read, write, and emulate</span>
       <div class="note pl">Full NFC including card emulation. The phone can act as an NFC card, not just a reader.</div>
       <div class="note te">Full NDEF, low-level tag protocols (NfcA/B/F/V, IsoDep, MifareClassic/Ultralight), Host Card Emulation (HCE, API 19+), reader mode, background tag dispatch.</div></td>
@@ -505,7 +537,7 @@
     <td><div class="cap-label">Live video &amp; audio streaming</div><div class="cap-eg">real-time camera feeds, peer-to-peer audio, video calling</div></td>
     <td><span class="pill par">Works, with caveats</span>
       <div class="note pl">Works. Requires camera and/or microphone permission. Cannot share the phone's screen. Streams pause if the user switches to another app.</div>
-      <div class="note te">WebRTC supported since Safari 11. H.264 prioritized; VP8 added in Safari 12.1 (software-decoded); VP9 decode-only since Safari 17.4 (no encode in WebRTC); no AV1 in WebRTC. getDisplayMedia() unsupported on iPhone. Streams pause when Safari backgrounded. Limited simulcast (since 12.1, less capable than Chrome/Firefox). No Insertable Streams.</div></td>
+      <div class="note te">WebRTC supported since Safari 11. H.264 prioritized; VP8 added in Safari 12.1 (software-decoded); VP9 decode-only since Safari 17.4 (no encode in WebRTC); no AV1 in WebRTC (Safari 18.4 added AV1 for MediaRecorder only, not WebRTC). getDisplayMedia() unsupported on iPhone. Streams pause when Safari backgrounded; video goes black after ~8 min if audio disabled. Limited simulcast (since 12.1, less capable than Chrome/Firefox). RTCRtpScriptTransform (W3C Encoded Transforms) supported since Safari 15.4 &#8212; E2E encryption of WebRTC frames is possible via the standard API (Chrome&#8217;s proprietary Insertable Streams API is not supported, but the W3C standard equivalent works).</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">Works fully. Requires camera and/or microphone permission. Screen sharing available. Streams survive briefly when backgrounded.</div>
       <div class="note te">Full WebRTC: VP8, VP9/SVC, H.264, AV1, simulcast, getDisplayMedia(), Insertable Streams. Streams survive backgrounding with limits.</div></td>
@@ -520,8 +552,8 @@
   <tr>
     <td><div class="cap-label">Keeping connections alive</div><div class="cap-eg">maintaining live game state, staying connected during a show</div></td>
     <td><span class="pill no">Drops within ~30 seconds</span>
-      <div class="note pl">Connections drop within about 30 seconds if the user switches apps, even briefly. Applies to home-screen web apps too. A real risk for live show scenarios.</div>
-      <div class="note te">Safari aggressively suspends background tabs and PWAs within ~30s. WebSocket connections drop. No Background Sync API. Service Workers have strict time limits.</div></td>
+      <div class="note pl">Connections drop within about 30 seconds if the user switches apps, even briefly. Applies to home-screen web apps too. A real risk for live show scenarios. New in Safari 26/iOS 26: WebSocket connections may break entirely when iCloud Private Relay is enabled (upgrade request sent as CONNECT instead of GET).</div>
+      <div class="note te">Safari aggressively suspends background tabs and PWAs within ~30s. WebSocket connections drop. No Background Sync API. Service Workers have strict time limits and can be permanently killed after 30&#8211;45s in background (reported in iOS 17.4.x). Safari may clear SW state for infrequently-opened PWAs. Safari 26: WebSocket upgrade sent as CONNECT (not GET) when iCloud Private Relay is enabled, breaking connections.</div></td>
     <td><span class="pill par">More forgiving</span>
       <div class="note pl">More lenient. Connections survive longer when backgrounded. Installed web apps can do limited background work.</div>
       <div class="note te">More lenient backgrounding; connections may survive several minutes before Doze mode. Background Sync (Chrome 49+), Periodic Background Sync and Background Fetch for installed PWAs.</div></td>
@@ -538,9 +570,9 @@
     <td><span class="pill no">Online/offline only</span>
       <div class="note pl">Can only detect whether the phone is online or offline. No information about connection speed, type, or quality.</div>
       <div class="note te">NetworkInformation API not implemented in WebKit. Only navigator.onLine (boolean) and online/offline events available.</div></td>
-    <td><span class="pill yes">Yes</span>
-      <div class="note pl">Connection type (4G, 3G, Wi-Fi), estimated download speed, round-trip time, and whether the user has enabled data saving.</div>
-      <div class="note te">NetworkInformation API (Chrome 61+): effectiveType (4g/3g/2g/slow-2g), downlink (Mbps estimate), rtt (ms), saveData boolean. Change events via connection.onchange.</div></td>
+    <td><span class="pill par">Yes, but coarse</span>
+      <div class="note pl">Connection type (4G, 3G, Wi-Fi), estimated download speed, round-trip time, and whether the user has enabled data saving. However, download speed is capped at 10 Mbps regardless of actual connection, and the classification thresholds are based on 2017 measurement data. Values are rounded for anti-fingerprinting. Only Chromium-based browsers support this &#8212; Firefox does not either.</div>
+      <div class="note te">NetworkInformation API (Chrome 61+): effectiveType (4g/3g/2g/slow-2g), downlink (Mbps estimate, capped at 10 Mbps, rounded to 25 kbps), rtt (rounded to 25 ms), saveData boolean. effectiveType thresholds based on Chrome Android data from April 2017. Anti-fingerprinting caps on all values. Only Chromium browsers; Firefox does not implement. Change events via connection.onchange.</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">Connection type, interface (cellular, Wi-Fi, Ethernet), whether the connection is expensive or constrained.</div>
       <div class="note te">NWPathMonitor (Network framework): path status, interface type, isExpensive, isConstrained, DNS resolution, supported protocols. Real-time monitoring.</div></td>
@@ -555,10 +587,10 @@
     <td><div class="cap-label">Getting there without a full install</div><div class="cap-eg">scan-to-play, tap-to-join, no App Store friction</div></td>
     <td><span class="pill yes">App Clips</span>
       <div class="note pl">Scan a QR code or tap an NFC tag and a small native app loads instantly, no App Store or install needed. 15 MB limit when triggered physically (QR, NFC); 50 MB when triggered digitally (Safari banner, Messages, Maps link). Full native capabilities: haptics, AR, Bluetooth, accurate sensors, flashlight. Deletes itself after about a month.</div>
-      <div class="note te">App Clips (iOS 14+): 15 MB limit for physical invocations (NFC, QR, App Clip Codes); 50 MB for digital (Safari Smart App Banner, Messages, Maps). Full native APIs available: camera, ARKit, Core Haptics, CoreBluetooth (foreground), NFC read, Apple Pay, Metal, Sign in with Apple. Exclusions: HealthKit, HomeKit, CallKit, SensorKit, background processing, full push notifications. Ephemeral push for 8 hours post-use. Auto-deleted after ~30 days. Requires companion full app in App Store.</div></td>
+      <div class="note te">App Clips (iOS 14+): 15 MB limit for physical invocations (NFC, QR, App Clip Codes); 50 MB for digital (Safari Smart App Banner, Messages, Maps). NFC tags can trigger App Clip cards even with screen locked. Full native APIs available: camera, ARKit, Core Haptics, CoreBluetooth (foreground), NFC read, Apple Pay, Metal, Sign in with Apple. Exclusions: HealthKit, HomeKit, CallKit, SensorKit, background processing, full push notifications. Ephemeral push for 8 hours post-use. Auto-deleted after ~30 days. For PWAs: no beforeinstallprompt API &#8212; users must manually use Share &gt; Add to Home Screen. iOS 26 defaults &#8220;Open as Web App&#8221; toggle on for all Home Screen additions.</div></td>
     <td><span class="pill no">No equivalent</span>
-      <div class="note pl">Android had an equivalent (Instant Apps) but Google discontinued it in late 2025. A web page or home-screen web app is the current lightweight option.</div>
-      <div class="note te">Android Instant Apps discontinued December 2025. Play Instant APIs no longer functional. PWA is the current recommended lightweight alternative.</div></td>
+      <div class="note pl">Android had an equivalent (Instant Apps) but Google discontinued it in late 2025. A web page or home-screen web app is the current lightweight option. Android Chrome supports beforeinstallprompt, so you can programmatically prompt users to install &#8212; unlike iOS, which has no install prompt API.</div>
+      <div class="note te">Android Instant Apps discontinued December 2025. Play Instant APIs no longer functional. PWA is the recommended lightweight alternative. Chrome supports beforeinstallprompt event for custom install prompts (iOS Safari does not &#8212; users must use Share &gt; Add to Home Screen). Trusted Web Activities (TWAs) can wrap PWAs in a native shell with access to native permissions.</div></td>
     <td>&#8212;</td>
     <td>&#8212;</td>
   </tr>
@@ -566,11 +598,11 @@
   <tr>
     <td><div class="cap-label">Sharing content</div><div class="cap-eg">share a moment, send a link to a friend, post a score</div></td>
     <td><span class="pill yes">Yes</span>
-      <div class="note pl">Can share text, URLs, and files using the native share sheet. Cannot receive shares from other apps.</div>
-      <div class="note te">navigator.share() supported (Safari 12.1+). Supports text, URL, and files. Web Share Target API not supported &#8212; cannot register as a share receiver.</div></td>
-    <td><span class="pill yes">Yes</span>
-      <div class="note pl">Same native share sheet. Installed PWAs can also receive shares from other apps.</div>
-      <div class="note te">navigator.share() supported (Chrome 61+). Web Share Target API supported for installed PWAs &#8212; can register as a share target via manifest.</div></td>
+      <div class="note pl">Can share text, URLs, and files using the native share sheet. Cannot receive shares from other apps &#8212; Web Share Target API is not supported in WebKit (open since 2019, no timeline). Must be triggered by a user gesture. navigator.canShare() available for checking file type support before attempting.</div>
+      <div class="note te">navigator.share() supported (Safari 12.1+). Level 2 file sharing since Safari 15. navigator.canShare() available. Web Share Target API not supported (WebKit bug #194593, open since 2019) &#8212; cannot register as a share receiver. Transient activation required. Some file types may fail depending on receiving app UTI support.</div></td>
+    <td><span class="pill yes">Yes, and can receive</span>
+      <div class="note pl">Same native share sheet for sharing out. Installed PWAs can also receive shares from other apps &#8212; they appear as an option in the system share sheet alongside native apps. This is a significant advantage over iOS.</div>
+      <div class="note te">navigator.share() supported (Chrome 61+). Level 2 file sharing since Chrome 75. Web Share Target API supported for installed PWAs &#8212; can register as a share target via manifest share_target field, including receiving files via multipart/form-data. Transient activation required for outbound shares.</div></td>
     <td><span class="pill yes">Full</span>
       <div class="note pl">Share anything to any app. Can also receive shares via a share extension.</div>
       <div class="note te">UIActivityViewController: text, URLs, images, files, custom types. Share Extension for receiving. Universal Links for deep linking.</div></td>
@@ -612,5 +644,6 @@ function setMode(mode) {
   document.getElementById('btn-te').classList.toggle('active', mode === 'tech');
 }
 </script>
+<p style="text-align:center; color:#777; font-size:11px; margin-top:2rem;">&copy; 2026 Third Wave. All rights reserved.</p>
 </body>
 </html>
