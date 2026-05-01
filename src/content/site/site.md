@@ -7,7 +7,7 @@ description: "We're making places playable. Follow along as we invent a new medi
 # Hero Section
 hero:
   title: "MAKING PLACES PLAYABLE"
-  tagline: "No goggles. No controllers."
+  tagline: ""
   subtitle: "Follow along as we invent a new medium."
   
 # Email Signup

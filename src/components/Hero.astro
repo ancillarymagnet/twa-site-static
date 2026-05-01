@@ -12,7 +12,7 @@ const { title, tagline, subtitle } = Astro.props;
 	<div class="hero-background"></div>
 	<div class="hero-content">
 		<h1 class="hero-title" set:html={title.replace('GAMING', '<br/>GAMING')} />
-		<h2 class="hero-tagline" set:html={tagline.replace('. ', '.<br/>')} />
+		{tagline && <h2 class="hero-tagline" set:html={tagline.replace('. ', '.<br/>')} />}
 		<p class="hero-subtitle" set:html={subtitle.replace('. ', '.<br class="desktop-break"/> ')} />
 	</div>
 </section>
