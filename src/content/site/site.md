@@ -2,13 +2,13 @@
 title: "Third Wave"
 tagline: "No goggles. No controllers."
 subtitle: "Follow along as we invent a new medium"
-description: "We're making theaters playable. Follow along as we invent a new medium."
+description: "We're making places playable. Follow along as we invent a new medium."
 
 # Hero Section
 hero:
   title: "IRL GAME CULTURE"
   tagline: "No goggles. No controllers."
-  subtitle: "We're making theaters playable. Follow along as we invent a new medium."
+  subtitle: "We're making places playable. Follow along as we invent a new medium."
   
 # Email Signup
 signup:
@@ -33,7 +33,7 @@ social:
 seo:
   title: "Third Wave — IRL Game Culture"
   description: "Third Wave is reinventing movie theaters as multiplayer gaming venues. No goggles, no controllers — just your phone and the cinema screen."
-  socialDescription: "No goggles. No controllers. We're making theaters playable."
+  socialDescription: "No goggles. No controllers. We're making places playable."
   keywords: "gaming, irl, immersive, multiplayer, theater, third wave"
 ---
 
