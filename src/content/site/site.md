@@ -6,9 +6,9 @@ description: "We're making places playable. Follow along as we invent a new medi
 
 # Hero Section
 hero:
-  title: "IRL GAME CULTURE"
+  title: "MAKING PLACES PLAYABLE"
   tagline: "No goggles. No controllers."
-  subtitle: "We're making places playable. Follow along as we invent a new medium."
+  subtitle: "Follow along as we invent a new medium."
   
 # Email Signup
 signup:
@@ -31,7 +31,7 @@ social:
 
 # SEO
 seo:
-  title: "Third Wave — IRL Game Culture"
+  title: "Third Wave — Making Places Playable"
   description: "Third Wave is reinventing movie theaters as multiplayer gaming venues. No goggles, no controllers — just your phone and the cinema screen."
   socialDescription: "No goggles. No controllers. We're making places playable."
   keywords: "gaming, irl, immersive, multiplayer, theater, third wave"
