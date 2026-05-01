@@ -6,7 +6,7 @@ description: "We're making theaters playable. Follow along as we invent a new me
 
 # Hero Section
 hero:
-  title: "BIG SCREEN GAMING"
+  title: "IRL GAME CULTURE"
   tagline: "No goggles. No controllers."
   subtitle: "We're making theaters playable. Follow along as we invent a new medium."
   
@@ -31,10 +31,10 @@ social:
 
 # SEO
 seo:
-  title: "Third Wave — Big Screen Gaming"
-  description: "Third Wave is reinventing movie theaters as multiplayer gaming venues. No goggles, no controllers — just your phone and the big screen."
+  title: "Third Wave — IRL Game Culture"
+  description: "Third Wave is reinventing movie theaters as multiplayer gaming venues. No goggles, no controllers — just your phone and the cinema screen."
   socialDescription: "No goggles. No controllers. We're making theaters playable."
-  keywords: "gaming, big screen, immersive, multiplayer, theater, third wave"
+  keywords: "gaming, irl, immersive, multiplayer, theater, third wave"
 ---
 
 # About Third Wave
