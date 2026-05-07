@@ -34,7 +34,7 @@ const showCta = Boolean(ctaHref && ctaText);
 
 <style>
 	.header {
-		background: #000;
+		background: var(--color-bg);
 	}
 
 	.header-inner {
@@ -61,14 +61,18 @@ const showCta = Boolean(ctaHref && ctaText);
 		font-weight: 600;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: #000;
-		background: #fff;
+		color: #fff;
+		background: transparent;
+		border: 1px solid #fff;
 		text-decoration: none;
-		padding: 10px 16px;
-		transition: opacity 0.2s ease;
+		padding: 9px 15px;
+		transition: background 0.2s ease, color 0.2s ease;
 	}
 
-	.cta-link:hover { opacity: 0.85; }
+	.cta-link:hover {
+		background: #fff;
+		color: var(--color-bg);
+	}
 
 	@media (max-width: 820px) {
 		.header-inner { padding: 14px 22px 10px; }

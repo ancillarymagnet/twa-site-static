@@ -1,20 +1,18 @@
 ---
+import { Image } from 'astro:assets';
+import lockup from '../assets/lockup.png';
+
 export interface Props {
 	tagline: string;
-	lockupSrc?: string;
 	lockupAlt?: string;
 }
 
-const {
-	tagline,
-	lockupSrc = '/images/lockup.png',
-	lockupAlt = 'Third Wave',
-} = Astro.props;
+const { tagline, lockupAlt = 'Third Wave' } = Astro.props;
 ---
 
 <section class="hero">
 	<div class="lockup">
-		<img src={lockupSrc} alt={lockupAlt} />
+		<Image src={lockup} alt={lockupAlt} loading="eager" />
 	</div>
 	{tagline && <h1 class="tagline">{tagline}</h1>}
 </section>
