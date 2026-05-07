@@ -1,28 +1,54 @@
 ---
 title: "Third Wave"
-tagline: "No goggles. No controllers."
+tagline: "Making places playable."
 subtitle: "Follow along as we invent a new medium"
 description: "We're making places playable. Follow along as we invent a new medium."
 
+# Top status bar (above ticker)
+topBar:
+  status: "SIGNUPS OPEN"
+  meta: "EST. 2024 · CULVER CITY"
+
+# Infinite ticker copy (single string, will repeat)
+ticker: "A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · 70 MINUTES · NOT A GAME, NOT A MOVIE · IRL 4 EVER · BRING YOUR PHONE · NO GOGGLES · NO CONTROLLERS · "
+
 # Hero Section
 hero:
-  title: "MAKING PLACES PLAYABLE"
+  title: "Making places playable."
   tagline: ""
-  subtitle: "Follow along as we invent a new medium."
-  
+  subtitle: ""
+
 # Email Signup
 signup:
-  placeholder: "your@email.com"
-  buttonText: "SUBMIT"
-  description: "Sign up for invites to parties and demos"
+  placeholder: "you@example.com"
+  buttonText: "GET INVITED"
+  description: ""
+
+# Reel section (below the fold)
+reel:
+  cta: "↗ More on YouTube"
+  videos:
+    - id: "5GKXyOgsR9U"
+      title: "Making Games in TouchDesigner?"
+      label: "DISPATCH 03"
+      duration: "2:41"
+    - id: "sKWCtp8nlfY"
+      title: "Noah Norman // Gradient Descent @ TouchDesigner Philly Meetup"
+      label: "DISPATCH 02"
+      duration: "3:18"
+    - id: "nQT7EhYCVg0"
+      title: "How I Build TouchDesigner Apps in 2025"
+      label: "DISPATCH 01"
+      duration: "1:54"
 
 # Header
 header:
   brand: "THIRD WAVE"
 
-# Footer  
+# Footer
 footer:
-  copyrightHolder: "Your Free Call Will End Soon, Co."
+  production: "A production of Your Free Call Will End Soon, Co."
+  copyrightHolder: "Third Wave"
 
 # Social Media
 social:
@@ -33,7 +59,7 @@ social:
 seo:
   title: "Third Wave — Making Places Playable"
   description: "Third Wave is reinventing movie theaters as multiplayer gaming venues. No goggles, no controllers — just your phone and the cinema screen."
-  socialDescription: "No goggles. No controllers. We're making places playable."
+  socialDescription: "Making places playable."
   keywords: "gaming, irl, immersive, multiplayer, theater, third wave"
 ---
 

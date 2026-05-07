@@ -1,25 +1,32 @@
 ---
 export interface Props {
-	/** Company or rights holder name; the year is rendered automatically. */
+	production?: string;
 	copyrightHolder: string;
+	youtube?: string;
+	instagram?: string;
 }
 
-const { copyrightHolder } = Astro.props;
+const { production, copyrightHolder, youtube, instagram } = Astro.props;
 
 const buildYear = new Date().getFullYear();
 const holder = copyrightHolder.trim();
+const hasLinks = Boolean(youtube || instagram);
 ---
 
 <footer class="footer">
-	<div class="footer-content">
-		<p class="copyright">
-			©
-			<span class="js-current-year" data-build-year={buildYear}>
-				{buildYear}
-			</span>
+	<div class="left">
+		{production && <p class="yfc">{production}</p>}
+		<p class="copy">
+			© <span class="js-current-year" data-build-year={buildYear}>{buildYear}</span>
 			{holder ? ` ${holder}` : ''}
 		</p>
 	</div>
+	{hasLinks && (
+		<div class="links">
+			{youtube && <a href={youtube} target="_blank" rel="noopener noreferrer">YouTube ↗</a>}
+			{instagram && <a href={instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>}
+		</div>
+	)}
 </footer>
 
 <script is:inline>
@@ -33,30 +40,67 @@ const holder = copyrightHolder.trim();
 
 <style>
 	.footer {
-		padding: 2rem;
-		text-align: center;
-		border-top: 1px solid rgba(240, 237, 232, 0.1);
+		padding: 48px 40px 32px;
+		border-top: 1px solid var(--color-rule);
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		gap: 24px;
 		margin-top: auto;
 	}
 
-	.footer-content {
-		max-width: 1200px;
-		margin: 0 auto;
+	.left {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
 	}
 
-	.copyright {
-		font-size: 0.875rem;
-		color: var(--color-muted);
+	.yfc {
+		font-family: var(--font-serif);
+		font-style: italic;
 		font-weight: 400;
+		font-size: 13px;
+		color: #888;
+		line-height: 1.3;
+		max-width: 320px;
 	}
 
-	@media (max-width: 768px) {
+	.copy {
+		font-family: var(--font-mono);
+		font-size: 9px;
+		color: var(--color-dim);
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+
+	.links {
+		display: flex;
+		gap: 18px;
+		font-family: var(--font-mono);
+		font-size: 10px;
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+	}
+
+	.links a {
+		color: #888;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.links a:hover { color: #fff; }
+
+	@media (max-width: 820px) {
 		.footer {
-			padding: 1.5rem;
+			padding: 28px 22px 22px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 14px;
 		}
 
-		.copyright {
-			font-size: 0.75rem;
-		}
+		.yfc { font-size: 11px; }
+		.copy { font-size: 8px; letter-spacing: 0.15em; }
+		.links { gap: 14px; font-size: 9px; letter-spacing: 0.13em; }
 	}
 </style>

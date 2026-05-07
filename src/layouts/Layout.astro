@@ -110,7 +110,7 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 		<!-- Google Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 	</head>
 	<body>
 		<slot />
@@ -119,12 +119,15 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 
 <style is:global>
 	:root {
-		--color-bg: #111111;
-		--color-text: #f0ede8;
-		--color-accent: #e1a24a;
-		--color-muted: rgba(240, 237, 232, 0.5);
-		--font-heading: 'Lexend', sans-serif;
-		--font-body: 'Lexend', sans-serif;
+		--color-bg: #000000;
+		--color-text: #ffffff;
+		--color-muted: #888888;
+		--color-dim: #555555;
+		--color-rule: #1a1a1a;
+		--color-rule-strong: #2a2a2a;
+		--font-serif: 'Newsreader', Georgia, serif;
+		--font-sans: 'Inter', system-ui, sans-serif;
+		--font-mono: 'JetBrains Mono', ui-monospace, monospace;
 	}
 
 	* {
@@ -134,20 +137,37 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 	}
 
 	html {
-		font-family: var(--font-body);
+		font-family: var(--font-sans);
 		background: var(--color-bg);
 		color: var(--color-text);
-		line-height: 1.5;
+		font-size: 15px;
+		line-height: 1.55;
 		scroll-behavior: smooth;
+		-webkit-font-smoothing: antialiased;
 	}
 
 	#signup {
-		scroll-margin-top: 12rem;
+		scroll-margin-top: 8rem;
 	}
 
 	body {
 		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
+	}
+
+	@keyframes tw-pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.35; }
+	}
+
+	@keyframes tw-scroll {
+		from { transform: translateX(0); }
+		to { transform: translateX(-50%); }
+	}
+
+	@keyframes tw-bob {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(4px); }
 	}
 </style>
