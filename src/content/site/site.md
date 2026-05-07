@@ -30,15 +30,12 @@ reel:
   videos:
     - id: "5GKXyOgsR9U"
       title: "Making Games in TouchDesigner?"
-      label: "DISPATCH 03"
       duration: "2:41"
     - id: "sKWCtp8nlfY"
       title: "Noah Norman // Gradient Descent @ TouchDesigner Philly Meetup"
-      label: "DISPATCH 02"
       duration: "3:18"
     - id: "nQT7EhYCVg0"
       title: "How I Build TouchDesigner Apps in 2025"
-      label: "DISPATCH 01"
       duration: "1:54"
 
 # Header

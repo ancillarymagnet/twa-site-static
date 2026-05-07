@@ -33,7 +33,7 @@ const thumb = (id: string, fallback = false) =>
 		{videos.map((v, i) => (
 			<button
 				type="button"
-				class={`tile t${(i % 3) + 1}`}
+				class="tile"
 				data-video-id={v.id}
 				data-video-title={v.title}
 				aria-label={`Play: ${v.title}`}
@@ -46,14 +46,14 @@ const thumb = (id: string, fallback = false) =>
 					loading="lazy"
 					decoding="async"
 				/>
-				<span class="tile-vignette" aria-hidden="true"></span>
 				<span class="play" aria-hidden="true">
 					<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
 				</span>
-				<span class="meta">
-					{v.label && <span>{v.label}</span>}
-					{v.duration && <span>{v.duration}</span>}
-				</span>
+				{v.duration && (
+					<span class="meta">
+						<span>{v.duration}</span>
+					</span>
+				)}
 			</button>
 		))}
 	</div>
@@ -120,27 +120,22 @@ const thumb = (id: string, fallback = false) =>
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		opacity: 0.85;
-		transition: opacity 0.2s ease;
+		transition: filter 0.2s ease, transform 0.4s ease;
+		filter: brightness(0.7);
 	}
 
-	.tile-vignette {
+	.tile::after {
+		content: '';
 		position: absolute;
-		inset: 0;
-		background: radial-gradient(ellipse at center, rgba(80, 40, 120, 0.35), rgba(0, 0, 0, 0.95));
-		transition: opacity 0.2s ease;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 50%;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
 		pointer-events: none;
 	}
 
-	.tile.t1 .tile-vignette {
-		background: radial-gradient(ellipse at center, rgba(120, 40, 60, 0.35), rgba(0, 0, 0, 0.9));
-	}
-	.tile.t2 .tile-vignette {
-		background: radial-gradient(ellipse at center, rgba(40, 90, 140, 0.35), rgba(0, 0, 0, 0.9));
-	}
-
-	.tile:hover .tile-vignette { opacity: 0.6; }
-	.tile:hover .tile-thumb { opacity: 1; }
+	.tile:hover .tile-thumb { filter: brightness(1); transform: scale(1.03); }
 
 	.play {
 		position: relative;
@@ -187,8 +182,8 @@ const thumb = (id: string, fallback = false) =>
 
 	.tile.is-playing .play,
 	.tile.is-playing .meta,
-	.tile.is-playing .tile-vignette,
 	.tile.is-playing .tile-thumb { display: none; }
+	.tile.is-playing::after { display: none; }
 
 	.tile iframe {
 		position: absolute;
