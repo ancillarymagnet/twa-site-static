@@ -1,7 +1,34 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "WebSearch",
+      "WebFetch(domain:developers.google.com)",
+      "WebFetch(domain:caniuse.com)",
+      "WebFetch(domain:webkit.org)",
+      "WebFetch(domain:forum.8thwall.com)",
+      "WebFetch(domain:appleinsider.com)",
+      "WebFetch(domain:brainhub.eu)",
+      "WebFetch(domain:intercom.help)",
+      "WebFetch(domain:ai.google.dev)",
+      "WebFetch(domain:antmedia.io)",
+      "WebFetch(domain:getstream.io)",
+      "WebFetch(domain:chromestatus.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:immersive-web.github.io)",
+      "WebFetch(domain:copyprogramming.com)",
+      "WebFetch(domain:pwa.gripe)",
+      "WebFetch(domain:whatpwacando.today)",
+      "Bash(git status -u)",
+      "Bash(git add public/browser-vs-app/index.html CLAUDE.md)",
+      "WebFetch(domain:www.unicorn.studio)",
+      "Bash(find /Users/handsheik/Documents/GitHub/twa-site-static/src -type f \\\\\\( -name \"*.html\" -o -name \"*.astro\" -o -name \"*.css\" -o -name \"*.md\" \\\\\\) 2>/dev/null | sort)",
+      "Bash(grep -r \"browser-vs-app\\\\|comparison\" /Users/handsheik/Documents/GitHub/twa-site-static --include=\"*.ts\" --include=\"*.js\" --include=\"*.mjs\" --exclude-dir=node_modules --exclude-dir=dist 2>/dev/null | head -20)",
+      "Bash(git add public/browser-vs-app/index.html && git commit -m \"$\\(cat <<'EOF'\nFix mobile layout: capability column crushed to 2 chars wide\n\nSwitch table-layout from auto to fixed on mobile so col widths\n\\(180px capability, 200px platform\\) are respected instead of being\noverridden by content-based sizing.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(awk 'length > 5000 {print NR\": [LONG LINE - \"length\" chars]\"; next} {print NR\": \"$0}' /Users/handsheik/Downloads/thirdwave_marquee_v7_dl.html)"
     ],
     "deny": [],
     "ask": []

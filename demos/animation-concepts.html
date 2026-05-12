@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rive Animation Concepts — thirdwave.fun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-bg: #111111;
+      --color-text: #f0ede8;
+      --color-accent: #e1a24a;
+      --color-muted: rgba(240, 237, 232, 0.5);
+      --color-border: rgba(240, 237, 232, 0.2);
+      --color-border-subtle: rgba(240, 237, 232, 0.1);
+      --font: 'Lexend', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font);
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Page header ── */
+    .page-header {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .page-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .page-header p {
+      color: var(--color-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── Section wrapper ── */
+    .demo-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .demo-section.full-width {
+      max-width: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .demo-label {
+      margin-bottom: 2rem;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 2rem;
+    }
+    .demo-section:not(.full-width) .demo-label {
+      padding: 0;
+    }
+    .demo-label h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+    .demo-label .meta {
+      color: var(--color-muted);
+      font-size: 0.85rem;
+    }
+    .demo-label .meta span {
+      display: inline-block;
+      margin-right: 1.5rem;
+    }
+
+    /* ── TOC nav ── */
+    .toc {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.5rem 2rem;
+      flex-wrap: wrap;
+    }
+    .toc a {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .toc a:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-color: var(--color-accent);
+    }
+
+    /* ═══════════════════════════════════════════
+       1. HERO — 3D TUNNEL + GOD RAYS
+       ═══════════════════════════════════════════ */
+    .hero-demo {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #000;
+    }
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .hero-text {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      pointer-events: none;
+    }
+    .hero-text .title {
+      font-size: clamp(2.5rem, 10vw, 7rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 60px rgba(225, 162, 74, 0.3), 0 0 120px rgba(225, 162, 74, 0.1);
+    }
+    .hero-text .tagline {
+      font-size: clamp(1.5rem, 5vw, 2.8rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      color: var(--color-accent);
+      text-shadow: 0 0 40px rgba(225, 162, 74, 0.4);
+    }
+    .hero-text .subtitle {
+      font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+      color: var(--color-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════
+       2. SUBMIT BUTTON — SHOCKWAVE
+       ═══════════════════════════════════════════ */
+    .button-demo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+    }
+    .signup-form {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      z-index: 2;
+    }
+    .form-group {
+      display: flex;
+      gap: 0.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-group.glow {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 30px rgba(225, 162, 74, 0.3), 0 0 60px rgba(225, 162, 74, 0.1);
+    }
+    .email-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--color-text);
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      font-family: var(--font);
+      outline: none;
+    }
+    .email-input::placeholder { color: var(--color-muted); }
+    .submit-btn {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+      position: relative;
+      margin: 3px;
+      white-space: nowrap;
+    }
+    .submit-btn:hover { opacity: 0.85; }
+
+    #shockwave-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .success-msg {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+      text-shadow: 0 0 30px rgba(225, 162, 74, 0.5);
+    }
+    .success-msg.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .reset-btn {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-family: var(--font);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .reset-btn:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    /* ═══════════════════════════════════════════
+       3. SECTION DIVIDER — FREQUENCY BARS
+       ═══════════════════════════════════════════ */
+    .divider-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .faux-section {
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .faux-section h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .faux-section p {
+      color: var(--color-muted);
+      font-size: 0.9rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .frequency-divider {
+      position: relative;
+      height: 60px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .frequency-divider canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ═══════════════════════════════════════════
+       4. WORDMARK — SHATTER / REFORM
+       ═══════════════════════════════════════════ */
+    .wordmark-demo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .wordmark-container {
+      background: #000;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 12px;
+      padding: 3rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      min-width: 360px;
+      min-height: 100px;
+    }
+    #wordmark-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .wordmark {
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      display: inline-flex;
+      position: relative;
+      z-index: 1;
+      user-select: none;
+    }
+    .wordmark .char {
+      display: inline-block;
+      transition: none;
+      will-change: transform, opacity;
+    }
+
+    .hint {
+      color: var(--color-muted);
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .form-group {
+        flex-direction: column;
+        border: none;
+        gap: 0.75rem;
+      }
+      .email-input {
+        border: 1px solid rgba(240, 237, 232, 0.3);
+        border-radius: 8px;
+      }
+      .submit-btn {
+        margin: 0;
+        border-radius: 8px;
+        width: 100%;
+      }
+      .toc { gap: 0.5rem; }
+      .wordmark { font-size: 1.8rem; }
+      .wordmark-container { min-width: 280px; padding: 2.5rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <h1>Animation Concepts v2</h1>
+    <p>Cinematic & immersive — 4 effects to preview before building in Rive</p>
+  </header>
+
+  <nav class="toc">
+    <a href="#tunnel">1. 3D Tunnel</a>
+    <a href="#shockwave">2. Shockwave</a>
+    <a href="#frequency">3. Frequency Bars</a>
+    <a href="#shatter">4. Shatter/Reform</a>
+  </nav>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 1. HERO — 3D PERSPECTIVE TUNNEL + GOD RAYS  -->
+  <!-- ════════════════════════════════════════════ -->
+  <section class="demo-section full-width" id="tunnel">
+    <div class="demo-label">
+      <h2>1. Hero Background — 3D Tunnel with Volumetric Light</h2>
+      <div class="meta">
+        <span><strong>Where:</strong> Hero section, behind headline</span>
+        <span><strong>Trigger:</strong> Always on + mouse shifts vanishing point</span>
+        <span><strong>Vibe:</strong> Flying into the screen — movie-trailer energy</span>
+      </div>
+    </div>
+    <div class="hero-demo">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-text">
+        <div class="title">BIG SCREEN<br>GAMING</div>
+        <div class="tagline">No goggles. No controllers.</div>
+        <div class="subtitle">We're making theaters playable. Follow along as we invent a new medium.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 2. SUBMIT BUTTON — SHOCKWAVE RIPPLE          -->
+  <!-- ════════════════════════════════════════════ -->
+  <section class="demo-section" id="shockwave">
+    <div class="demo-label">
+      <h2>2. Submit Button — Shockwave Ripple</h2>
+      <div class="meta">
+        <span><strong>Where:</strong> Email signup form</span>
+        <span><strong>Trigger:</strong> Button click</span>
+        <span><strong>Effect:</strong> Expanding ring distortion + screen flash</span>
+      </div>
+    </div>
+    <div class="button-demo">
+      <div class="signup-form" id="signup-form">
+        <div class="form-group" id="form-group">
+          <input type="email" class="email-input" placeholder="your@email.com" id="email-input">
+          <button class="submit-btn" id="submit-btn">Join the waitlist</button>
+        </div>
+      </div>
+      <div class="success-msg" id="success-msg">You're in.</div>
+      <button class="reset-btn" id="reset-btn">Reset &amp; try again</button>
+    </div>
+  </section>
+  <canvas id="shockwave-canvas"></canvas>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 3. SECTION DIVIDER — FREQUENCY BARS           -->
+  <!-- ════════════════════════════════════════════ -->
+  <section class="demo-section" id="frequency">
+    <div class="demo-label">
+      <h2>3. Section Dividers — Audio-Reactive Frequency Bars</h2>
+      <div class="meta">
+        <span><strong>Where:</strong> Between content sections</span>
+        <span><strong>Trigger:</strong> Always on (procedural noise)</span>
+        <span><strong>Vibe:</strong> The room is alive — bass is thumping</span>
+      </div>
+    </div>
+    <div class="divider-demo">
+      <div class="faux-section">
+        <h3>How It Works</h3>
+        <p>Your phone becomes the controller. The big screen becomes the playground.</p>
+      </div>
+      <div class="frequency-divider"><canvas id="freq-canvas-1"></canvas></div>
+      <div class="faux-section">
+        <h3>Why Theaters?</h3>
+        <p>40-foot screens, cinema sound, 200 players in one room. Nothing else compares.</p>
+      </div>
+      <div class="frequency-divider"><canvas id="freq-canvas-2"></canvas></div>
+      <div class="faux-section">
+        <h3>Join the Movement</h3>
+        <p>We're building the future of shared entertainment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 4. WORDMARK — SHATTER / REFORM               -->
+  <!-- ════════════════════════════════════════════ -->
+  <section class="demo-section" id="shatter">
+    <div class="demo-label">
+      <h2>4. Wordmark — Shatter &amp; Reform</h2>
+      <div class="meta">
+        <span><strong>Where:</strong> Header brand / wordmark</span>
+        <span><strong>Trigger:</strong> Click (hover to charge)</span>
+        <span><strong>Vibe:</strong> Title card reveal — letters explode out, then snap back</span>
+      </div>
+    </div>
+    <div class="wordmark-demo">
+      <div class="wordmark-container" id="wordmark-container">
+        <canvas id="wordmark-canvas"></canvas>
+        <span class="wordmark" id="wordmark"></span>
+      </div>
+      <span class="hint">Click the wordmark to shatter it</span>
+    </div>
+  </section>
+
+  <script>
+  // ═══════════════════════════════════════════════
+  // UTILITIES
+  // ═══════════════════════════════════════════════
+  function setupCanvas(canvas, parent) {
+    const dpr = devicePixelRatio || 1;
+    const rect = parent ? parent.getBoundingClientRect() : canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx, w: rect.width, h: rect.height };
+  }
+
+  // Simple seeded noise for frequency bars
+  function noise(x) {
+    const s = Math.sin(x * 127.1 + x * 311.7) * 43758.5453;
+    return s - Math.floor(s);
+  }
+  function smoothNoise(x) {
+    const i = Math.floor(x);
+    const f = x - i;
+    const t = f * f * (3 - 2 * f); // smoothstep
+    return noise(i) * (1 - t) + noise(i + 1) * t;
+  }
+
+  // ═══════════════════════════════════════════════
+  // 1. HERO — 3D PERSPECTIVE GRID + GOD RAYS
+  // ═══════════════════════════════════════════════
+  (() => {
+    const canvas = document.getElementById('hero-canvas');
+    const container = canvas.parentElement;
+    let ctx, w, h;
+    let mouse = { x: 0.5, y: 0.5 };
+    let time = 0;
+
+    function resize() {
+      ({ ctx, w, h } = setupCanvas(canvas, container));
+    }
+
+    function drawGrid() {
+      const vpX = w * (0.5 + (mouse.x - 0.5) * 0.15);
+      const vpY = h * (0.45 + (mouse.y - 0.5) * 0.1);
+      const horizon = vpY;
+
+      // Grid lines receding into distance
+      const numHLines = 30;
+      const numVLines = 24;
+      const speed = time * 0.4;
+
+      ctx.save();
+
+      // Horizontal lines (receding)
+      for (let i = 0; i < numHLines; i++) {
+        const t = ((i / numHLines) + speed * 0.05) % 1;
+        const depth = t * t; // quadratic for perspective
+        const y = horizon + depth * (h - horizon) * 1.3;
+        const spread = depth * w * 1.5;
+        const alpha = depth * 0.5;
+
+        if (y > horizon && y < h + 20) {
+          ctx.beginPath();
+          ctx.moveTo(vpX - spread, y);
+          ctx.lineTo(vpX + spread, y);
+          ctx.strokeStyle = `rgba(225, 162, 74, ${alpha * 0.4})`;
+          ctx.lineWidth = 0.5 + depth * 1.5;
+          ctx.stroke();
+        }
+      }
+
+      // Vertical lines (converging to vanishing point)
+      for (let i = -numVLines / 2; i <= numVLines / 2; i++) {
+        const baseX = vpX + i * (w / numVLines) * 3;
+        const alpha = 1 - Math.abs(i) / (numVLines / 2);
+
+        ctx.beginPath();
+        ctx.moveTo(vpX, horizon);
+        ctx.lineTo(baseX, h + 50);
+        ctx.strokeStyle = `rgba(225, 162, 74, ${alpha * 0.15})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function drawGodRays() {
+      const vpX = w * (0.5 + (mouse.x - 0.5) * 0.15);
+      const vpY = h * (0.35 + (mouse.y - 0.5) * 0.08);
+      const numRays = 12;
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+
+      for (let i = 0; i < numRays; i++) {
+        const baseAngle = (i / numRays) * Math.PI * 2;
+        const angle = baseAngle + Math.sin(time * 0.3 + i) * 0.1;
+        const length = Math.max(w, h) * 1.2;
+        const width = (15 + Math.sin(time * 0.5 + i * 2.1) * 10) * (1 + Math.sin(time * 0.2 + i) * 0.3);
+        const alpha = 0.02 + Math.sin(time * 0.4 + i * 1.7) * 0.015;
+
+        const endX = vpX + Math.cos(angle) * length;
+        const endY = vpY + Math.sin(angle) * length;
+
+        const perpX = -Math.sin(angle) * width;
+        const perpY = Math.cos(angle) * width;
+
+        const grad = ctx.createLinearGradient(vpX, vpY, endX, endY);
+        grad.addColorStop(0, `rgba(225, 162, 74, ${alpha * 3})`);
+        grad.addColorStop(0.3, `rgba(225, 162, 74, ${alpha})`);
+        grad.addColorStop(1, 'rgba(225, 162, 74, 0)');
+
+        ctx.beginPath();
+        ctx.moveTo(vpX, vpY);
+        ctx.lineTo(endX + perpX, endY + perpY);
+        ctx.lineTo(endX - perpX, endY - perpY);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      // Central glow
+      const glowR = 80 + Math.sin(time * 0.6) * 20;
+      const glow = ctx.createRadialGradient(vpX, vpY, 0, vpX, vpY, glowR);
+      glow.addColorStop(0, 'rgba(225, 162, 74, 0.15)');
+      glow.addColorStop(0.5, 'rgba(225, 162, 74, 0.05)');
+      glow.addColorStop(1, 'rgba(225, 162, 74, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(vpX - glowR, vpY - glowR, glowR * 2, glowR * 2);
+
+      ctx.restore();
+    }
+
+    function drawStreaks() {
+      const vpX = w * (0.5 + (mouse.x - 0.5) * 0.15);
+      const vpY = h * (0.4 + (mouse.y - 0.5) * 0.1);
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+
+      // Flying particles / streaks
+      for (let i = 0; i < 60; i++) {
+        const seed = i * 7.31;
+        const angle = noise(seed) * Math.PI * 2;
+        const baseSpeed = 0.2 + noise(seed + 100) * 0.8;
+        const t = ((time * baseSpeed * 0.15 + noise(seed + 200)) % 1);
+        const depth = t;
+
+        const dist = depth * Math.max(w, h) * 0.8;
+        const x = vpX + Math.cos(angle) * dist;
+        const y = vpY + Math.sin(angle) * dist;
+
+        const size = depth * 3;
+        const alpha = Math.sin(depth * Math.PI) * 0.6;
+        const streakLen = depth * 20;
+
+        if (alpha > 0.01 && x > -50 && x < w + 50 && y > -50 && y < h + 50) {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x - Math.cos(angle) * streakLen, y - Math.sin(angle) * streakLen);
+          ctx.strokeStyle = `rgba(225, 162, 74, ${alpha})`;
+          ctx.lineWidth = size;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+      }
+
+      ctx.restore();
+    }
+
+    function drawVignette() {
+      // Radial vignette
+      const grad = ctx.createRadialGradient(w / 2, h / 2, h * 0.2, w / 2, h / 2, Math.max(w, h) * 0.7);
+      grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0.7)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    function frame() {
+      time += 0.016;
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, w, h);
+
+      drawGrid();
+      drawGodRays();
+      drawStreaks();
+      drawVignette();
+
+      requestAnimationFrame(frame);
+    }
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      mouse.x = (e.clientX - rect.left) / rect.width;
+      mouse.y = (e.clientY - rect.top) / rect.height;
+    });
+    container.addEventListener('mouseleave', () => {
+      mouse.x = 0.5;
+      mouse.y = 0.5;
+    });
+
+    window.addEventListener('resize', resize);
+    resize();
+    frame();
+  })();
+
+  // ═══════════════════════════════════════════════
+  // 2. SUBMIT BUTTON — SHOCKWAVE RIPPLE
+  // ═══════════════════════════════════════════════
+  (() => {
+    const btn = document.getElementById('submit-btn');
+    const input = document.getElementById('email-input');
+    const msg = document.getElementById('success-msg');
+    const resetBtn = document.getElementById('reset-btn');
+    const formGroup = document.getElementById('form-group');
+    const canvas = document.getElementById('shockwave-canvas');
+    let ctx, cw, ch;
+    let rings = [];
+    let animating = false;
+
+    function resizeCanvas() {
+      const dpr = devicePixelRatio || 1;
+      cw = window.innerWidth;
+      ch = window.innerHeight;
+      canvas.width = cw * dpr;
+      canvas.height = ch * dpr;
+      canvas.style.width = cw + 'px';
+      canvas.style.height = ch + 'px';
+      ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function spawnShockwave(originX, originY) {
+      const maxR = Math.max(cw, ch) * 1.5;
+      // Main ring
+      rings.push({ x: originX, y: originY, r: 0, maxR, speed: 12, width: 3, alpha: 0.8, decay: 0.008 });
+      // Secondary ring (slightly delayed effect)
+      setTimeout(() => {
+        rings.push({ x: originX, y: originY, r: 0, maxR, speed: 8, width: 6, alpha: 0.4, decay: 0.006 });
+      }, 80);
+      // Third ring
+      setTimeout(() => {
+        rings.push({ x: originX, y: originY, r: 0, maxR, speed: 18, width: 1.5, alpha: 0.6, decay: 0.012 });
+      }, 30);
+
+      if (!animating) {
+        animating = true;
+        animateRings();
+      }
+    }
+
+    function animateRings() {
+      ctx.clearRect(0, 0, cw, ch);
+      rings = rings.filter(r => r.alpha > 0.01);
+
+      for (const ring of rings) {
+        ring.r += ring.speed;
+        ring.alpha -= ring.decay;
+
+        if (ring.alpha > 0) {
+          // Gold ring with glow
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(225, 162, 74, ${ring.alpha})`;
+          ctx.lineWidth = ring.width;
+          ctx.shadowColor = 'rgba(225, 162, 74, 0.5)';
+          ctx.shadowBlur = 20;
+          ctx.stroke();
+
+          // Inner glow ring
+          ctx.beginPath();
+          ctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(255, 220, 150, ${ring.alpha * 0.5})`;
+          ctx.lineWidth = ring.width * 0.3;
+          ctx.shadowBlur = 40;
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      if (rings.length > 0) {
+        requestAnimationFrame(animateRings);
+      } else {
+        animating = false;
+        ctx.clearRect(0, 0, cw, ch);
+      }
+    }
+
+    function flashScreen() {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed; inset: 0; z-index: 9998;
+        background: rgba(225, 162, 74, 0.12);
+        pointer-events: none;
+        animation: screenFlash 0.6s ease-out forwards;
+      `;
+      document.body.appendChild(overlay);
+      setTimeout(() => overlay.remove(), 700);
+
+      // Inject flash keyframes if not already done
+      if (!document.getElementById('flash-style')) {
+        const style = document.createElement('style');
+        style.id = 'flash-style';
+        style.textContent = `
+          @keyframes screenFlash {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      resizeCanvas();
+      const btnRect = btn.getBoundingClientRect();
+      const ox = btnRect.left + btnRect.width / 2;
+      const oy = btnRect.top + btnRect.height / 2;
+
+      flashScreen();
+      spawnShockwave(ox, oy);
+
+      // Form glow
+      formGroup.classList.add('glow');
+
+      setTimeout(() => {
+        msg.classList.add('visible');
+      }, 300);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      msg.classList.remove('visible');
+      formGroup.classList.remove('glow');
+      input.value = '';
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  })();
+
+  // ═══════════════════════════════════════════════
+  // 3. SECTION DIVIDERS — FREQUENCY BARS
+  // ═══════════════════════════════════════════════
+  (() => {
+    const canvases = [
+      document.getElementById('freq-canvas-1'),
+      document.getElementById('freq-canvas-2'),
+    ];
+    const contexts = [];
+    const dims = [];
+
+    function resize() {
+      canvases.forEach((c, i) => {
+        const parent = c.parentElement;
+        const { ctx, w, h } = setupCanvas(c, parent);
+        contexts[i] = ctx;
+        dims[i] = { w, h };
+      });
+    }
+
+    function drawBars(ctx, w, h, time, offset) {
+      ctx.clearRect(0, 0, w, h);
+
+      const barCount = Math.floor(w / 4);
+      const barWidth = 2;
+      const gap = (w - barCount * barWidth) / (barCount + 1);
+      const centerY = h / 2;
+
+      for (let i = 0; i < barCount; i++) {
+        const x = gap + i * (barWidth + gap);
+        const normalizedX = i / barCount;
+
+        // Layer multiple noise frequencies for organic feel
+        const n1 = smoothNoise(normalizedX * 8 + time * 1.2 + offset);
+        const n2 = smoothNoise(normalizedX * 3 + time * 0.7 + offset + 50);
+        const n3 = smoothNoise(normalizedX * 15 + time * 2.5 + offset + 100);
+
+        // Combine with bass emphasis in center
+        const bassBump = Math.exp(-Math.pow((normalizedX - 0.5) * 3, 2));
+        const combined = (n1 * 0.5 + n2 * 0.3 + n3 * 0.2) * (0.4 + bassBump * 0.6);
+
+        const barH = combined * h * 0.8;
+        const intensity = combined;
+
+        // Gradient from accent to dim
+        const r = Math.floor(225 * intensity + 30 * (1 - intensity));
+        const g = Math.floor(162 * intensity + 20 * (1 - intensity));
+        const b = Math.floor(74 * intensity + 15 * (1 - intensity));
+        const alpha = 0.3 + intensity * 0.7;
+
+        // Mirror bars from center
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.fillRect(x, centerY - barH / 2, barWidth, barH);
+
+        // Glow on bright bars
+        if (intensity > 0.6) {
+          ctx.save();
+          ctx.shadowColor = `rgba(225, 162, 74, ${(intensity - 0.6) * 1.5})`;
+          ctx.shadowBlur = 8;
+          ctx.fillRect(x, centerY - barH / 2, barWidth, barH);
+          ctx.restore();
+        }
+      }
+
+      // Horizontal center line (very subtle)
+      ctx.fillStyle = 'rgba(225, 162, 74, 0.08)';
+      ctx.fillRect(0, centerY - 0.25, w, 0.5);
+    }
+
+    let time = 0;
+    function frame() {
+      time += 0.016;
+      contexts.forEach((ctx, i) => {
+        if (ctx) drawBars(ctx, dims[i].w, dims[i].h, time, i * 33);
+      });
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    frame();
+  })();
+
+  // ═══════════════════════════════════════════════
+  // 4. WORDMARK — SHATTER & REFORM
+  // ═══════════════════════════════════════════════
+  (() => {
+    const text = 'THIRD WAVE';
+    const el = document.getElementById('wordmark');
+    const container = document.getElementById('wordmark-container');
+    const canvas = document.getElementById('wordmark-canvas');
+    let ctx, cw, ch;
+    let chars = [];
+    let debris = [];
+    let state = 'idle'; // idle | shattering | reforming
+    let stateTime = 0;
+
+    // Build character spans
+    text.split('').forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      el.appendChild(span);
+      chars.push({
+        el: span,
+        index: i,
+        x: 0, y: 0,
+        tx: 0, ty: 0, // target exploded position
+        tr: 0, // target rotation
+        ts: 1, // target scale
+        cx: 0, cy: 0, cr: 0, cs: 1, // current animated values
+        opacity: 1,
+      });
+    });
+
+    function resizeCanvas() {
+      ({ ctx, w: cw, h: ch } = setupCanvas(canvas, container));
+    }
+
+    function shatter() {
+      if (state === 'shattering') return;
+      state = 'shattering';
+      stateTime = 0;
+      debris = [];
+
+      chars.forEach((c, i) => {
+        // Random explosion direction
+        const angle = (Math.random() - 0.5) * Math.PI * 1.5;
+        const dist = 80 + Math.random() * 200;
+        c.tx = Math.cos(angle) * dist * (i < text.length / 2 ? -1 : 1);
+        c.ty = -40 + Math.random() * -120;
+        c.tr = (Math.random() - 0.5) * 720;
+        c.ts = 0.3 + Math.random() * 0.5;
+      });
+
+      // Spawn debris particles
+      for (let i = 0; i < 50; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 1 + Math.random() * 4;
+        debris.push({
+          x: cw / 2 + (Math.random() - 0.5) * 100,
+          y: ch / 2,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          size: 1 + Math.random() * 3,
+          life: 1,
+          decay: 0.01 + Math.random() * 0.02,
+        });
+      }
+
+      // Auto-reform after delay
+      setTimeout(() => {
+        state = 'reforming';
+        stateTime = 0;
+      }, 800);
+    }
+
+    function easeOutBack(t) {
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    }
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function frame() {
+      stateTime += 0.016;
+      ctx.clearRect(0, 0, cw, ch);
+
+      if (state === 'shattering') {
+        const t = Math.min(stateTime / 0.4, 1);
+        const ease = easeOutCubic(t);
+        chars.forEach(c => {
+          c.cx = c.tx * ease;
+          c.cy = c.ty * ease;
+          c.cr = c.tr * ease;
+          c.cs = 1 + (c.ts - 1) * ease;
+          c.opacity = 1 - ease * 0.3;
+          c.el.style.transform = `translate(${c.cx}px, ${c.cy}px) rotate(${c.cr}deg) scale(${c.cs})`;
+          c.el.style.opacity = c.opacity;
+        });
+      } else if (state === 'reforming') {
+        const t = Math.min(stateTime / 0.5, 1);
+        const ease = easeOutBack(t);
+        chars.forEach(c => {
+          c.cx = c.tx * (1 - ease);
+          c.cy = c.ty * (1 - ease);
+          c.cr = c.tr * (1 - ease);
+          c.cs = 1 + (c.ts - 1) * (1 - ease);
+          c.opacity = 0.7 + ease * 0.3;
+          c.el.style.transform = `translate(${c.cx}px, ${c.cy}px) rotate(${c.cr}deg) scale(${c.cs})`;
+          c.el.style.opacity = c.opacity;
+
+          // Gold flash on reform
+          if (t > 0.7) {
+            c.el.style.color = '#e1a24a';
+            c.el.style.textShadow = `0 0 ${30 * (1 - t) * 3}px rgba(225, 162, 74, ${(1 - t) * 3})`;
+          }
+        });
+
+        if (t >= 1) {
+          state = 'idle';
+          chars.forEach(c => {
+            c.el.style.transform = '';
+            c.el.style.opacity = 1;
+            c.el.style.color = '';
+            c.el.style.textShadow = '';
+          });
+        }
+      }
+
+      // Draw debris
+      debris = debris.filter(d => d.life > 0);
+      for (const d of debris) {
+        d.x += d.vx;
+        d.y += d.vy;
+        d.vy += 0.08;
+        d.life -= d.decay;
+
+        ctx.save();
+        ctx.globalAlpha = d.life;
+        ctx.fillStyle = '#e1a24a';
+        ctx.shadowColor = 'rgba(225, 162, 74, 0.8)';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Flash overlay on reform
+      if (state === 'reforming' && stateTime < 0.15) {
+        const flashAlpha = (1 - stateTime / 0.15) * 0.2;
+        ctx.fillStyle = `rgba(225, 162, 74, ${flashAlpha})`;
+        ctx.fillRect(0, 0, cw, ch);
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    container.addEventListener('click', shatter);
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    frame();
+  })();
+  </script>
+</body>
+</html>
