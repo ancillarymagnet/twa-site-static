@@ -38,7 +38,7 @@ const showCta = Boolean(ctaHref && ctaText);
 	}
 
 	.header-inner {
-		padding: 18px 40px 12px;
+		padding: 18px 40px 20px;
 		display: flex;
 		align-items: center;
 		gap: 16px;
@@ -61,21 +61,21 @@ const showCta = Boolean(ctaHref && ctaText);
 		font-weight: 600;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: #fff;
+		color: var(--color-text);
 		background: transparent;
-		border: 1px solid #fff;
+		border: 1px solid var(--color-text);
 		text-decoration: none;
 		padding: 9px 15px;
 		transition: background 0.2s ease, color 0.2s ease;
 	}
 
 	.cta-link:hover {
-		background: #fff;
+		background: var(--color-text);
 		color: var(--color-bg);
 	}
 
 	@media (max-width: 820px) {
-		.header-inner { padding: 14px 22px 10px; }
+		.header-inner { padding: 14px 22px 18px; }
 		.cta-link { font-size: 11px; padding: 9px 14px; letter-spacing: 0.13em; }
 	}
 </style>

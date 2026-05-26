@@ -28,7 +28,7 @@ const FORM_URL = 'https://tally.so/r/WOoYxP';
 	<main>
 		<section class="dev">
 			<p class="eyebrow">Developers</p>
-			<h1 class="dev-title">Build on Third&nbsp;Wave.</h1>
+			<h1 class="dev-title">Build on<br/>Third&nbsp;Wave.</h1>
 
 			<p class="dev-lede">
 				Our dev kit is in closed beta. We're working hands-on with a
@@ -87,22 +87,23 @@ const FORM_URL = 'https://tally.so/r/WOoYxP';
 	}
 
 	.dev-title {
-		font-family: var(--font-serif);
-		font-weight: 400;
-		font-size: clamp(40px, 7vw, 64px);
-		line-height: 1.05;
-		letter-spacing: -0.015em;
-		color: #fff;
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(48px, 8vw, 80px);
+		line-height: 0.95;
+		letter-spacing: -0.025em;
+		text-transform: uppercase;
+		color: var(--color-text);
 		margin-bottom: 28px;
 	}
 
 	.dev-lede {
-		font-family: var(--font-serif);
-		font-size: clamp(18px, 2.4vw, 22px);
+		font-family: var(--font-sans);
+		font-size: 18px;
 		font-weight: 400;
-		line-height: 1.4;
-		color: #ddd;
-		margin-bottom: 18px;
+		line-height: 1.5;
+		color: var(--color-text);
+		margin-bottom: 16px;
 		max-width: 560px;
 	}
 
@@ -122,8 +123,8 @@ const FORM_URL = 'https://tally.so/r/WOoYxP';
 		font-weight: 600;
 		letter-spacing: 0.15em;
 		text-transform: uppercase;
-		color: #000;
-		background: #fff;
+		color: var(--color-bg);
+		background: var(--color-text);
 		padding: 16px 28px;
 		text-decoration: none;
 		transition: opacity 0.2s ease, transform 0.15s ease;

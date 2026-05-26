@@ -110,7 +110,7 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 		<!-- Google Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Lexend:wght@400;600;800&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 	</head>
 	<body>
 		<slot />
@@ -120,7 +120,7 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 <style is:global>
 	:root {
 		--color-bg: #0a0a0a;
-		--color-text: #ffffff;
+		--color-text: #ededeb;     /* off-white, near-neutral. Never pure. */
 		--color-muted: #888888;
 		--color-dim: #555555;
 		--color-rule: #1a1a1a;
@@ -128,6 +128,7 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 		--font-serif: 'Newsreader', Georgia, serif;
 		--font-sans: 'Inter', system-ui, sans-serif;
 		--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+		--font-display: 'Lexend', system-ui, sans-serif;
 	}
 
 	* {

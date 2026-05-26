@@ -18,7 +18,7 @@ ticker: "A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GA
 # Hero Section
 
 hero:
-  title: "Making places playable."
+  title: "Making places playable"
   tagline: ""
   subtitle: ""
 
