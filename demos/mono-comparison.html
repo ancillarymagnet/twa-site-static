@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Third Wave — Utility-voice typeface comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Fragment+Mono&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Lexend:wght@400;600;800&family=Martian+Mono:wght@300;400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-text: #ffffff;
+  --color-muted: #888888;
+  --color-dim: #555555;
+  --color-rule: #1a1a1a;
+  --color-rule-strong: #2a2a2a;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Lexend', system-ui, sans-serif;
+  --util: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; font-size: 15px; line-height: 1.55; }
+body { min-height: 100vh; padding: 0 0 120px; }
+.page-head { max-width: 1240px; margin: 0 auto; padding: 56px 32px 8px; }
+.page-kicker { font-family: var(--util); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); }
+.page-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 5vw, 56px); letter-spacing: -0.025em; line-height: 1.02; margin: 14px 0 18px; }
+.page-lede { font-family: var(--font-sans); font-weight: 300; font-size: 18px; color: var(--color-muted); max-width: 760px; }
+.page-lede strong { color: var(--color-text); font-weight: 500; }
+.controls { position: sticky; top: 0; z-index: 10; background: rgba(10,10,10,0.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--color-rule); margin-top: 36px; }
+.controls-inner { max-width: 1240px; margin: 0 auto; padding: 14px 32px; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+.control-label { font-family: var(--util); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-dim); }
+.seg { display: inline-flex; border: 1px solid var(--color-rule-strong); border-radius: 6px; overflow: hidden; }
+.seg button { font-family: var(--font-sans); font-size: 13px; font-weight: 500; padding: 7px 14px; background: transparent; color: var(--color-muted); border: 0; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--color-text); color: var(--color-bg); }
+.grid { max-width: 1240px; margin: 0 auto; padding: 40px 32px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+.card { border: 1px solid var(--color-rule-strong); border-radius: 12px; background: linear-gradient(180deg, #0d0d0d, #0a0a0a); overflow: hidden; }
+.card.is-current { border-color: #3a3a3a; box-shadow: 0 0 0 1px #2a2a2a inset; }
+.card.is-drop { border-style: dashed; --util: 'Inter', system-ui, sans-serif; }
+.card-head { padding: 18px 20px 16px; border-bottom: 1px solid var(--color-rule); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.card-name { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.card-name span { display: block; font-size: 12px; font-weight: 400; color: var(--color-muted); letter-spacing: 0; margin-top: 3px; }
+.card-tag { font-family: var(--util); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-dim); white-space: nowrap; }
+.card.is-current .card-tag { color: #c98; }
+.s-topbar { display: flex; justify-content: space-between; align-items: center; padding: 11px 20px; border-bottom: 1px solid var(--color-rule); font-family: var(--util); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-muted); }
+.s-topbar .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; margin-right: 8px; vertical-align: middle; }
+.s-ticker { background: var(--color-text); color: var(--color-bg); font-family: var(--util); font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 11px 0; white-space: nowrap; overflow: hidden; }
+.s-ticker span { display: inline-block; }
+.s-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--color-rule); }
+.s-nav .brand { font-family: var(--font-display); font-weight: 800; font-size: 17px; letter-spacing: -0.02em; }
+.s-nav .cta { font-family: var(--util); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; border: 1px solid var(--color-rule-strong); border-radius: 5px; padding: 8px 13px; color: var(--color-text); }
+.s-section { padding: 24px 20px; border-bottom: 1px solid var(--color-rule); }
+.s-eyebrow { font-family: var(--util); font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); }
+.s-h { font-family: var(--font-display); font-weight: 800; font-size: 30px; letter-spacing: -0.025em; text-transform: uppercase; line-height: 1.0; margin-top: 10px; }
+.s-form { padding: 22px 20px; border-bottom: 1px solid var(--color-rule); }
+.s-form .flabel { font-family: var(--util); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 10px; }
+.s-form .row { display: flex; gap: 8px; }
+.s-form input { flex: 1; min-width: 0; background: transparent; border: 1px solid var(--color-rule-strong); border-radius: 6px; padding: 11px 12px; color: var(--color-text); font-family: var(--font-sans); font-size: 15px; }
+.s-form input::placeholder { color: var(--color-dim); }
+.s-form .btn { font-family: var(--util); font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; background: var(--color-text); color: var(--color-bg); border: 0; border-radius: 6px; padding: 0 16px; cursor: pointer; white-space: nowrap; }
+.s-form .cue { font-family: var(--util); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-dim); margin-top: 14px; }
+.s-footer { padding: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.s-footer .byline { font-family: var(--font-serif); font-size: 14px; color: var(--color-muted); font-style: italic; }
+.s-footer .links { display: flex; gap: 18px; }
+.s-footer .links a { font-family: var(--util); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-muted); text-decoration: none; cursor: pointer; }
+.s-footer .copy { font-family: var(--util); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-dim); }
+body.soft .s-topbar,
+body.soft .s-nav .cta,
+body.soft .s-form .flabel,
+body.soft .s-footer .links a,
+body.soft .s-footer .copy { text-transform: none; letter-spacing: 0.01em; }
+body.soft .s-nav .cta { font-weight: 500; }
+body.soft .s-form .cue { text-transform: none; letter-spacing: 0.02em; }
+footer.note { max-width: 1240px; margin: 48px auto 0; padding: 28px 32px; border-top: 1px solid var(--color-rule); color: var(--color-muted); font-size: 14px; max-width: 900px; }
+footer.note code { font-family: var(--util); background: var(--color-surface); padding: 2px 6px; border-radius: 4px; font-size: 13px; color: var(--color-text); }
+</style>
+</head>
+<body class="soft">
+<div class="page-head">
+  <div class="page-kicker">Third Wave · type study</div>
+  <h1 class="page-title">The utility voice,<br>seven ways.</h1>
+  <p class="page-lede">Every card shows the <strong>same real labels from the live site</strong> — top bar, ticker, nav CTA, section eyebrow, signup form, footer — rendered in a different monospace (or, in the last card, no monospace at all). The Lexend display voice and Inter reading voice are unchanged. Use the toggle to compare the current <strong>uppercase + wide-tracking</strong> stamp against a softened treatment.</p>
+</div>
+<div class="controls">
+  <div class="controls-inner">
+    <span class="control-label">Treatment</span>
+    <div class="seg" id="seg-treatment">
+      <button data-mode="current">Current (uppercase + tracked)</button>
+      <button data-mode="soft" aria-pressed="true">Softened</button>
+    </div>
+  </div>
+</div>
+<div class="grid">
+    <div class="card is-current" style="--util: 'JetBrains Mono', ui-monospace, monospace">
+      <div class="card-head">
+        <div class="card-name">JetBrains Mono<span>Current — the one to beat</span></div>
+        <div class="card-tag">Live now</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div>
+    <div class="card " style="--util: 'Martian Mono', ui-monospace, monospace">
+      <div class="card-head">
+        <div class="card-name">Martian Mono<span>Wide grotesque · biggest departure</span></div>
+        <div class="card-tag">Distinctive</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div>
+    <div class="card " style="--util: 'DM Mono', ui-monospace, monospace">
+      <div class="card-head">
+        <div class="card-name">DM Mono<span>Low-contrast · understated</span></div>
+        <div class="card-tag">Subtle</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div>
+    <div class="card " style="--util: 'Space Mono', ui-monospace, monospace">
+      <div class="card-head">
+        <div class="card-name">Space Mono<span>Retro-geometric · quirky</span></div>
+        <div class="card-tag">Characterful</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div>
+    <div class="card " style="--util: 'IBM Plex Mono', ui-monospace, monospace">
+      <div class="card-head">
+        <div class="card-name">IBM Plex Mono<span>Corporate-warm · familiar</span></div>
+        <div class="card-tag">Safe</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div>
+    <div class="card " style="--util: 'Spline Sans Mono', ui-monospace, monospace">
+      <div class="card-head">
+        <div class="card-name">Spline Sans Mono<span>Modern · clean · uncommon</span></div>
+        <div class="card-tag">Neutral</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div>
+    <div class="card " style="--util: 'Fragment Mono', ui-monospace, monospace">
+      <div class="card-head">
+        <div class="card-name">Fragment Mono<span>Courier-ish · editorial</span></div>
+        <div class="card-tag">Editorial</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div>
+    <div class="card is-drop" style="--util: 'Inter', system-ui, sans-serif">
+      <div class="card-head">
+        <div class="card-name">Drop mono entirely<span>Tracked Inter for all labels</span></div>
+        <div class="card-tag">No mono</div>
+      </div>
+      <div class="specimen">
+      <div class="s-topbar">
+        <span><span class="dot"></span>Signups open</span>
+        <span>Est. 2024 · Culver City</span>
+      </div>
+      <div class="s-ticker"><span>A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · FEATURE LENGTH · NOT A GAME, NOT A MOVIE · IRL 4 EVER · NO GOGGLES · NO CONTROLLERS · </span></div>
+      <div class="s-nav">
+        <span class="brand">Third Wave</span>
+        <span class="cta">Developers ↗</span>
+      </div>
+      <div class="s-section">
+        <p class="s-eyebrow">Developers</p>
+        <h2 class="s-h">Build on<br>Third Wave.</h2>
+      </div>
+      <div class="s-form">
+        <p class="flabel">Get the newsletter</p>
+        <div class="row">
+          <input type="email" placeholder="you@example.com" readonly>
+          <button class="btn" type="button">Get invited</button>
+        </div>
+        <p class="cue">See it in motion ↓</p>
+      </div>
+      <div class="s-footer">
+        <span class="byline">Making places playable.</span>
+        <span class="links"><a>Privacy</a><a>Contact</a></span>
+      </div>
+      <div class="s-footer" style="border-top:1px solid var(--color-rule); padding-top:14px;">
+        <span class="copy">© 2026 Third Wave</span>
+        <span class="copy">Culver City, CA</span>
+      </div>
+      </div>
+    </div></div>
+<footer class="note">
+  Candidates are all on Google Fonts, so swapping is a one-line change to the <code>&lt;link&gt;</code> and <code>--font-mono</code> in <code>Layout.astro</code>. Note: the brand skill currently documents <code>JetBrains Mono</code> as the utility voice — picking a new one means updating that skill too. Tell me which card wins (typeface + treatment) and I'll wire it into the real components.
+</footer>
+<script>
+const seg = document.getElementById('seg-treatment');
+seg.addEventListener('click', function (e) {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  Array.prototype.forEach.call(seg.children, function (b) {
+    b.setAttribute('aria-pressed', String(b === btn));
+  });
+  document.body.classList.toggle('soft', btn.dataset.mode === 'soft');
+});
+</script>
+</body>
+</html>
