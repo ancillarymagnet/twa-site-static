@@ -12,22 +12,35 @@ export interface Props {
 	ctaExternal?: boolean;
 }
 
+const NAV_LINKS = [
+	{ label: 'DEVELOPERS', href: '/dev' },
+	{ label: 'PLATFORM', href: '/platform' },
+];
+
 const { status, meta, metaHref, ticker, ctaHref, ctaText, ctaExternal = false } = Astro.props;
 const showCta = Boolean(ctaHref && ctaText);
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 
 <header class="header">
 	<div class="header-inner">
 		<div class="top-bar-slot"><TopBar status={status} meta={meta} metaHref={metaHref} /></div>
-		{showCta && (
-			<div class="cta-row">
+		<nav class="nav" aria-label="Primary">
+			{NAV_LINKS.map((link) => (
+				<a
+					href={link.href}
+					class:list={['nav-link', { active: currentPath === link.href }]}
+					{...currentPath === link.href ? { 'aria-current': 'page' } : {}}
+				>{link.label}</a>
+			))}
+			{showCta && (
 				<a
 					href={ctaHref}
 					class="cta-link"
 					{...ctaExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
 				>{ctaText}</a>
-			</div>
-		)}
+			)}
+		</nav>
 	</div>
 	<Ticker copy={ticker} />
 </header>
@@ -49,11 +62,27 @@ const showCta = Boolean(ctaHref && ctaText);
 		min-width: 0;
 	}
 
-	.cta-row {
+	.nav {
 		display: flex;
 		align-items: center;
+		gap: 24px;
 		flex-shrink: 0;
 	}
+
+	.nav-link {
+		font-family: var(--font-label);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.nav-link:hover { color: var(--color-text); }
+
+	.nav-link.active { color: var(--color-text); }
 
 	.cta-link {
 		font-family: var(--font-label);
@@ -75,7 +104,10 @@ const showCta = Boolean(ctaHref && ctaText);
 	}
 
 	@media (max-width: 820px) {
-		.header-inner { padding: 14px 22px 18px; }
-		.cta-link { font-size: 11px; padding: 9px 14px; letter-spacing: 0.13em; }
+		.header-inner { padding: 14px 22px 18px; flex-wrap: wrap; }
+		.top-bar-slot { flex-basis: 100%; }
+		.nav { gap: 18px; width: 100%; }
+		.nav-link { font-size: 11px; letter-spacing: 0.13em; }
+		.cta-link { font-size: 11px; padding: 9px 14px; letter-spacing: 0.13em; margin-left: auto; }
 	}
 </style>
