@@ -4,8 +4,7 @@ import Ticker from './Ticker.astro';
 
 export interface Props {
 	status: string;
-	meta: string;
-	metaHref?: string;
+	meta?: string;
 	ticker: string;
 	ctaHref?: string;
 	ctaText?: string;
@@ -17,14 +16,14 @@ const NAV_LINKS = [
 	{ label: 'PLATFORM', href: '/platform' },
 ];
 
-const { status, meta, metaHref, ticker, ctaHref, ctaText, ctaExternal = false } = Astro.props;
+const { status, meta, ticker, ctaHref, ctaText, ctaExternal = false } = Astro.props;
 const showCta = Boolean(ctaHref && ctaText);
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 
 <header class="header">
 	<div class="header-inner">
-		<div class="top-bar-slot"><TopBar status={status} meta={meta} metaHref={metaHref} /></div>
+		<div class="top-bar-slot"><TopBar status={status} meta={meta} /></div>
 		<nav class="nav" aria-label="Primary">
 			{NAV_LINKS.map((link) => (
 				<a
@@ -67,6 +66,7 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 		align-items: center;
 		gap: 24px;
 		flex-shrink: 0;
+		min-height: 38px;
 	}
 
 	.nav-link {
