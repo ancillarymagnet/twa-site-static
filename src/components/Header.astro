@@ -6,9 +6,6 @@ export interface Props {
 	status: string;
 	meta?: string;
 	ticker: string;
-	ctaHref?: string;
-	ctaText?: string;
-	ctaExternal?: boolean;
 }
 
 const NAV_LINKS = [
@@ -16,8 +13,9 @@ const NAV_LINKS = [
 	{ label: 'PLATFORM', href: '/platform' },
 ];
 
-const { status, meta, ticker, ctaHref, ctaText, ctaExternal = false } = Astro.props;
-const showCta = Boolean(ctaHref && ctaText);
+const CTA = { label: 'GET INVITED', href: '/#signup' };
+
+const { status, meta, ticker } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 
@@ -32,13 +30,7 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 					{...currentPath === link.href ? { 'aria-current': 'page' } : {}}
 				>{link.label}</a>
 			))}
-			{showCta && (
-				<a
-					href={ctaHref}
-					class="cta-link"
-					{...ctaExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
-				>{ctaText}</a>
-			)}
+			<a href={CTA.href} class="cta-link">{CTA.label}</a>
 		</nav>
 	</div>
 	<Ticker copy={ticker} />
@@ -67,6 +59,8 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 		gap: 24px;
 		flex-shrink: 0;
 		min-height: 38px;
+		border-left: 1px solid var(--color-rule-strong);
+		padding-left: 24px;
 	}
 
 	.nav-link {
@@ -106,7 +100,7 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 	@media (max-width: 820px) {
 		.header-inner { padding: 14px 22px 18px; flex-wrap: wrap; }
 		.top-bar-slot { flex-basis: 100%; }
-		.nav { gap: 18px; width: 100%; }
+		.nav { gap: 18px; width: 100%; border-left: 0; padding-left: 0; }
 		.nav-link { font-size: 11px; letter-spacing: 0.13em; }
 		.cta-link { font-size: 11px; padding: 9px 14px; letter-spacing: 0.13em; margin-left: auto; }
 	}

@@ -88,6 +88,23 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 		outline-offset: -1px;
 	}
 
+	@keyframes signup-flash {
+		0%, 35% { border-color: var(--color-text); }
+		100% { border-color: var(--color-rule-strong); }
+	}
+
+	#signup:target .form-group,
+	#signup:target .email-input {
+		animation: signup-flash 1.4s ease-out 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#signup:target .form-group,
+		#signup:target .email-input {
+			animation: none;
+		}
+	}
+
 	.submit-btn {
 		background: var(--color-text);
 		border: 0;
