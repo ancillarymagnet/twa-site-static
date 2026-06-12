@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!-- HOME (streetwear print register) — based on streetwear-comp.html. Three sections route the
+     three audiences with real shortened subpage copy + links. Cube woven into each plate.
+     Type: Lexend (display) + Schibsted (text). Throwaway exploration. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Third Wave — Making places playable</title>
+<meta name="description" content="100 players. One screen. Your phone is the controller — no goggles, no app. A new medium for shared, in-person play." />
+<link rel="canonical" href="https://thirdwave.fun/althome/" />
+<!-- Open Graph / social -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://thirdwave.fun/althome/" />
+<meta property="og:title" content="Third Wave — Making places playable" />
+<meta property="og:description" content="100 players. One screen. Your phone is the controller — no goggles, no app. A new medium for shared, in-person play." />
+<meta property="og:image" content="https://thirdwave.fun/althome/gen/hero-v2-1.jpg" />
+<meta property="og:image:width" content="1536" />
+<meta property="og:image:height" content="1024" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Third Wave — Making places playable" />
+<meta name="twitter:description" content="100 players. One screen. Your phone is the controller — no goggles, no app. A new medium for shared, in-person play." />
+<meta name="twitter:image" content="https://thirdwave.fun/althome/gen/hero-v2-1.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@600;800&family=Schibsted+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#0a0a0a; --rule:#2a2a2a; --dim:#b3b3b3; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+  html,body{overflow-x:hidden;max-width:100%}
+  body{font-family:'Schibsted Grotesk',system-ui,sans-serif}
+  a{color:inherit}
+  img{display:block}
+  .tag{font-family:'Schibsted Grotesk';text-transform:uppercase;letter-spacing:.18em;font-weight:600;font-size:11px}
+
+  header{display:flex;justify-content:space-between;align-items:center;padding:18px 30px;border-bottom:1px solid var(--rule)}
+  .wm{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;font-size:19px;text-decoration:none}
+  nav{display:flex;gap:20px;align-items:center}
+  nav a{color:var(--dim);text-decoration:none}
+  nav a.cta{border:1px solid #fff;color:#fff;padding:9px 15px}
+
+  .ticker{background:#fff;color:#000;padding:11px 0;overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--rule)}
+  .ticker span{font-family:'Schibsted Grotesk';font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+
+  /* HERO — full theater plate, centered chrome (matches original framing) */
+  .hero{position:relative;height:760px;overflow:hidden;border-bottom:1px solid var(--rule)}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:grayscale(1) contrast(0.95) brightness(0.88)}
+  .hero .scrim{position:absolute;inset:0;background:radial-gradient(58% 46% at 50% 56%, rgba(6,6,6,.74), transparent 72%), linear-gradient(180deg,rgba(6,6,6,.6) 0%,transparent 26%,transparent 58%,rgba(6,6,6,.92) 100%)}
+  .hero .ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:26px 34px}
+  .hero .top{display:flex;justify-content:space-between;align-items:flex-start}
+  .hero .top .wm{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;font-size:20px;text-decoration:none}
+  .hero .top .meta{text-align:right;color:#d4d4d4}
+  .hero .top .meta div{margin-bottom:3px}
+  .hero .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px}
+  .hero .mid h1{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.04em;line-height:.82;font-size:clamp(64px,9vw,124px);text-shadow:0 2px 30px rgba(0,0,0,.65),0 0 8px rgba(0,0,0,.5)}
+  .hero .mid p{font-size:18px;color:#f2f2f2;text-shadow:0 1px 14px rgba(0,0,0,.7)}
+  .hero .bottom{display:flex;justify-content:space-between;align-items:flex-end}
+  .hero .pill{display:flex;align-items:center;gap:8px}
+  .hero .dot{width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.7)}
+  .btn{display:inline-block;border:1px solid #fff;color:#fff;padding:12px 18px;text-decoration:none;width:max-content}
+
+  /* DEV — graphic drop, art + copy */
+  .drop{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule)}
+  .drop .art{display:flex;align-items:center;justify-content:center;padding:44px;border-right:1px solid var(--rule)}
+  .drop .art img{width:100%;max-width:440px;border:1px solid var(--rule);filter:grayscale(1) contrast(1.06)}
+  .drop .copy{padding:52px 46px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+  .drop .copy h2{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.03em;line-height:.86;font-size:54px}
+  .drop .copy p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:42ch}
+  .kick{color:var(--dim)}
+  @media (min-width:769px){ .drop.rev .art{order:2;border-right:0;border-left:1px solid var(--rule)} .drop.rev .copy{order:1} }
+
+  /* VENUE — full-width collage ribbon + copy below */
+  .ribbon{border-bottom:1px solid var(--rule)}
+  .ribbon .rimg{width:100%;height:300px;overflow:hidden;border-bottom:1px solid var(--rule)}
+  .ribbon .rimg img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.08)}
+  .ribbon .copy{padding:44px 46px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+  .ribbon .copy h2{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.035em;line-height:.86;font-size:54px}
+  .ribbon .copy p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:48ch}
+
+  /* wave band */
+  .band{position:relative;height:200px;overflow:hidden;border-bottom:1px solid var(--rule)}
+  .band img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) invert(1)}
+  .band .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .band .ov span{font-family:'Lexend';font-weight:800;text-transform:uppercase;font-size:50px;color:#fff;mix-blend-mode:difference}
+
+  footer{display:flex;justify-content:space-between;align-items:flex-end;padding:28px 30px;color:var(--dim);font-size:14px}
+
+  @media (max-width: 768px){
+    .hero{height:82vh;min-height:520px}
+    .hero .ov{padding:14px 16px}
+    .hero .top .wm{font-size:14px}
+    .hero .top .meta{display:none}
+    .hero .bottom{gap:10px}
+    .hero .pill .dot{flex-shrink:0}
+    .hero .mid{gap:8px;padding:0 14px}
+    .hero .mid h1{font-size:clamp(48px,15vw,84px)}
+    .hero .mid p{font-size:12px}
+    .hero .bottom{flex-wrap:wrap;gap:10px}
+    .hero .pill{font-size:10px;letter-spacing:.12em}
+    .hero .btn{font-size:10px;padding:9px 12px;letter-spacing:.12em}
+    .ticker{padding:10px 0}
+    .ticker span{font-size:10px;letter-spacing:.1em}
+
+    .drop{grid-template-columns:1fr}
+    .drop .art{border-right:0;border-bottom:1px solid var(--rule);padding:28px 28px 30px}
+    .drop .art img{max-width:300px}
+    .drop .copy{padding:30px 22px 36px;gap:13px}
+    .drop .copy h2{font-size:clamp(34px,11vw,44px)}
+    .drop .copy p{font-size:15px}
+
+    .ribbon .rimg{height:200px}
+    .ribbon .copy{padding:30px 22px 36px;gap:13px}
+    .ribbon .copy h2{font-size:clamp(34px,11vw,44px)}
+    .ribbon .copy p{font-size:15px}
+
+    .band{height:150px}
+    .band .ov span{font-size:clamp(26px,8vw,36px)}
+
+    footer{flex-direction:column;align-items:flex-start;gap:10px;padding:24px 22px;font-size:13px}
+  }
+</style>
+</head>
+<body>
+  <!-- PLAYERS / HERO -->
+  <section class="hero">
+    <img src="gen/hero-v2-1.jpg" alt="A theater crowd holding up phones that each glow with the Third Wave wave-cube logo, facing a screen showing intense eyes beside the glowing cube">
+    <div class="scrim"></div>
+    <div class="ov">
+      <div class="top">
+        <a class="wm" href="/">Third Wave</a>
+        <div class="meta tag"><div>Shared-Screen Multiplayer</div><div>Est. 2024 · Culver City</div></div>
+      </div>
+      <div class="mid">
+        <h1>Third<br>Wave</h1>
+        <p class="tag" style="letter-spacing:.16em">Making places playable</p>
+      </div>
+      <div class="bottom">
+        <span class="pill tag"><span class="dot"></span>Signups Open</span>
+        <a class="btn tag" href="/#signup">Get Invited</a>
+      </div>
+    </div>
+  </section>
+  <div class="ticker"><span>&nbsp;A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER ·&nbsp;</span></div>
+
+  <!-- DEVELOPERS -->
+  <section class="drop">
+    <div class="art"><img src="gen/final-dev-crowdwork.jpg" alt="Third Wave data-dissolution graphic"></div>
+    <div class="copy">
+      <div class="kick tag">For Developers</div>
+      <h2>Build on<br>Third Wave</h2>
+      <p>Dev kit in closed beta. Build location-based, phone-as-controller experiences — and blow some wigs back in a new medium.</p>
+      <a class="btn tag" href="/dev">Request Dev Kit Access</a>
+    </div>
+  </section>
+
+  <!-- VENUES -->
+  <section class="ribbon">
+    <div class="rimg"><img src="gen/final-collage.jpg" alt="Third Wave zine collage — IRL"></div>
+    <div class="copy">
+      <div class="kick tag">For Venues</div>
+      <h2>Your space, playable</h2>
+      <p>License the platform. Any room becomes a venue for shared play — phones in, no hardware graveyard, throughput high.</p>
+      <a class="btn tag" href="/platform">Talk to Us</a>
+    </div>
+  </section>
+
+  <!-- WAVE BAND -->
+  <div class="band">
+    <img src="gen/p5-wave.jpg" alt="">
+    <div class="ov"><span>A New Medium</span></div>
+  </div>
+
+  <footer>
+    <span>A production of Your Free Call Will End Soon, Co.</span>
+    <span class="tag">YouTube ↗ &nbsp; Instagram ↗</span>
+  </footer>
+</body>
+</html>
