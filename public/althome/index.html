@@ -91,6 +91,10 @@
   .band .ov span{font-family:'Lexend';font-weight:800;text-transform:uppercase;font-size:50px;color:#fff;mix-blend-mode:difference}
 
   footer{display:flex;justify-content:space-between;align-items:flex-end;padding:28px 30px;color:var(--dim);font-size:14px}
+  /* social links matched to the homepage Footer.astro: separate hoverable links, gap, color transition */
+  .social{display:flex;gap:20px;font-family:'Schibsted Grotesk';font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  .social a{color:var(--dim);text-decoration:none;transition:color .2s ease}
+  .social a:hover{color:#fff}
 
   @media (max-width: 768px){
     .hero{height:82vh;min-height:520px}
@@ -124,6 +128,7 @@
     .band .ov span{font-size:clamp(26px,8vw,36px)}
 
     footer{flex-direction:column;align-items:flex-start;gap:10px;padding:24px 22px;font-size:13px}
+    .social{gap:16px;font-size:11px;letter-spacing:.13em}
   }
 </style>
 </head>
@@ -179,7 +184,7 @@
 
   <footer>
     <span>A production of Your Free Call Will End Soon, Co.</span>
-    <span class="tag">YouTube ↗ &nbsp; Instagram ↗</span>
+    <span class="social"><a href="https://youtube.com/@thirdwavearcade" target="_blank" rel="noopener noreferrer">YouTube ↗</a><a href="https://instagram.com/thirdwavearcade" target="_blank" rel="noopener noreferrer">Instagram ↗</a></span>
   </footer>
 </body>
 </html>
