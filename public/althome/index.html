@@ -30,7 +30,8 @@
   *{margin:0;padding:0;box-sizing:border-box}
   html{background:#000;color:#fff;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
-  html,body{overflow-x:hidden;max-width:100%}
+  /* NO overflow-x:hidden on html/body — it kills iOS GPU scrolling (caused jumpy scroll).
+     The only wide element is the ticker .track, already clipped by .ticker{overflow:hidden}. */
   body{font-family:'Schibsted Grotesk',system-ui,sans-serif}
   a{color:inherit}
   img{display:block}
@@ -135,7 +136,7 @@
     .hero .pill{display:none}        /* drop SIGNUPS OPEN on mobile; center the lone CTA */
     .hero .btn{font-size:10px;padding:9px 12px;letter-spacing:.12em}
     .ticker{padding:11px 0}
-    .ticker .track{font-size:11px;letter-spacing:.13em;animation:none}
+    .ticker .track{font-size:11px;letter-spacing:.13em;animation-duration:40s}
 
     .drop{grid-template-columns:1fr}
     .drop .art{border-right:0;border-bottom:1px solid var(--rule);padding:28px 28px 30px}
