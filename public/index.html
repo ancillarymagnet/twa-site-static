@@ -114,6 +114,32 @@
   @keyframes join-flash{0%,35%{border-color:#fff}100%{border-color:#444}}
   @media (prefers-reduced-motion: reduce){ #signup:target .form-group{animation:none} }
 
+  /* REEL / YouTube — ported from YouTubeSection.astro (tokens mapped to this page) */
+  .reel{padding:64px 40px 40px;border-top:1px solid var(--rule)}
+  .reel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;gap:16px}
+  .reel-cta{font-family:'Schibsted Grotesk';font-size:13px;color:#b3b3b3;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transition:color .2s ease}
+  .reel-cta:hover{color:#fff}
+  .reel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .reel .tile{aspect-ratio:16/9;background:#0a0a0a;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;padding:0;font-family:inherit;color:inherit}
+  .reel .tile-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:filter .2s ease,transform .4s ease;filter:brightness(.7)}
+  .reel .tile::after{content:'';position:absolute;left:0;right:0;bottom:0;height:50%;background:linear-gradient(to top,rgba(0,0,0,.55),transparent);pointer-events:none}
+  .reel .tile:hover .tile-thumb{filter:brightness(1);transform:scale(1.03)}
+  .reel .play{position:relative;width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:background .2s ease,border-color .2s ease;background:rgba(0,0,0,.2)}
+  .reel .tile:hover .play{background:#fff;border-color:#fff}
+  .reel .play svg{width:18px;height:18px;fill:#fff;margin-left:3px;transition:fill .2s ease}
+  .reel .tile:hover .play svg{fill:#0a0a0a}
+  .reel .meta{position:absolute;bottom:14px;left:16px;right:16px;display:flex;justify-content:space-between;font-family:'Schibsted Grotesk';font-size:11px;color:#fff;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+  .reel .tile.is-playing .play,.reel .tile.is-playing .meta,.reel .tile.is-playing .tile-thumb{display:none}
+  .reel .tile.is-playing::after{display:none}
+  .reel .tile iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  @media (max-width:820px){
+    .reel{padding:32px 22px}
+    .reel-grid{grid-template-columns:1fr;gap:10px}
+    .reel-cta{font-size:9px;letter-spacing:.13em}
+    .reel .play{width:42px;height:42px}
+    .reel .play svg{width:14px;height:14px;margin-left:2px}
+  }
+
   footer{display:flex;justify-content:space-between;align-items:flex-end;padding:28px 30px;color:var(--dim);font-size:14px}
   /* social links matched to the homepage Footer.astro: separate hoverable links, gap, color transition */
   .foot-left{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
@@ -236,6 +262,35 @@
     </form>
   </section>
 
+  <!-- REEL / YouTube — ported verbatim from archived home (YouTubeSection.astro) -->
+  <section class="reel">
+    <div class="reel-head">
+      <span></span>
+      <a class="reel-cta" href="https://youtube.com/@thirdwavearcade" target="_blank" rel="noopener noreferrer">↗ More on YouTube</a>
+    </div>
+    <div class="reel-grid">
+      <button type="button" class="tile" data-video-id="4BrnQCr9uxg" data-video-title="THIRD WAVE PLAYTEST @ ZEROSPACE BROOKLYN 02.26.26" aria-label="Play: THIRD WAVE PLAYTEST @ ZEROSPACE BROOKLYN 02.26.26">
+        <img class="tile-thumb" src="https://img.youtube.com/vi/4BrnQCr9uxg/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/4BrnQCr9uxg/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+      </button>
+      <button type="button" class="tile" data-video-id="5GKXyOgsR9U" data-video-title="Making Games in TouchDesigner?" aria-label="Play: Making Games in TouchDesigner?">
+        <img class="tile-thumb" src="https://img.youtube.com/vi/5GKXyOgsR9U/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/5GKXyOgsR9U/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="meta"><span>2:41</span></span>
+      </button>
+      <button type="button" class="tile" data-video-id="sKWCtp8nlfY" data-video-title="Noah Norman // Gradient Descent @ TouchDesigner Philly Meetup" aria-label="Play: Noah Norman // Gradient Descent @ TouchDesigner Philly Meetup">
+        <img class="tile-thumb" src="https://img.youtube.com/vi/sKWCtp8nlfY/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/sKWCtp8nlfY/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="meta"><span>3:18</span></span>
+      </button>
+      <button type="button" class="tile" data-video-id="nQT7EhYCVg0" data-video-title="How I Build TouchDesigner Apps in 2025" aria-label="Play: How I Build TouchDesigner Apps in 2025">
+        <img class="tile-thumb" src="https://img.youtube.com/vi/nQT7EhYCVg0/maxresdefault.jpg" data-fallback="https://img.youtube.com/vi/nQT7EhYCVg0/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="meta"><span>1:54</span></span>
+      </button>
+    </div>
+  </section>
+
   <footer>
     <div class="foot-left">
       <img class="footmark" src="gen/lockup.jpg" width="84" height="84" alt="Third Wave" />
@@ -311,6 +366,32 @@
         }
       });
     }
+  </script>
+
+  <!-- REEL click-to-play — ported verbatim from YouTubeSection.astro -->
+  <script>
+    document.querySelectorAll('.reel .tile[data-video-id]').forEach((tile) => {
+      const thumb = tile.querySelector('.tile-thumb');
+      if (thumb) {
+        thumb.addEventListener('error', () => {
+          const fallback = thumb.dataset.fallback;
+          if (fallback && thumb.src !== fallback) thumb.src = fallback;
+        }, { once: true });
+      }
+      tile.addEventListener('click', () => {
+        if (tile.classList.contains('is-playing')) return;
+        const id = tile.getAttribute('data-video-id');
+        const title = tile.getAttribute('data-video-title') ?? '';
+        if (!id) return;
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+        iframe.title = title;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        tile.appendChild(iframe);
+        tile.classList.add('is-playing');
+      });
+    });
   </script>
 </body>
 </html>
