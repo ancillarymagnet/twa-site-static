@@ -27,7 +27,8 @@
 <style>
   :root{ --bg:#0a0a0a; --rule:#2a2a2a; --dim:#b3b3b3; }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+  html{background:#000;color:#fff;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
   html,body{overflow-x:hidden;max-width:100%}
   body{font-family:'Schibsted Grotesk',system-ui,sans-serif}
   a{color:inherit}
@@ -90,6 +91,24 @@
   .band .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
   .band .ov span{font-family:'Lexend';font-weight:800;text-transform:uppercase;font-size:50px;color:#fff;mix-blend-mode:difference}
 
+  /* JOIN / signup — self-contained email capture (posts to the same endpoint as the OG homepage) */
+  .join{border-bottom:1px solid var(--rule);padding:64px 30px 72px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+  .join .kick{color:var(--dim)}
+  .join h2{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.035em;line-height:.86;font-size:54px}
+  .join p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:46ch}
+  .join form{width:100%;max-width:480px;margin-top:10px}
+  .join .fg{display:flex;width:100%;border:1px solid #444}
+  .join input{flex:1;min-width:0;background:transparent;border:0;padding:16px 18px;color:#fff;font-size:16px;outline:none;font-family:'Schibsted Grotesk'}
+  .join input::placeholder{color:#666}
+  .join input[aria-invalid='true']{outline:1px solid #c87a5e;outline-offset:-1px}
+  .join button{background:#fff;border:0;color:#000;padding:0 28px;font-family:'Schibsted Grotesk';font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:opacity .2s ease;flex-shrink:0}
+  .join button:hover{opacity:.85}
+  .join button:disabled{cursor:progress;opacity:.7}
+  .join .form-msg{margin-top:12px;font-family:'Schibsted Grotesk';font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);min-height:1em}
+  #signup:target .fg{animation:join-flash 1.4s ease-out 1}
+  @keyframes join-flash{0%,35%{border-color:#fff}100%{border-color:#444}}
+  @media (prefers-reduced-motion: reduce){ #signup:target .fg{animation:none} }
+
   footer{display:flex;justify-content:space-between;align-items:flex-end;padding:28px 30px;color:var(--dim);font-size:14px}
   /* social links matched to the homepage Footer.astro: separate hoverable links, gap, color transition */
   .social{display:flex;gap:20px;font-family:'Schibsted Grotesk';font-size:12px;letter-spacing:.14em;text-transform:uppercase}
@@ -127,6 +146,13 @@
     .band{height:150px}
     .band .ov span{font-size:clamp(26px,8vw,36px)}
 
+    .join{padding:48px 22px 56px;gap:13px}
+    .join h2{font-size:clamp(34px,11vw,44px)}
+    .join p{font-size:15px}
+    .join .fg{flex-direction:column;border:0;gap:8px}
+    .join input{border:1px solid #444}
+    .join button{width:100%;padding:16px}
+
     footer{flex-direction:column;align-items:flex-start;gap:10px;padding:24px 22px;font-size:13px}
     .social{gap:16px;font-size:11px;letter-spacing:.13em}
   }
@@ -148,7 +174,7 @@
       </div>
       <div class="bottom">
         <span class="pill tag"><span class="dot"></span>Signups Open</span>
-        <a class="btn tag" href="/#signup">Get Invited</a>
+        <a class="btn tag" href="#signup">Get Invited</a>
       </div>
     </div>
   </section>
@@ -182,9 +208,66 @@
     <div class="ov"><span>A New Medium</span></div>
   </div>
 
+  <!-- JOIN / signup -->
+  <section class="join">
+    <div class="kick tag">For Players</div>
+    <h2>Get invited</h2>
+    <p>Be first to hear about playtests, shows, and where to play next. No spam — just an invite when there's a room to be in.</p>
+    <form id="signup" novalidate>
+      <div class="fg">
+        <input type="email" id="email-input" class="email-input" placeholder="you@example.com" required aria-label="Email address" aria-describedby="form-message" />
+        <button type="submit" id="submit-btn">Get Invited</button>
+      </div>
+      <p class="form-msg" id="form-message" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
   <footer>
     <span>A production of Your Free Call Will End Soon, Co.</span>
     <span class="social"><a href="https://youtube.com/@thirdwavearcade" target="_blank" rel="noopener noreferrer">YouTube ↗</a><a href="https://instagram.com/thirdwavearcade" target="_blank" rel="noopener noreferrer">Instagram ↗</a></span>
   </footer>
+
+  <script>
+    // Email capture — posts to the same Google Apps Script endpoint as the OG homepage.
+    (function(){
+      var form = document.getElementById('signup');
+      var emailInput = document.getElementById('email-input');
+      var submitBtn = document.getElementById('submit-btn');
+      var message = document.getElementById('form-message');
+      if (!form || !emailInput || !submitBtn || !message) return;
+      var ok = function(v){ return /^[^@\s]+@[^@\s]+$/.test(v); };
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        message.textContent = '';
+        var email = emailInput.value.trim();
+        if (!ok(email)) {
+          emailInput.setAttribute('aria-invalid','true');
+          message.textContent = 'Enter a valid email address.';
+          return;
+        }
+        emailInput.removeAttribute('aria-invalid');
+        message.textContent = 'Submitting…';
+        var prev = submitBtn.textContent;
+        submitBtn.textContent = '...';
+        submitBtn.disabled = true;
+        try {
+          await fetch('https://script.google.com/macros/s/AKfycbywTCoErcdOgjCLoFnVr7UZUfOjP0uEIHOd3owmGd3rblFg0Ams1tbmdCM-_tNqji3n/exec', {
+            method: 'POST', body: JSON.stringify({ email: email }), mode: 'no-cors'
+          });
+          message.textContent = "You're in.";
+          emailInput.value = '';
+        } catch (err) {
+          message.textContent = 'Network error. Try again.';
+        } finally {
+          submitBtn.textContent = prev;
+          submitBtn.disabled = false;
+        }
+      });
+      emailInput.addEventListener('focus', function(){
+        emailInput.removeAttribute('aria-invalid');
+        if (message.textContent !== "You're in.") message.textContent = '';
+      });
+    })();
+  </script>
 </body>
 </html>
