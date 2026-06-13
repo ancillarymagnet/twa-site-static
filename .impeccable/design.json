@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-13T00:00:00Z",
+  "title": "Design System: Third Wave",
+  "extensions": {
+    "colorMeta": {
+      "fg-0":   { "role": "primary", "displayName": "Knockout White", "canonical": "#ffffff", "tonalRamp": ["#0a0a0a","#1e1e1e","#3a3a3a","#5a5a5a","#888888","#b3b3b3","#d4d4d4","#ffffff"] },
+      "bg-0":   { "role": "neutral", "displayName": "Marquee Black", "canonical": "#0a0a0a", "tonalRamp": ["#0a0a0a","#141414","#1e1e1e","#272727","#2a2a2a","#555555","#888888","#b3b3b3"] },
+      "status-yes": { "role": "tertiary", "displayName": "Capability Green", "canonical": "#7ec87e", "tonalRamp": ["#16221a","#1a2e1a","#2f5a30","#3f7a40","#5aa35c","#7ec87e","#a6dca6","#d2f0d2"] },
+      "status-par": { "role": "tertiary", "displayName": "Capability Amber", "canonical": "#d4a847", "tonalRamp": ["#241d0a","#332b10","#5a4a1c","#7a6428","#a3853a","#d4a847","#e3c87f","#f1e3bf"] },
+      "status-no":  { "role": "tertiary", "displayName": "Capability Coral", "canonical": "#f28b8b", "tonalRamp": ["#2a1414","#3d1a1a","#5a2a2a","#7a3a3a","#a35a5a","#f28b8b","#f6b3b3","#fbd9d9"] }
+    },
+    "typographyMeta": {
+      "wordmark": { "displayName": "Wordmark", "purpose": "Lexend ExtraBold (800). The lockup + small top-bar wordmark." },
+      "display":  { "displayName": "Display", "purpose": "Lexend 800, uppercase. Page headlines (BUILD ON THIRD WAVE.) — shares the wordmark's face." },
+      "headline": { "displayName": "Section head", "purpose": "Lexend 600. Section heads (H2/H3), reel title." },
+      "lede":     { "displayName": "Lede", "purpose": "Schibsted 400 ~22px. Hero tagline and ledes — the narrator voice (no longer a serif)." },
+      "body":     { "displayName": "Body", "purpose": "Schibsted 400, 15px/1.55. Prose, form fields. Measure 65–75ch." },
+      "label":    { "displayName": "Label", "purpose": "Schibsted 600–700, uppercase, tracked 0.14em. Nav, CTAs, ticker, pills, metadata." }
+    },
+    "shadows": [
+      { "name": "status-glow", "value": "0 0 10px rgba(255,255,255,0.6)", "purpose": "The 6x6 live-status dot ONLY. The brand's sole box-shadow." }
+    ],
+    "motion": [
+      { "name": "hover", "value": "200ms ease", "purpose": "Color/background hover transitions. No scale, no translate (tiles excepted)." },
+      { "name": "ticker", "value": "60s linear infinite (40s mobile)", "purpose": "translateX(0 → -50%) marquee — the site's heartbeat." },
+      { "name": "pulse", "value": "1.8s ease-in-out infinite", "purpose": "Live-status dot opacity 1 → 0.35 → 1." },
+      { "name": "bob", "value": "2.4s ease-in-out infinite", "purpose": "Scroll-cue arrow translateY(0 → 4px)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "820px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (inverse fill)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Email submit / primary action. White fill, black text, square.",
+      "html": "<button class=\"ds-btn-primary\">Get Invited</button>",
+      "css": ".ds-btn-primary{font-family:'Schibsted Grotesk',system-ui,sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:#fff;color:#000;border:0;border-radius:0;padding:14px 28px;cursor:pointer;transition:opacity .2s ease}.ds-btn-primary:hover{opacity:.85}.ds-btn-primary:disabled{opacity:.7;cursor:progress}"
+    },
+    {
+      "name": "Outline Button (header CTA)",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Header CTA. Transparent with 1px white border; inverts on hover.",
+      "html": "<button class=\"ds-btn-outline\">Request Dev Kit Access</button>",
+      "css": ".ds-btn-outline{font-family:'Schibsted Grotesk',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;background:transparent;color:#fff;border:1px solid #fff;border-radius:0;padding:9px 15px;cursor:pointer;transition:background .2s ease,color .2s ease}.ds-btn-outline:hover{background:#fff;color:#0a0a0a}"
+    },
+    {
+      "name": "Email Field",
+      "kind": "input",
+      "refersTo": "input-email",
+      "description": "Transparent input inside a 1px hairline group, square.",
+      "html": "<div class=\"ds-field\"><input class=\"ds-input\" placeholder=\"you@example.com\"><button class=\"ds-field-btn\">Get Invited</button></div>",
+      "css": ".ds-field{display:flex;max-width:360px;border:1px solid #2a2a2a}.ds-input{flex:1;min-width:0;background:transparent;border:0;padding:16px 18px;color:#fff;font-family:'Schibsted Grotesk',system-ui,sans-serif;font-size:16px;outline:none}.ds-input::placeholder{color:#666}.ds-input[aria-invalid='true']{outline:1px solid #c87a5e;outline-offset:-1px}.ds-field-btn{font-family:'Schibsted Grotesk',system-ui,sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:#fff;color:#000;border:0;padding:0 24px;cursor:pointer}"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Uppercase tracked label, dim → bright on hover/active.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">Developers</a><a href=\"#\" class=\"on\">Platform</a></nav>",
+      "css": ".ds-nav{display:flex;gap:24px}.ds-nav a{font-family:'Schibsted Grotesk',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#888;text-decoration:none;transition:color .2s ease}.ds-nav a:hover,.ds-nav a.on{color:#fff}"
+    },
+    {
+      "name": "Ticker",
+      "kind": "custom",
+      "refersTo": "ticker",
+      "description": "Inverted full-bleed marquee band — the site's heartbeat.",
+      "html": "<div class=\"ds-ticker\"><span class=\"ds-ticker-txt\">A New Medium · 100 Players · One Screen · Not a Game, Not a Movie · No Goggles ·</span></div>",
+      "css": ".ds-ticker{background:#fff;color:#000;padding:13px 0;overflow:hidden;white-space:nowrap}.ds-ticker-txt{font-family:'Schibsted Grotesk',system-ui,sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}"
+    },
+    {
+      "name": "Live-Status Pill",
+      "kind": "chip",
+      "refersTo": "status-pill",
+      "description": "Glowing pulsing dot + tracked status label.",
+      "html": "<span class=\"ds-pill\"><span class=\"ds-dot\"></span>Signups Open</span>",
+      "css": ".ds-pill{display:inline-flex;align-items:center;gap:7px;font-family:'Schibsted Grotesk',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#fff}.ds-dot{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.6);animation:ds-pulse 1.8s ease-in-out infinite}@keyframes ds-pulse{0%,100%{opacity:1}50%{opacity:.35}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Knockout Wordmark",
+    "overview": "The system frames one asset: the pure-white knockout lockup. Text is #ffffff (not off-white) to match it; the chassis is a barely-warm off-black #0a0a0a, the only off-endpoint. Theater-marquee meets developer terminal — nearly-black house lights, off-white type, one bright element per screen. Lexend is the display voice (wordmark + headlines, sharing one face so they never clash) — a deliberately low-opinion pick for a young brand; Schibsted Grotesk is the text voice (body, ledes, labels). Chosen off the AI reflex-reject defaults (no Inter, no Newsreader, no editorial-serif lane). Louder personality is carried by copy, motion, and texture, not the type identity. The homepage is image-led: a heavily-treated B&W photographic hero (modern-streetwear register, Cav Empt / Brain Dead) carries the edge while the type stays a quiet chassis — quiet chassis, loud content.",
+    "keyCharacteristics": [
+      "Off-black chassis (#0a0a0a), pure-white type and CTAs (#ffffff) — the lockup sets the spec.",
+      "Zero radii everywhere; only circles are the status dot and play button.",
+      "1px hairline rules carry all structure; no shadow system.",
+      "One bright thing per screen. Color lives inside content frames, never the chassis.",
+      "Two type roles by size/job: Lexend = display (wordmark + headlines); Schibsted Grotesk = text (body, ledes, labels).",
+      "The homepage is image-led: a heavily-treated B&W hero plate carries the edge; type stays quiet over it. Subpages keep the chassis without the plate."
+    ],
+    "rules": [
+      { "name": "The One Bright Thing Rule", "body": "At most one loud element per screen — ticker, live pill, or white CTA. Quiet the UI around a loud content tile.", "section": "colors" },
+      { "name": "The No Accent Rule", "body": "No chromatic brand accent. Inversion (white↔black) is the only accent.", "section": "colors" },
+      { "name": "The Color-In-Content Rule", "body": "Saturation belongs to genuine show imagery and venue photos, never the chassis. Don't desaturate genuine content; don't tint the chassis.", "section": "colors" },
+      { "name": "The Treated-Imagery Rule", "body": "The brand's own marketing plates (homepage hero, section graphics) are deliberately heavy B&W treatments (high-contrast, grain, streetwear print register) — that treatment IS the aesthetic, the loud content the quiet chassis frames. Distinct from genuine show/venue imagery (which keeps its saturation). Bake the treatment into the asset, not runtime CSS filters, so scroll stays GPU-smooth.", "section": "colors" },
+      { "name": "The Display-Is-Lexend Rule", "body": "Lexend sets the wordmark AND every headline — and only those. Sharing one face across mark and headline keeps them from clashing. Body/ledes/labels are Schibsted; a headline in Schibsted is wrong.", "section": "typography" },
+      { "name": "The Low-Opinion-Display Rule", "body": "Keep the display face neutral and flexible while the brand is young. Don't swap Lexend for a charactered display as a shortcut to personality — that's an identity bet you can't cheaply undo. Personality belongs in copy, motion, texture.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces never lift. Use a surface-ladder step or a hairline rule, not a box-shadow. The only shadow is the status-dot glow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep the chassis strictly monochrome.",
+      "Do let exactly one bright thing live per screen.",
+      "Do use square corners (radius 0).",
+      "Do carry structure with 1px hairline rules and the surface ladder, not shadows.",
+      "Do use Lexend for display (wordmark + headlines) and Schibsted for text (body, ledes, uppercase tracked labels/CTAs). One face across mark + headline prevents clashing.",
+      "Do let genuine content imagery be as saturated as the source.",
+      "Do treat the brand's own hero/marketing plates heavily (high-contrast B&W, grain, streetwear print) — bake the treatment into the asset, not runtime CSS filters.",
+      "Do use Unicode glyphs (↗ ↓ ← · — //).",
+      "Do ship a prefers-reduced-motion alternative for every animation."
+    ],
+    "donts": [
+      "Don't look like loud arcade/gamer, generic SaaS, web3/crypto, or corporate/enterprise.",
+      "Don't introduce a chromatic brand accent.",
+      "Don't add box-shadow, backdrop-filter, blur, or translucent layers (status-dot glow excepted).",
+      "Don't use decorative monospace; labels are tracked Schibsted.",
+      "Don't reintroduce Inter or Newsreader, or an editorial display-serif-italic headline.",
+      "Don't set body/ledes/labels in Lexend or headlines in Schibsted; don't swap Lexend for a charactered display face as a personality shortcut while the brand is young.",
+      "Don't desaturate content imagery or tint the chassis to decorate.",
+      "Don't use the editorial saturated darks as default chassis, cards, or rules.",
+      "Don't use exclamation marks or emoji in product copy."
+    ]
+  }
+}
