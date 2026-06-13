@@ -15,6 +15,25 @@ For every capability row, research and surface:
 
 Do not write "Full access" or "Yes" without confirming this is actually true in practice. A native API existing is not the same as it working well. Verify claims against current (2025+) sources.
 
+## Brand source of truth — keep tw-brand in sync
+
+**This repo is the canonical brand.** The live site (`public/`) plus the impeccable
+capture at `.impeccable/design.json` are the source of truth for Third Wave's visual
+system — colors, type, components, and the reasoning behind them. impeccable is trusted
+to be accurate to what we've actually shipped here; if it drifts, fix it *here* first
+(keep iterating on the site + re-running impeccable), then propagate.
+
+**`tw-brand` is downstream.** The `third-wave-design` skill is a symlink:
+`~/.claude/skills/third-wave-design → ~/Documents/GitHub/tw-brand`. Nothing auto-populates
+it — it must be **updated by hand to match this repo**. After any brand/design change here
+(especially after an impeccable pass), reconcile `tw-brand` (its `colors_and_type.css`,
+`README.md`, `SKILL.md`, `preview/`) so the design skill never contradicts the shipped site.
+
+**Canonical type (as of 2026-06):**
+- **Lexend** — display only: wordmark + headlines (they share one face so they never clash). Lexend ExtraBold 800 for wordmark/page headlines, 600 for section heads.
+- **Schibsted Grotesk** — everything else: body, ledes, and uppercase tracked labels/CTAs/nav/ticker. A headline in Schibsted is wrong; body in Lexend is wrong.
+- Retired, do not reintroduce: **Inter**, **Newsreader**/editorial serif, **Bricolage Grotesque**. (tw-brand may still reference Bricolage — that's the stale bit to reconcile to Schibsted.)
+
 ## Image generation / editing (fal.ai)
 
 The fal.ai API key lives in `.env` as `FAL_API_KEY` (gitignored — never commit it). Use that directly; you do **not** need the 1Password (`op`) CLI for this repo.
