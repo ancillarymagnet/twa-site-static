@@ -76,8 +76,9 @@
   .drop .copy h2{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.03em;line-height:.86;font-size:54px}
   .drop .copy p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:42ch;text-wrap:balance}
   .kick{color:var(--dim)}
-  /* dim bullet separator so multi-phrase body copy reads as one list, not choppy full stops */
-  .sep{color:#5e5e5e;padding:0 .5em;font-size:.82em;vertical-align:middle}
+  /* dim bullet separator; .nb keeps a bullet bound to its phrase's first words so they never strand at a line end */
+  .sep{color:#5e5e5e;font-size:.82em;vertical-align:middle}
+  .nb{white-space:nowrap}
   @media (min-width:769px){ .drop.rev .art{order:2;border-right:0;border-left:1px solid var(--rule)} .drop.rev .copy{order:1} }
 
   /* VENUE — full-width collage ribbon + copy below */
@@ -192,7 +193,7 @@
     <div class="copy">
       <div class="kick tag">For Developers</div>
       <h2>Build on<br>Third Wave</h2>
-      <p>Build location-based, phone-as-controller experiences<span class="sep">•</span>Blow some wigs back in a new&nbsp;medium<span class="sep">•</span>Distribute through the Third&nbsp;Wave&nbsp;platform</p>
+      <p>Build location-based, phone-as-controller experiences <span class="nb"><span class="sep">•</span>&nbsp;Blow&nbsp;some</span> wigs back in a new&nbsp;medium <span class="nb"><span class="sep">•</span>&nbsp;Distribute&nbsp;through</span> the Third&nbsp;Wave&nbsp;platform</p>
       <a class="btn tag" href="/dev">Request Dev Kit Access</a>
     </div>
   </section>
@@ -203,7 +204,7 @@
     <div class="copy">
       <div class="kick tag">For Venues</div>
       <h2>Your space, playable</h2>
-      <p>License the platform<span class="sep">•</span>Any room can be a venue for shared&nbsp;play<span class="sep">•</span>Guests use their own&nbsp;phones<span class="sep">•</span>No hardware graveyard, SDKs for all&nbsp;engines</p>
+      <p>License the platform <span class="nb"><span class="sep">•</span>&nbsp;Any&nbsp;room</span> can be a venue for shared&nbsp;play <span class="nb"><span class="sep">•</span>&nbsp;Guests&nbsp;use</span> their own&nbsp;phones <span class="nb"><span class="sep">•</span>&nbsp;No&nbsp;hardware</span> graveyard, SDKs for all&nbsp;engines</p>
       <a class="btn tag" href="/platform">Talk to Us</a>
     </div>
   </section>
@@ -218,7 +219,7 @@
   <section class="join">
     <div class="kick tag">For Players</div>
     <h2>Get invited</h2>
-    <p>Be first to hear about playtests, shows, and where to play&nbsp;next<span class="sep">•</span>No&nbsp;spam</p>
+    <p>Be first to hear about playtests, shows, and where to play&nbsp;next <span class="nb"><span class="sep">•</span>&nbsp;No&nbsp;spam</span></p>
     <form class="signup-form" id="signup">
       <div class="form-group">
         <input type="email" placeholder="you@example.com" required class="email-input" id="email-input" aria-describedby="form-message" aria-label="Email address" />
