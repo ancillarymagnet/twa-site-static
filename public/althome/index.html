@@ -123,9 +123,10 @@
   .social a:hover{color:#fff}
 
   @media (max-width: 768px){
-    /* svh = small-viewport height: pinned to the address-bar-visible size so the hero doesn't
-       grow ~100px (and jump) when iOS collapses the toolbar on a flick. vh kept as fallback. */
-    .hero{height:82vh;height:82svh;min-height:520px}
+    /* Size the hero from viewport WIDTH (vw), not height — width never changes when a browser
+       collapses its address bar, so there's no resize/jump on scroll in ANY iOS browser
+       (Safari/Chrome were fixed by svh, but Firefox iOS still resized with svh/dvh). */
+    .hero{height:150vw;min-height:520px;max-height:700px}
     .hero .ov{padding:14px 16px}
     .hero .top .wm{font-size:14px}
     .hero .top .meta{display:none}
