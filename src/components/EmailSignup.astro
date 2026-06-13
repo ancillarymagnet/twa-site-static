@@ -65,6 +65,11 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 		width: 100%;
 		max-width: 480px;
 		border: 1px solid var(--color-rule-strong);
+		transition: border-color 0.2s ease;
+	}
+
+	.form-group:focus-within {
+		border-color: var(--color-text);
 	}
 
 	.email-input {
@@ -169,6 +174,10 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 			border: 1px solid var(--color-rule-strong);
 			padding: 16px 16px;
 			font-size: 16px;
+		}
+
+		.email-input:focus {
+			border-color: var(--color-text);
 		}
 
 		.submit-btn {

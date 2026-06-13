@@ -26,27 +26,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@600;800&family=Schibsted+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --bg:#0a0a0a; --rule:#2a2a2a; --dim:#b3b3b3; }
+  :root{ --bg:#0a0a0a; --rule:#2a2a2a; --dim:#b3b3b3; --font-display:'Lexend',system-ui,sans-serif; --font-sans:'Schibsted Grotesk',system-ui,sans-serif; }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{background:#000;color:#fff;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+  html{background:var(--bg);color:#fff;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
   /* NO overflow-x:hidden on html/body — it kills iOS GPU scrolling (caused jumpy scroll).
      The only wide element is the ticker .track, already clipped by .ticker{overflow:hidden}. */
-  body{font-family:'Schibsted Grotesk',system-ui,sans-serif}
+  body{font-family:var(--font-sans)}
   a{color:inherit}
   img{display:block}
-  .tag{font-family:'Schibsted Grotesk';text-transform:uppercase;letter-spacing:.18em;font-weight:600;font-size:11px}
+  .tag{font-family:var(--font-sans);text-transform:uppercase;letter-spacing:.18em;font-weight:600;font-size:11px}
 
-  header{display:flex;justify-content:space-between;align-items:center;padding:18px 30px;border-bottom:1px solid var(--rule)}
-  .wm{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;font-size:19px;text-decoration:none}
-  nav{display:flex;gap:20px;align-items:center}
-  nav a{color:var(--dim);text-decoration:none}
-  nav a.cta{border:1px solid #fff;color:#fff;padding:9px 15px}
+  .wm{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;font-size:19px;text-decoration:none}
 
   /* matched to the live homepage Ticker.astro (tw-scroll 60s, weight 600, 13px, doubled-copy track + sr-only) */
   .ticker{background:#fff;color:#000;padding:13px 0;overflow:hidden;border-bottom:1px solid var(--rule);display:flex;white-space:nowrap}
   .ticker .track{display:inline-flex;flex-shrink:0;will-change:transform;animation:tw-scroll 60s linear infinite}
-  .ticker .track{font-family:'Schibsted Grotesk';font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+  .ticker .track{font-family:var(--font-sans);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   @keyframes tw-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @media (prefers-reduced-motion: reduce){ .ticker .track{animation:none} }
@@ -58,23 +54,24 @@
   .hero .scrim{position:absolute;inset:0;background:radial-gradient(64% 42% at 50% 74%, rgba(6,6,6,.78), transparent 72%), linear-gradient(180deg,rgba(6,6,6,.48) 0%,transparent 20%,transparent 42%,rgba(6,6,6,.5) 60%,rgba(6,6,6,.95) 100%)}
   .hero .ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:26px 34px}
   .hero .top{display:flex;justify-content:space-between;align-items:flex-start}
-  .hero .top .wm{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;font-size:20px;text-decoration:none}
+  .hero .top .wm{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;font-size:20px;text-decoration:none}
   .hero .top .meta{text-align:right;color:#d4d4d4}
   .hero .top .meta div{margin-bottom:3px}
   .hero .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;gap:12px;padding-bottom:40px}
-  .hero .mid h1{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.04em;line-height:.82;font-size:clamp(64px,9vw,124px);text-shadow:0 2px 30px rgba(0,0,0,.65),0 0 8px rgba(0,0,0,.5)}
+  .hero .mid h1{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.04em;line-height:.82;font-size:clamp(64px,9vw,124px);text-shadow:0 2px 30px rgba(0,0,0,.65),0 0 8px rgba(0,0,0,.5)}
   .hero .mid p{font-size:18px;color:#f2f2f2;text-shadow:0 1px 14px rgba(0,0,0,.7)}
   .hero .bottom{display:flex;justify-content:space-between;align-items:flex-end}
   .hero .pill{display:flex;align-items:center;gap:8px}
   .hero .dot{width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.7)}
-  .btn{display:inline-block;border:1px solid #fff;color:#fff;padding:12px 18px;text-decoration:none;width:max-content}
+  .btn{display:inline-block;border:1px solid #fff;color:#fff;padding:12px 18px;text-decoration:none;width:max-content;transition:background .2s ease,color .2s ease}
+  .btn:hover{background:#fff;color:var(--bg)}
 
   /* DEV — graphic drop, art + copy */
   .drop{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule)}
   .drop .art{display:flex;align-items:center;justify-content:center;padding:44px;border-right:1px solid var(--rule)}
   .drop .art img{width:100%;max-width:440px;border:1px solid var(--rule)}
   .drop .copy{padding:52px 46px;display:flex;flex-direction:column;justify-content:center;gap:16px}
-  .drop .copy h2{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.03em;line-height:.86;font-size:54px}
+  .drop .copy h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.03em;line-height:.86;font-size:54px}
   .drop .copy p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:42ch;text-wrap:balance}
   .kick{color:var(--dim)}
   /* dim bullet separator; .nb keeps a bullet bound to its phrase's first words so they never strand at a line end */
@@ -87,29 +84,30 @@
   .ribbon .rimg{width:100%;height:300px;overflow:hidden;border-bottom:1px solid var(--rule)}
   .ribbon .rimg img{width:100%;height:100%;object-fit:cover}
   .ribbon .copy{padding:44px 46px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
-  .ribbon .copy h2{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.035em;line-height:.86;font-size:54px}
+  .ribbon .copy h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.035em;line-height:.86;font-size:54px}
   .ribbon .copy p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:48ch;text-wrap:balance}
 
   /* wave band */
   .band{position:relative;height:200px;overflow:hidden;border-bottom:1px solid var(--rule)}
   .band img{width:100%;height:100%;object-fit:cover}
   .band .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-  .band .ov span{font-family:'Lexend';font-weight:800;text-transform:uppercase;font-size:50px;color:#fff;mix-blend-mode:difference}
+  .band .ov span{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:50px;color:#fff;mix-blend-mode:difference}
 
   /* JOIN / signup — self-contained email capture (posts to the same endpoint as the OG homepage) */
   .join{border-bottom:1px solid var(--rule);padding:64px 30px 72px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
   .join .kick{color:var(--dim)}
-  .join h2{font-family:'Lexend';font-weight:800;text-transform:uppercase;letter-spacing:-0.035em;line-height:.86;font-size:54px}
+  .join h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.035em;line-height:.86;font-size:54px}
   .join p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:46ch;text-wrap:balance}
   .join .signup-form{display:flex;flex-direction:column;align-items:center;width:100%;max-width:480px;margin-top:10px}
-  .join .form-group{display:flex;width:100%;border:1px solid #444}
-  .join .email-input{flex:1;min-width:0;background:transparent;border:0;padding:16px 18px;color:#fff;font-size:16px;outline:none;font-family:'Schibsted Grotesk'}
+  .join .form-group{display:flex;width:100%;border:1px solid var(--rule);transition:border-color .2s ease}
+  .join .form-group:focus-within{border-color:#fff}
+  .join .email-input{flex:1;min-width:0;background:transparent;border:0;padding:16px 18px;color:#fff;font-size:16px;outline:none;font-family:var(--font-sans)}
   .join .email-input::placeholder{color:#666}
   .join .email-input[aria-invalid='true']{outline:1px solid #c87a5e;outline-offset:-1px}
-  .join .submit-btn{background:#fff;border:0;color:#000;padding:0 28px;font-family:'Schibsted Grotesk';font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:opacity .2s ease;flex-shrink:0}
+  .join .submit-btn{background:#fff;border:0;color:#000;padding:0 28px;font-family:var(--font-sans);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:opacity .2s ease;flex-shrink:0}
   .join .submit-btn:hover{opacity:.85}
   .join .submit-btn:disabled{cursor:progress;opacity:.7}
-  .join .form-message{margin-top:12px;font-family:'Schibsted Grotesk';font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);min-height:1em}
+  .join .form-message{margin-top:12px;font-family:var(--font-sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);min-height:1em}
   #signup:target .form-group{animation:join-flash 1.4s ease-out 1}
   @keyframes join-flash{0%,35%{border-color:#fff}100%{border-color:#444}}
   @media (prefers-reduced-motion: reduce){ #signup:target .form-group{animation:none} }
@@ -117,7 +115,7 @@
   /* REEL / YouTube — ported from YouTubeSection.astro (tokens mapped to this page) */
   .reel{padding:64px 40px 40px;border-top:1px solid var(--rule)}
   .reel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;gap:16px;max-width:800px;margin-left:auto;margin-right:auto}
-  .reel-cta{font-family:'Schibsted Grotesk';font-size:13px;color:#b3b3b3;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transition:color .2s ease}
+  .reel-cta{font-family:var(--font-sans);font-size:13px;color:#b3b3b3;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transition:color .2s ease}
   .reel-cta:hover{color:#fff}
   .reel-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:800px;margin:0 auto}
   .reel .tile{aspect-ratio:16/9;background:#0a0a0a;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;padding:0;font-family:inherit;color:inherit}
@@ -128,7 +126,7 @@
   .reel .tile:hover .play{background:#fff;border-color:#fff}
   .reel .play svg{width:18px;height:18px;fill:#fff;margin-left:3px;transition:fill .2s ease}
   .reel .tile:hover .play svg{fill:#0a0a0a}
-  .reel .meta{position:absolute;bottom:14px;left:16px;right:16px;display:flex;justify-content:space-between;font-family:'Schibsted Grotesk';font-size:11px;color:#fff;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+  .reel .meta{position:absolute;bottom:14px;left:16px;right:16px;display:flex;justify-content:space-between;font-family:var(--font-sans);font-size:11px;color:#fff;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 2px rgba(0,0,0,.6)}
   .reel .tile.is-playing .play,.reel .tile.is-playing .meta,.reel .tile.is-playing .tile-thumb{display:none}
   .reel .tile.is-playing::after{display:none}
   .reel .tile iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -144,7 +142,7 @@
   /* social links matched to the homepage Footer.astro: separate hoverable links, gap, color transition */
   .foot-left{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
   .footmark{width:84px;height:auto;display:block}
-  .social{display:flex;gap:20px;font-family:'Schibsted Grotesk';font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  .social{display:flex;gap:20px;font-family:var(--font-sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
   .social a{color:var(--dim);text-decoration:none;transition:color .2s ease}
   .social a:hover{color:#fff}
 
@@ -186,7 +184,8 @@
     .join h2{font-size:clamp(34px,11vw,44px)}
     .join p{font-size:15px}
     .join .form-group{flex-direction:column;border:0;gap:8px}
-    .join .email-input{border:1px solid #444}
+    .join .email-input{border:1px solid var(--rule)}
+    .join .email-input:focus{border-color:#fff}
     .join .submit-btn{width:100%;padding:16px}
 
     footer{flex-direction:column;align-items:center;text-align:center;gap:16px;padding:28px 22px;font-size:13px}
