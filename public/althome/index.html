@@ -123,7 +123,9 @@
   .social a:hover{color:#fff}
 
   @media (max-width: 768px){
-    .hero{height:82vh;min-height:520px}
+    /* svh = small-viewport height: pinned to the address-bar-visible size so the hero doesn't
+       grow ~100px (and jump) when iOS collapses the toolbar on a flick. vh kept as fallback. */
+    .hero{height:82vh;height:82svh;min-height:520px}
     .hero .ov{padding:14px 16px}
     .hero .top .wm{font-size:14px}
     .hero .top .meta{display:none}
