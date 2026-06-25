@@ -145,6 +145,8 @@
   .social{display:flex;gap:20px;font-family:var(--font-sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
   .social a{color:var(--dim);text-decoration:none;transition:color .2s ease}
   .social a:hover{color:#fff}
+  .foot-privacy{font-family:var(--font-sans);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#555;text-decoration:none;transition:color .2s ease}
+  .foot-privacy:hover{color:#b3b3b3}
 
   @media (max-width: 768px){
     /* Size the hero from viewport WIDTH (vw), not height — width never changes when a browser
@@ -193,6 +195,8 @@
     .social{gap:16px;font-size:11px;letter-spacing:.13em}
   }
 </style>
+<!-- Analytics: GA4 + Meta Pixel, geo-gated consent (see /tw-analytics.js) -->
+<script src="/tw-analytics.js" defer></script>
 </head>
 <body>
   <main>
@@ -297,6 +301,7 @@
     <div class="foot-left">
       <img class="footmark" src="gen/lockup.jpg" width="84" height="84" alt="Third Wave" />
       <span>A production of Your Free Call Will End Soon, Co.</span>
+      <a class="foot-privacy" href="/privacy">Privacy Policy</a>
     </div>
     <span class="social"><a href="https://youtube.com/@thirdwavearcade" target="_blank" rel="noopener noreferrer">YouTube&#xA0;&#x2197;&#xFE0E;</a><a href="https://instagram.com/thirdwavearcade" target="_blank" rel="noopener noreferrer">Instagram&#xA0;&#x2197;&#xFE0E;</a></span>
   </footer>
@@ -352,6 +357,7 @@
           message.textContent = "You're in.";
           emailInput.value = '';
           emailInput.removeAttribute('aria-invalid');
+          if (window.twTrack) window.twTrack('sign_up', { method: 'email' });
         } catch (err) {
           console.error('Network error during signup', err);
           message.textContent = 'Network error. Try again.';

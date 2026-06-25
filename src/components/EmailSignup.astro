@@ -240,6 +240,7 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 				message.textContent = "You're in.";
 				emailInput.value = '';
 				emailInput.removeAttribute('aria-invalid');
+				if (window.twTrack) window.twTrack('sign_up', { method: 'email' });
 			} catch (err) {
 				console.error('Network error during signup', err);
 				message.textContent = 'Network error. Try again.';

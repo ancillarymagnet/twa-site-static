@@ -111,6 +111,9 @@ const ogImageUrl = siteUrl ? new URL(ogImagePath, siteUrl).toString() : undefine
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+		<!-- Analytics: GA4 + Meta Pixel, geo-gated consent (see /tw-analytics.js) -->
+		<script is:inline src="/tw-analytics.js" defer></script>
 	</head>
 	<body>
 		<slot />
