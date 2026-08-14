@@ -20,7 +20,10 @@ const hasLinks = Boolean(youtube || instagram);
 			© <span class="js-current-year" data-build-year={buildYear}>{buildYear}</span>
 			{holder ? ` ${holder}` : ''}
 		</p>
-		<a class="privacy" href="/privacy">Privacy Policy</a>
+		<p class="legal">
+			<a class="privacy" href="/privacy">Privacy Policy</a>
+			<a class="privacy" href="/support">Support</a>
+		</p>
 	</div>
 	{hasLinks && (
 		<div class="links">
@@ -72,6 +75,13 @@ const hasLinks = Boolean(youtube || instagram);
 		color: #888;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
+	}
+
+	.legal {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+		margin: 0;
 	}
 
 	.privacy {

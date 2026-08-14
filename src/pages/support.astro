@@ -1,0 +1,197 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getEntry } from 'astro:content';
+
+const siteEntry = await getEntry('site', 'site');
+const siteData = siteEntry.data;
+
+const SUPPORT_EMAIL = 'support@thirdwave.fun';
+const MAILTO_URL = `mailto:${SUPPORT_EMAIL}`;
+---
+
+<Layout
+	title="Third Wave — Support"
+	description="Get help with the Third Wave app. Contact support@thirdwave.fun with questions, bug reports, or account requests."
+	socialDescription="Get help with Third Wave."
+>
+	<Header
+		status={siteData.topBar.status}
+		meta={siteData.topBar.meta}
+		ticker={siteData.ticker}
+		ctaHref={MAILTO_URL}
+		ctaText="EMAIL SUPPORT"
+	/>
+
+	<main>
+		<article class="doc">
+			<p class="eyebrow">Help</p>
+			<h1 class="doc-title">Support</h1>
+
+			<section>
+				<p class="lede">
+					Need help? Email <a href={MAILTO_URL}>{SUPPORT_EMAIL}</a> and a human will
+					get back to you.
+				</p>
+				<p>
+					We answer within two business days. If you&rsquo;re reporting a problem,
+					it helps to include your device and OS version, the venue or show you
+					were at, and roughly when it happened.
+				</p>
+				<p>
+					<a class="cta" href={MAILTO_URL}>Email {SUPPORT_EMAIL}</a>
+				</p>
+			</section>
+
+			<section>
+				<h2>Common questions</h2>
+
+				<h3>The app can&rsquo;t find the show I&rsquo;m at.</h3>
+				<p>
+					Third Wave experiences run at specific venues and showtimes. Make sure
+					you&rsquo;re on the venue&rsquo;s network or in the room, then close and
+					reopen the app. If it still doesn&rsquo;t connect, email us with the
+					venue name and showtime.
+				</p>
+
+				<h3>How do I delete my account and data?</h3>
+				<p>
+					Use the <a href="/delete-account">account deletion page</a>. You can
+					request deletion there without contacting us first.
+				</p>
+
+				<h3>What data does the app collect?</h3>
+				<p>
+					That&rsquo;s all covered in our <a href="/privacy">Privacy Policy</a>.
+				</p>
+
+				<h3>I want to run Third Wave at my venue.</h3>
+				<p>
+					See the <a href="/platform">platform page</a>, or email us and we&rsquo;ll
+					point you to the right person.
+				</p>
+			</section>
+
+			<section>
+				<h2>Who we are</h2>
+				<p>
+					Third Wave is operated by Your Free Call Will End Soon, Co., a Delaware
+					corporation.
+				</p>
+			</section>
+		</article>
+	</main>
+
+	<Footer
+		production={siteData.footer.production}
+		copyrightHolder={siteData.footer.copyrightHolder}
+		youtube={siteData.social.youtube}
+		instagram={siteData.social.instagram}
+	/>
+</Layout>
+
+<style>
+	main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.doc {
+		padding: 64px 40px 80px;
+		max-width: 740px;
+		margin: 0 auto;
+		width: 100%;
+	}
+
+	.eyebrow {
+		font-family: var(--font-label);
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: #888;
+		margin-bottom: 24px;
+	}
+
+	.doc-title {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(36px, 6vw, 56px);
+		line-height: 0.98;
+		letter-spacing: -0.025em;
+		text-transform: uppercase;
+		color: var(--color-text);
+		margin-bottom: 40px;
+	}
+
+	section {
+		margin-bottom: 48px;
+	}
+
+	section h2 {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 22px;
+		letter-spacing: -0.01em;
+		color: var(--color-text);
+		margin-bottom: 16px;
+	}
+
+	section h3 {
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 15px;
+		color: var(--color-text);
+		margin: 28px 0 8px;
+	}
+
+	section p {
+		font-family: var(--font-sans);
+		font-size: 15px;
+		line-height: 1.65;
+		color: #b3b3b3;
+		margin-bottom: 16px;
+	}
+
+	section p:last-child { margin-bottom: 0; }
+
+	.lede {
+		font-size: 20px;
+		color: var(--color-text);
+		line-height: 1.25;
+		letter-spacing: -0.01em;
+	}
+
+	a {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		transition: opacity 0.2s ease;
+	}
+
+	a:hover { opacity: 0.7; }
+
+	.cta {
+		display: inline-block;
+		background: var(--color-text);
+		color: var(--color-bg);
+		padding: 16px 28px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		font-family: var(--font-label);
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+
+	.cta:hover { opacity: 0.85; }
+
+	@media (max-width: 820px) {
+		.doc { padding: 40px 22px 56px; }
+		.doc-title { margin-bottom: 32px; }
+		section { margin-bottom: 40px; }
+		.cta { display: block; text-align: center; }
+	}
+</style>
