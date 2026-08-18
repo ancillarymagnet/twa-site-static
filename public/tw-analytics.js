@@ -9,16 +9,13 @@
     • Geo is read from Cloudflare's edge endpoint /cdn-cgi/trace (no extra deps).
     • Fail-safe: if geo lookup fails or the country is unknown, we GATE (treat
       the visitor as opt-in-required) rather than firing without consent.
-
-  GO LIVE: replace the two placeholder IDs below with real ones. Until then the
-  loader is completely inert — no banner, no network calls, no pixels.
 */
 (function () {
 	'use strict';
 
 	// ---- config -------------------------------------------------------------
 	var GA4_ID = 'G-MC2JXEF4TR'; // GA4 Measurement ID
-	var META_PIXEL_ID = 'XXXXXXXXXXXXXXX'; // TODO: real Meta Pixel ID (~15 digits)
+	var META_PIXEL_ID = '1776201383412689'; // Meta Pixel ID
 
 	var STORE_KEY = 'tw-consent'; // value: 'granted' | 'denied'
 	var TRACE_URL = '/cdn-cgi/trace'; // Cloudflare edge geo
@@ -84,10 +81,10 @@
 	}
 
 	// ---- conversion helper --------------------------------------------------
-	// Call window.twTrack('sign_up') from anywhere. Fires to GA4 (and Meta, when
-	// its pixel is live) ONLY if pixels actually loaded — i.e. the visitor
-	// consented (gated regions) or is in a free region. No-op otherwise, so
-	// callers never need to know about consent state.
+	// Call window.twTrack('sign_up') from anywhere. Fires to GA4 and Meta ONLY if
+	// pixels actually loaded — i.e. the visitor consented (gated regions) or is
+	// in a free region. No-op otherwise, so callers never need to know about
+	// consent state.
 	window.twTrack = function (name, params) {
 		try {
 			if (window.gtag && !isPlaceholder(GA4_ID)) {

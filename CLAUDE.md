@@ -15,7 +15,7 @@ The site is **not** uniformly Astro. Two distinct systems serve the pages:
 
 ## Analytics
 
-GA4 + (scaffolded) Meta Pixel load via `public/tw-analytics.js`, geo-gated for consent: EU/EEA/UK/CH visitors get a consent banner (opt-in), everyone else loads immediately; geo comes from Cloudflare's `/cdn-cgi/trace` (only works on the deployed site, not localhost). Call `window.twTrack(name, params)` to record a conversion — it no-ops unless pixels actually loaded (consent given). Three conversions are wired: `sign_up` (consumer email), `dev_kit_interest` (Tally link click), `licensing_interest` (licensing mailto click).
+GA4 + Meta Pixel load via `public/tw-analytics.js`, geo-gated for consent: EU/EEA/UK/CH visitors get a consent banner (opt-in), everyone else loads immediately; geo comes from Cloudflare's `/cdn-cgi/trace` (only works on the deployed site, not localhost). Call `window.twTrack(name, params)` to record a conversion — it no-ops unless pixels actually loaded (consent given). Three conversions are wired: `sign_up` (consumer email), `dev_kit_interest` (Tally link click), `licensing_interest` (licensing mailto click).
 
 ## Browser vs. App Comparison Page
 
