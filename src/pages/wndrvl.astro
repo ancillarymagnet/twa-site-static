@@ -1,0 +1,478 @@
+---
+// thirdwave.fun/wndrvl: the page the Wonderville CTA screen's QR opens.
+// Signup first, under the moire band; then links out; then credits for LINE.
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import EmailSignup from '../components/EmailSignup.astro';
+import { getEntry } from 'astro:content';
+
+const siteEntry = await getEntry('site', 'site');
+const siteData = siteEntry.data;
+
+const DEV_URL = 'https://thirdwave.fun/dev/';
+// The survey row renders only when this is set. No placeholder ships.
+const SURVEY_URL: string | null = null;
+
+const links = [
+	{ text: 'Build for this screen', href: DEV_URL, newTab: false },
+	{ text: 'Get the SDK', href: DEV_URL, newTab: false },
+	{ text: 'Follow @thirdwavearcade', href: siteData.social.instagram, newTab: true },
+	...(SURVEY_URL ? [{ text: 'Say how it went.', href: SURVEY_URL, newTab: true }] : []),
+];
+
+// Each font's copyright line from its own OFL.txt, verbatim (read 2026-10-02 from
+// tw-controller-demo). A URL in a line renders as a link.
+const fonts = [
+	{ before: 'Copyright 2019 The Big Shoulders Project Authors (', url: 'https://github.com/xotypeco/big_shoulders', after: ')' },
+	{ before: 'Copyright 2020 The Anton Project Authors (', url: 'https://github.com/googlefonts/AntonFont.git', after: ')' },
+	{ before: 'Copyright 2025 The SUSE Project Authors (', url: 'https://github.com/SUSE/suse-font', after: ')' },
+	{ before: 'Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"', url: null, after: '' },
+	{ before: 'Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors (', url: 'https://github.com/googlefonts/atkinson-hyperlegible-next', after: ')' },
+	{ before: 'Copyright 2018 The Lexend Project Authors (', url: 'https://github.com/googlefonts/lexend', after: '), with Reserved Font Name “RevReading Lexend”.' },
+];
+---
+
+<Layout
+	title="Third Wave — Wonderville"
+	description="Play new games with Third Wave. Get invited to the next one."
+	socialDescription="Play new games. Get invited to the next one."
+>
+	<main class="wv" id="wv">
+		<script is:inline>
+			// Hold everything at its pre-build-in state until the page script starts the build-in.
+			// Without JS this never runs, and the page simply shows.
+			document.currentScript.parentElement.classList.add('is-pre');
+		</script>
+
+		<div class="wv-band" aria-hidden="true">
+			<img src="/images/wndrvl-band.webp" alt="" width="1170" height="450" decoding="async" />
+		</div>
+
+		<div class="wv-top">
+			<span class="wv-mark">Third Wave</span>
+			<span class="wv-place">Wonderville</span>
+		</div>
+
+		<div class="wv-col">
+			<h1 class="wv-h1">PLAY NEW GAMES.</h1>
+			<p class="wv-lede">Get invited to the next one.</p>
+
+			<div class="wv-signup">
+				<EmailSignup placeholder="you@example.com" buttonText="GET INVITED" cueText="" />
+			</div>
+
+			<ul class="wv-links" style={`--n: ${links.length}`}>
+				{links.map((link, i) => (
+					<li>
+						<a
+							class="wv-row"
+							style={`--i: ${i}`}
+							href={link.href}
+							{...(link.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+						>
+							<span>{link.text}</span>
+							<span class="wv-arrow" aria-hidden="true">&#x2197;&#xFE0E;</span>
+						</a>
+					</li>
+				))}
+			</ul>
+
+			<details class="wv-credits">
+				<summary>Credits</summary>
+				<div class="wv-credits-body">
+					<section class="wv-credit" style="--i: 0">
+						<h2>Music</h2>
+						<p>Park Lug, Claustrophobic Vibe Check, Stand Still, I Watch the TVs Well, Morose Weekend — Braille.</p>
+					</section>
+					<section class="wv-credit" style="--i: 1">
+						<h2>Light</h2>
+						<p>TD GI Component by Prismatic Visuals.</p>
+					</section>
+					<section class="wv-credit" style="--i: 2">
+						<h2>Type</h2>
+						<ul>
+							{fonts.map((f) => (
+								<li>{f.before}{f.url && <a href={f.url} target="_blank" rel="noopener noreferrer">{f.url}</a>}{f.after}</li>
+							))}
+						</ul>
+						<p>Licensed under the SIL Open Font License, Version 1.1.</p>
+						<p>Noto Emoji images: Apache License 2.0.</p>
+					</section>
+					<section class="wv-credit" style="--i: 3">
+						<h2>Licenses</h2>
+						<p class="wv-licenses">
+							<a href="https://openfontlicense.org" target="_blank" rel="noopener noreferrer">SIL Open Font License 1.1&#xA0;&#x2197;&#xFE0E;</a>
+							<span aria-hidden="true">·</span>
+							<a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache License 2.0&#xA0;&#x2197;&#xFE0E;</a>
+						</p>
+					</section>
+				</div>
+			</details>
+		</div>
+	</main>
+
+	<Footer
+		production={siteData.footer.production}
+		copyrightHolder={siteData.footer.copyrightHolder}
+		youtube={siteData.social.youtube}
+		instagram={siteData.social.instagram}
+	/>
+</Layout>
+
+<style>
+	/*
+	 * Motion: every element builds in on load and builds off on a same-tab link tap.
+	 * Build-in uses the base transitions (ease out); build-off uses the .is-leaving ones (ease in).
+	 * The pre-build-in state only exists for no-preference motion, so reduced motion shows all at once.
+	 */
+	.wv {
+		--out: cubic-bezier(.33, 1, .68, 1);
+		--in: cubic-bezier(.32, 0, .67, 0);
+		--gutter: 22px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	/* Band: the baked moire, 150 px tall at 390 px wide. */
+	.wv-band {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1170 / 450;
+		max-height: 240px;
+		overflow: hidden;
+		background: var(--color-bg);
+		transition: opacity 300ms var(--out) 0ms;
+	}
+
+	.wv-band img {
+		position: absolute;
+		top: 0;
+		left: -4%;
+		width: 108%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		animation: wv-drift 20s ease-in-out infinite alternate;
+	}
+
+	/* ±4% of the frame; the image is 108% of the frame, so 4 / 108. */
+	@keyframes wv-drift {
+		from { transform: translateX(-3.7037%); }
+		to { transform: translateX(3.7037%); }
+	}
+
+	/* Top line: wordmark left, place right, hairline under. */
+	.wv-top {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		/* Inset to the column's edges on wide screens. */
+		padding: 16px max(var(--gutter), calc((100% - 520px) / 2 + var(--gutter)));
+		border-bottom: 1px solid var(--color-rule-strong);
+		transition: opacity 280ms var(--out) 80ms, transform 280ms var(--out) 80ms;
+	}
+
+	.wv-mark {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 15px;
+		line-height: 0.9;
+		letter-spacing: -0.02em;
+		text-transform: uppercase;
+	}
+
+	.wv-place {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.wv-col {
+		width: 100%;
+		max-width: 520px;
+		margin: 0 auto;
+		padding: 36px var(--gutter) 56px;
+	}
+
+	.wv-h1 {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(40px, 7vw, 56px);
+		line-height: 0.95;
+		letter-spacing: -0.025em;
+		text-transform: uppercase;
+		transition: opacity 360ms var(--out) 140ms, transform 360ms var(--out) 140ms;
+	}
+
+	.wv-lede {
+		margin-top: 14px;
+		font-family: var(--font-sans);
+		font-size: 20px;
+		line-height: 1.25;
+		letter-spacing: -0.01em;
+		color: #d4d4d4;
+		transition: opacity 340ms var(--out) 220ms, transform 340ms var(--out) 220ms;
+	}
+
+	.wv-signup {
+		margin-top: 28px;
+		transition: opacity 400ms var(--out) 300ms, transform 400ms var(--out) 300ms;
+	}
+
+	.wv-signup :global(.signup-wrap) {
+		padding: 0;
+		align-items: stretch;
+	}
+
+	.wv-signup :global(.form-group) {
+		max-width: none;
+	}
+
+	.wv-signup :global(.submit-btn) {
+		transition: opacity 0.2s ease, transform 400ms var(--out) 300ms;
+	}
+
+	.wv-signup :global(.form-message:empty) {
+		display: none;
+	}
+
+	/* Links: text rows with hairlines, ↗ after the text. */
+	.wv-links {
+		list-style: none;
+		margin-top: 28px;
+	}
+
+	.wv-row {
+		display: flex;
+		align-items: baseline;
+		gap: 8px;
+		padding: 17px 0;
+		border-top: 1px solid var(--color-rule-strong);
+		color: var(--color-text);
+		text-decoration: none;
+		font-size: 16px;
+		line-height: 1.3;
+		transition:
+			opacity 300ms var(--out) calc(380ms + 60ms * var(--i)),
+			transform 300ms var(--out) calc(380ms + 60ms * var(--i)),
+			color 0.2s ease;
+	}
+
+	.wv-row:hover { color: #b3b3b3; }
+
+	.wv-arrow {
+		font-size: 14px;
+	}
+
+	/* Credits: closed by default. */
+	.wv-credits {
+		margin-top: 40px;
+		border-top: 1px solid var(--color-rule-strong);
+		transition: opacity 280ms var(--out) 620ms;
+	}
+
+	.wv-credits summary {
+		list-style: none;
+		cursor: pointer;
+		padding: 16px 0;
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.wv-credits summary::-webkit-details-marker { display: none; }
+
+	.wv-credits summary::before {
+		content: '▸';
+		display: inline-block;
+		margin-right: 8px;
+		transition: transform 200ms var(--out);
+	}
+
+	.wv-credits[open] summary::before { transform: rotate(90deg); }
+
+	.wv-credits-body {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+		padding-bottom: 8px;
+		font-size: 13px;
+		line-height: 1.5;
+		color: #b3b3b3;
+		overflow-wrap: anywhere;
+	}
+
+	.wv-credit h2 {
+		margin-bottom: 4px;
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 10px;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.wv-credit ul {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		margin-bottom: 4px;
+	}
+
+	.wv-credit a {
+		color: #d4d4d4;
+		text-decoration: underline;
+		text-decoration-color: var(--color-dim);
+		text-underline-offset: 2px;
+	}
+
+	.wv-credit a:hover { color: var(--color-text); }
+
+	.wv-licenses {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 10px;
+	}
+
+	.wv-licenses a { text-decoration: none; }
+
+	@media (prefers-reduced-motion: no-preference) {
+		/* Pre-build-in state. */
+		.is-pre .wv-band { opacity: 0; }
+		.is-pre .wv-top { opacity: 0; transform: translateY(8px); }
+		.is-pre .wv-h1 { opacity: 0; transform: translateY(16px); }
+		.is-pre .wv-lede { opacity: 0; transform: translateY(12px); }
+		.is-pre .wv-signup { opacity: 0; transform: translateY(12px); }
+		.is-pre .wv-signup :global(.submit-btn) { transform: scale(0.96); }
+		.is-pre .wv-row { opacity: 0; transform: translateY(8px); }
+		.is-pre .wv-credits { opacity: 0; }
+
+		/* Build-off: credits first, links in reverse, then up the page, band last (done by 380 ms). */
+		.is-leaving .wv-credits {
+			opacity: 0;
+			transition: opacity 100ms var(--in) 0ms;
+		}
+		.is-leaving .wv-row {
+			opacity: 0;
+			transform: translateY(-6px);
+			transition:
+				opacity 120ms var(--in) calc(40ms + 40ms * (var(--n) - 1 - var(--i))),
+				transform 120ms var(--in) calc(40ms + 40ms * (var(--n) - 1 - var(--i)));
+		}
+		.is-leaving .wv-signup {
+			opacity: 0;
+			transform: translateY(-6px);
+			transition: opacity 140ms var(--in) 100ms, transform 140ms var(--in) 100ms;
+		}
+		.is-leaving .wv-lede {
+			opacity: 0;
+			transform: translateY(-6px);
+			transition: opacity 120ms var(--in) 120ms, transform 120ms var(--in) 120ms;
+		}
+		.is-leaving .wv-h1 {
+			opacity: 0;
+			transform: translateY(-6px);
+			transition: opacity 140ms var(--in) 140ms, transform 140ms var(--in) 140ms;
+		}
+		.is-leaving .wv-top {
+			opacity: 0;
+			transform: translateY(-6px);
+			transition: opacity 120ms var(--in) 160ms, transform 120ms var(--in) 160ms;
+		}
+		.is-leaving .wv-band {
+			opacity: 0;
+			transition: opacity 200ms var(--in) 180ms;
+		}
+
+		/* Credits open: each group rises in, staggered. Close: they drop away together. */
+		.wv-credits[open] .wv-credit {
+			animation: wv-credit-in 300ms var(--out) calc(40ms * var(--i)) both;
+		}
+		.wv-credits.is-closing .wv-credit {
+			animation: wv-credit-out 160ms var(--in) both;
+		}
+	}
+
+	@keyframes wv-credit-in {
+		from { opacity: 0; transform: translateY(6px); }
+		to { opacity: 1; transform: none; }
+	}
+
+	@keyframes wv-credit-out {
+		from { opacity: 1; transform: none; }
+		to { opacity: 0; transform: translateY(-4px); }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.wv-band img { animation: none; transform: none; }
+		.wv-credits summary::before { transition: none; }
+	}
+</style>
+
+<script>
+	const main = document.getElementById('wv');
+	const band = main?.querySelector('.wv-band');
+	const credits = main?.querySelector('.wv-credits');
+	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	if (main) {
+		// Build in: drop the pre state once it has painted, so the transitions run.
+		requestAnimationFrame(() => requestAnimationFrame(() => main.classList.remove('is-pre')));
+
+		// Coming back through the back/forward cache: show the page again.
+		window.addEventListener('pageshow', (e) => {
+			if (e.persisted) main.classList.remove('is-leaving', 'is-pre');
+		});
+
+		// Build off on a same-tab link tap, then navigate. New-tab links and the signup do not build off.
+		main.addEventListener('click', (e) => {
+			const a = e.target instanceof Element ? e.target.closest('a[href]') : null;
+			if (!a || !(a instanceof HTMLAnchorElement)) return;
+			if (a.target === '_blank' || reduced.matches) return;
+			if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+			if (main.classList.contains('is-leaving')) {
+				e.preventDefault();
+				return;
+			}
+			e.preventDefault();
+			const href = a.href;
+			let gone = false;
+			const go = () => {
+				if (gone) return;
+				gone = true;
+				window.location.href = href;
+			};
+			band?.addEventListener('transitionend', (t) => {
+				if (t.target === band && t.propertyName === 'opacity') go();
+			});
+			setTimeout(go, 400);
+			main.classList.add('is-leaving');
+		});
+	}
+
+	// Credits close: let the groups drop away before the details shuts.
+	if (credits instanceof HTMLDetailsElement) {
+		const summary = credits.querySelector('summary');
+		summary?.addEventListener('click', (e) => {
+			if (!credits.open || reduced.matches) return;
+			e.preventDefault();
+			if (credits.classList.contains('is-closing')) return;
+			credits.classList.add('is-closing');
+			let done = false;
+			const close = () => {
+				if (done) return;
+				done = true;
+				credits.open = false;
+				credits.classList.remove('is-closing');
+			};
+			credits.addEventListener('animationend', close, { once: true });
+			setTimeout(close, 300);
+		});
+	}
+</script>
