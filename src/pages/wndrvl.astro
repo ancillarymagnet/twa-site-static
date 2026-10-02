@@ -34,14 +34,18 @@ const fonts = [
 
 <Layout
 	title="Third Wave — Wonderville"
-	description="Play new games with Third Wave. Get invited to the next one."
+	description="Get invited to play the next new game from Third Wave."
 	socialDescription="Play new games. Get invited to the next one."
 >
 	<main class="wv" id="wv">
 		<script is:inline>
 			// Hold everything at its pre-build-in state until the page script starts the build-in.
-			// Without JS this never runs, and the page simply shows.
-			document.currentScript.parentElement.classList.add('is-pre');
+			// Only this script applies is-pre: without JS the page simply shows, and if the page
+			// script never runs, this timer releases the page anyway.
+			(function (main) {
+				main.classList.add('is-pre');
+				setTimeout(function () { main.classList.remove('is-pre'); }, 1500);
+			})(document.currentScript.parentElement);
 		</script>
 
 		<div class="wv-band" aria-hidden="true">
@@ -235,8 +239,15 @@ const fonts = [
 		transition: opacity 0.2s ease, transform 400ms var(--out) 300ms;
 	}
 
+	/* Collapse the empty status line without taking the live region out of the a11y tree. */
 	.wv-signup :global(.form-message:empty) {
-		display: none;
+		margin-top: 0;
+	}
+
+	/* The site footer gets the credits summary's beat. It is main's sibling, so it does not
+	   inherit --out/--in from .wv: the curves are spelled out. */
+	.wv ~ :global(.footer) {
+		transition: opacity 280ms cubic-bezier(.33, 1, .68, 1) 620ms;
 	}
 
 	/* Links: text rows with hairlines, ↗ after the text. */
@@ -288,7 +299,7 @@ const fonts = [
 	.wv-credits summary::-webkit-details-marker { display: none; }
 
 	.wv-credits summary::before {
-		content: '▸';
+		content: '▸' / '';
 		display: inline-block;
 		margin-right: 8px;
 		transition: transform 200ms var(--out);
@@ -352,6 +363,13 @@ const fonts = [
 		.is-pre .wv-signup :global(.submit-btn) { transform: scale(0.96); }
 		.is-pre .wv-row { opacity: 0; transform: translateY(8px); }
 		.is-pre .wv-credits { opacity: 0; }
+		.is-pre ~ :global(.footer) { opacity: 0; }
+
+		/* Footer leaves with the credits, first. */
+		.is-leaving ~ :global(.footer) {
+			opacity: 0;
+			transition: opacity 100ms cubic-bezier(.32, 0, .67, 0) 0ms;
+		}
 
 		/* Build-off: credits first, links in reverse, then up the page, band last (done by 380 ms). */
 		.is-leaving .wv-credits {
@@ -430,10 +448,12 @@ const fonts = [
 			if (e.persisted) main.classList.remove('is-leaving', 'is-pre');
 		});
 
-		// Build off on a same-tab link tap, then navigate. New-tab links and the signup do not build off.
-		main.addEventListener('click', (e) => {
+		// Build off on a same-tab link tap (page or site footer), then navigate.
+		// New-tab links and the signup do not build off.
+		document.addEventListener('click', (e) => {
 			const a = e.target instanceof Element ? e.target.closest('a[href]') : null;
 			if (!a || !(a instanceof HTMLAnchorElement)) return;
+			if (!a.closest('.wv, .footer')) return;
 			if (a.target === '_blank' || reduced.matches) return;
 			if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 			if (main.classList.contains('is-leaving')) {
@@ -450,7 +470,7 @@ const fonts = [
 			};
 			band?.addEventListener('transitionend', (t) => {
 				if (t.target === band && t.propertyName === 'opacity') go();
-			});
+			}, { once: true });
 			setTimeout(go, 400);
 			main.classList.add('is-leaving');
 		});
