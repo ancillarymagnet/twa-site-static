@@ -41,6 +41,7 @@ const siteCollection = defineCollection({
     }),
     social: z.object({
       youtube: z.string().optional(),
+      tiktok: z.string().optional(),
       instagram: z.string().optional(),
     }),
     seo: z.object({

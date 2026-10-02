@@ -60,6 +60,7 @@ footer:
 social:
   youtube: "https://youtube.com/@thirdwavearcade"
   instagram: "https://instagram.com/thirdwavearcade"
+  tiktok: "https://tiktok.com/@thirdwavearcade"
 
 # SEO
 seo:

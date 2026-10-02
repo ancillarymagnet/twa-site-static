@@ -16,8 +16,14 @@ const SURVEY_URL: string | null = null;
 const links = [
 	{ text: 'Build for this screen', href: DEV_URL, newTab: false },
 	{ text: 'Get the SDK', href: DEV_URL, newTab: false },
-	{ text: 'Follow @thirdwavearcade', href: siteData.social.instagram, newTab: true },
-	{ text: 'Watch on YouTube', href: siteData.social.youtube, newTab: true },
+	{
+		text: 'Follow',
+		socials: [
+			{ text: 'Instagram', href: siteData.social.instagram },
+			{ text: 'YouTube', href: siteData.social.youtube },
+			{ text: 'TikTok', href: siteData.social.tiktok },
+		],
+	},
 	...(SURVEY_URL ? [{ text: 'Say how it went.', href: SURVEY_URL, newTab: true }] : []),
 ];
 
@@ -69,15 +75,24 @@ const fonts = [
 			<ul class="wv-links" style={`--n: ${links.length}`}>
 				{links.map((link, i) => (
 					<li>
-						<a
-							class="wv-row"
-							style={`--i: ${i}`}
-							href={link.href}
-							{...(link.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-						>
-							<span>{link.text}</span>
-							<span class="wv-arrow" aria-hidden="true">&#x2197;&#xFE0E;</span>
-						</a>
+						{'socials' in link ? (
+							<div class="wv-row wv-social" style={`--i: ${i}`}>
+								<span>{link.text}</span>
+								{link.socials.map((s) => (
+									<a href={s.href} target="_blank" rel="noopener noreferrer">{s.text}</a>
+								))}
+							</div>
+						) : (
+							<a
+								class="wv-row"
+								style={`--i: ${i}`}
+								href={link.href}
+								{...(link.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+							>
+								<span>{link.text}</span>
+								<span class="wv-arrow" aria-hidden="true">&#x2197;&#xFE0E;</span>
+							</a>
+						)}
 					</li>
 				))}
 			</ul>
@@ -274,6 +289,12 @@ const fonts = [
 	}
 
 	.wv-row:hover { color: #b3b3b3; }
+
+	.wv-social { gap: 18px; flex-wrap: wrap; }
+	.wv-social:hover { color: var(--color-text); }
+	.wv-social a { color: inherit; text-decoration: none; }
+	.wv-social a:hover { color: #b3b3b3; }
+	.wv-social span:first-child { color: var(--color-muted); }
 
 	.wv-arrow {
 		font-size: 14px;

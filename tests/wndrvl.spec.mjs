@@ -18,9 +18,10 @@ test('renders the page the QR opens', async ({ page }) => {
   const links = page.locator('.wv-links');
   await expect(links.locator('a[href="https://thirdwave.fun/dev/"]')).toHaveCount(2);
   await expect(links.locator('a[href="https://instagram.com/thirdwavearcade"]')).toHaveCount(1);
+  await expect(links.locator('a[href="https://tiktok.com/@thirdwavearcade"]')).toHaveCount(1);
   // SURVEY_URL is null: the row is omitted, and no placeholder ships.
   await expect(links.locator('a[href="https://youtube.com/@thirdwavearcade"]')).toHaveCount(1);
-  await expect(links.locator('a')).toHaveCount(4);
+  await expect(links.locator('a')).toHaveCount(5);
   await expect(page.getByText('Say how it went.')).toHaveCount(0);
   await expect(page.getByText('SURVEY URL', { exact: false })).toHaveCount(0);
   expect(errors).toEqual([]);
@@ -54,7 +55,7 @@ test('reduced motion shows everything at once', async ({ browser }) => {
   await open(page, { waitUntil: 'domcontentloaded' });
   // The last link row is the latest beat of the build-in; under reduced motion it is already there.
   const opacity = await page
-    .locator('.wv-links li:last-child a')
+    .locator('.wv-links li:last-child .wv-row')
     .evaluate((el) => getComputedStyle(el).opacity);
   expect(opacity).toBe('1');
   await ctx.close();
@@ -62,9 +63,9 @@ test('reduced motion shows everything at once', async ({ browser }) => {
 
 test('elements build in staggered', async ({ page }) => {
   await open(page, { waitUntil: 'domcontentloaded' });
-  const early = await page.locator('.wv-links a').last().evaluate((el) => +getComputedStyle(el).opacity);
+  const early = await page.locator('.wv-links .wv-row').last().evaluate((el) => +getComputedStyle(el).opacity);
   await page.waitForTimeout(1000);
-  const late = await page.locator('.wv-links a').last().evaluate((el) => +getComputedStyle(el).opacity);
+  const late = await page.locator('.wv-links .wv-row').last().evaluate((el) => +getComputedStyle(el).opacity);
   expect(early).toBeLessThan(1);
   expect(late).toBe(1);
 });
