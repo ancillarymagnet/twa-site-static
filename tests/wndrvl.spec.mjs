@@ -19,7 +19,8 @@ test('renders the page the QR opens', async ({ page }) => {
   await expect(links.locator('a[href="https://thirdwave.fun/dev/"]')).toHaveCount(2);
   await expect(links.locator('a[href="https://instagram.com/thirdwavearcade"]')).toHaveCount(1);
   // SURVEY_URL is null: the row is omitted, and no placeholder ships.
-  await expect(links.locator('a')).toHaveCount(3);
+  await expect(links.locator('a[href="https://youtube.com/@thirdwavearcade"]')).toHaveCount(1);
+  await expect(links.locator('a')).toHaveCount(4);
   await expect(page.getByText('Say how it went.')).toHaveCount(0);
   await expect(page.getByText('SURVEY URL', { exact: false })).toHaveCount(0);
   expect(errors).toEqual([]);
