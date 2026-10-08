@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Developer page wireframe</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&amp;family=Schibsted+Grotesk:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#EDEDEA;color:#161616;font-family:'Schibsted Grotesk',system-ui,sans-serif}
+a{color:#161616}a:hover{color:#555}
+*{box-sizing:border-box}
+
+/* ---- tokens (wireframe greys + one annotation blue) ---- */
+:root{
+  --ink:#161616; --mid:#5E5E5A; --line:#BDBDB8; --ph:#D8D8D4; --hatch:#C9C9C4; --tag:#1F4FE0;
+  --ease-out:cubic-bezier(.2,.7,.2,1);    /* build-in */
+  --ease-in:cubic-bezier(.55,0,.85,.35);  /* build-off */
+  --ease-wipe:cubic-bezier(.77,0,.18,1);  /* stage wipe */
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Lexend',system-ui,sans-serif}
+
+/* ---- placeholder video ---- */
+.ph{position:relative;overflow:hidden;background:var(--ph);
+  background-image:repeating-linear-gradient(135deg,transparent 0 22px,var(--hatch) 22px 23px)}
+.ph::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:translateX(-100%);animation:scan 3.6s linear infinite}
+@keyframes scan{to{transform:translateX(100%)}}
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tag)}
+.tag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--tag);animation:rec 1.2s steps(2) infinite}
+@keyframes rec{50%{opacity:.2}}
+
+/* ---- load build-in (hero, nav) ---- */
+.bi{opacity:0;transform:translateY(18px);animation:bi .7s var(--ease-out) forwards;animation-delay:calc(var(--i,0) * 90ms + 150ms)}
+@keyframes bi{to{opacity:1;transform:none}}
+
+/* ---- scroll build-in AND build-off ---- */
+@supports (animation-timeline: view()){
+  .rv{animation:rvio linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+  @keyframes rvio{
+    0%{opacity:0;transform:translateY(48px)}
+    14%,86%{opacity:1;transform:none}
+    100%{opacity:0;transform:translateY(-28px)}
+  }
+}
+
+/* ---- the barrage stage: clips wipe in over the old one, old one fades off ---- */
+.stage{position:relative;overflow:hidden;background:#cfcfcb}
+.clip{position:absolute;inset:0;z-index:1;opacity:0;clip-path:inset(0 0 0 100%);
+  transition:opacity .25s var(--ease-in) .55s, clip-path 0s .8s}
+.clip.on{z-index:2;opacity:1;clip-path:inset(0 0 0 0);
+  transition:clip-path .7s var(--ease-wipe), opacity 0s}
+.st{opacity:0;transform:translateY(16px);transition:opacity .2s var(--ease-in),transform .2s var(--ease-in)}
+.clip.on .st{opacity:1;transform:none;
+  transition:opacity .5s var(--ease-out) calc(.35s + var(--i,0) * 80ms),transform .5s var(--ease-out) calc(.35s + var(--i,0) * 80ms)}
+.ghost{position:absolute;right:-1%;bottom:-6%;font-family:'Lexend',sans-serif;font-weight:800;line-height:.8;color:rgba(22,22,22,.07);letter-spacing:-.04em;pointer-events:none;white-space:nowrap}
+
+/* ---- list rows: the beat ---- */
+.row{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:6px;padding:18px 0 22px;border-top:1px solid var(--line);position:relative;color:#8E8E89;transition:color .35s var(--ease-in)}
+.row:hover{color:var(--mid)}
+.row.on{color:var(--ink);transition:color .25s var(--ease-out)}
+.row:focus-visible{outline:2px solid var(--tag);outline-offset:4px}
+.bar{position:absolute;left:0;right:0;top:-1px;height:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);transform-origin:left;transform:scaleX(1);opacity:0;transition:opacity .4s var(--ease-in)}
+.row.on .bar i{opacity:1;animation:fill var(--dwell) linear both;transition:none}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.row .desc{max-height:0;opacity:0;overflow:hidden;transition:max-height .35s var(--ease-in),opacity .2s var(--ease-in)}
+.row.on .desc{max-height:80px;opacity:1;transition:max-height .45s var(--ease-out),opacity .4s var(--ease-out) .12s}
+
+/* ---- ribbon marquee ---- */
+.track{display:flex;gap:16px;width:max-content;animation:marq 38s linear infinite}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ---- layout ---- */
+.wrap{max-width:1360px;margin:0 auto;padding:0 40px}
+.gridA{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:40px}
+.splitB{display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start}
+.listB{flex:1 1 380px;min-width:0}
+.stageB{flex:999 1 560px;min-width:0;position:sticky;top:24px;aspect-ratio:4/3}
+.engines{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.navlinks{display:flex;gap:28px;align-items:center}
+@media (max-width:820px){
+  .wrap{padding:0 16px}
+  .gridA{grid-template-columns:minmax(0,1fr)}
+  .stageB{position:relative;top:0;order:-1}
+  .engines{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .navlinks .hide-sm{display:none}
+  .hero{aspect-ratio:4/5 !important}
+  .h1{font-size:44px !important}
+  .stageA{aspect-ratio:4/5 !important}
+  .ghost{font-size:140px !important}
+}
+@media (prefers-reduced-motion:reduce){
+  .ph::after,.track,.tag::before{animation:none}
+  .bi{animation:none;opacity:1;transform:none}
+  .rv{animation:none !important}
+}
+</style>
+</helmet>
+
+<div style="--dwell: {{dwellCss}}; width: 100%; overflow-x: hidden;">
+
+  <!-- ============ NAV ============ -->
+  <header class="wrap" style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px; padding-bottom: 20px;">
+    <a href="#top" class="bi disp" style="--i: 0; font-weight: 800; font-size: 18px; letter-spacing: -.01em; text-decoration: none;">THIRD WAVE</a>
+    <nav class="navlinks" aria-label="Primary">
+      <a href="#do" class="bi hide-sm" style="--i: 1; font-size: 14px; text-decoration: none;">What you can do</a>
+      <a href="#for" class="bi hide-sm" style="--i: 2; font-size: 14px; text-decoration: none;">What it does for you</a>
+      <a href="#access" class="bi mono" style="--i: 3; font-size: 12px; letter-spacing: .1em; text-decoration: none; background: #161616; color: #EDEDEA; padding: 12px 18px; min-height: 44px; display: inline-flex; align-items: center;">REQUEST ACCESS</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO: full-bleed loop ============ -->
+  <section id="top" class="hero ph" style="width: 100%; aspect-ratio: 16 / 8; max-height: 860px; display: flex; flex-direction: column; justify-content: space-between; padding: 32px 40px 48px;">
+    <div class="bi" style="--i: 2; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <span class="tag">Hero loop · 8–10 s</span>
+      <span class="mono" style="font-size: 12px; color: #5E5E5A; max-width: 360px; text-align: right;">Wide on a packed room: a wall, a hundred phones up, everyone reacting at once. No UI, no logo.</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 20px; max-width: 980px; position: relative; z-index: 1;">
+      <h1 class="h1 disp" style="margin: 0; font-weight: 800; font-size: 104px; line-height: .9; letter-spacing: -.035em;">
+        <span class="bi" style="--i: 4; display: block;">BUILD FOR</span>
+        <span class="bi" style="--i: 5; display: block;">THIS SCREEN.</span>
+      </h1>
+      <p class="bi" style="--i: 7; margin: 0; font-size: 20px; line-height: 1.45; max-width: 600px;">Every phone in the room is a controller. You build the wall, and our SDK handles the crowd.</p>
+      <div class="bi" style="--i: 8; display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="#access" class="mono" style="font-size: 12px; letter-spacing: .12em; text-decoration: none; background: #161616; color: #EDEDEA; padding: 16px 24px; min-height: 48px; display: inline-flex; align-items: center;">REQUEST DEV KIT ACCESS</a>
+        <a href="#do" class="mono" style="font-size: 12px; letter-spacing: .12em; text-decoration: none; border: 1px solid #161616; padding: 16px 24px; min-height: 48px; display: inline-flex; align-items: center;">SEE WHAT IT DOES ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BARRAGE A: things you can do ============ -->
+  <section id="do" style="padding: 120px 0 40px;">
+    <div class="wrap rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 40px;">
+      <h2 class="disp" style="margin: 0; font-weight: 800; font-size: 64px; line-height: .95; letter-spacing: -.03em;">Things you<br>can do.</h2>
+      <p style="margin: 0; max-width: 420px; color: #5E5E5A; font-size: 16px; line-height: 1.5;">Every input the phone has, reaching your engine as events. Each clip shows the phone in a hand and the wall it moves.</p>
+    </div>
+
+    <div class="stage stageA rv" style="width: 100%; aspect-ratio: 21 / 9;">
+      <sc-for list="{{ doItems }}" as="item" hint-placeholder-count="1">
+        <div class="clip ph {{ item.cls }}" aria-hidden="{{ item.hidden }}">
+          <div class="ghost" style="font-size: 300px;">{{ item.verb }}</div>
+          <div style="position: absolute; inset: 0; padding: 32px 40px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="st" style="--i: 0;"><span class="tag">Clip {{ item.n }} · {{ item.len }} loop</span></div>
+            <div style="display: flex; gap: 48px; flex-wrap: wrap; align-items: flex-end;">
+              <div class="st" style="--i: 1; display: flex; flex-direction: column; gap: 6px; max-width: 300px;">
+                <span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #5E5E5A;">ON THE PHONE</span>
+                <span style="font-size: 18px; line-height: 1.35;">{{ item.phone }}</span>
+              </div>
+              <svg class="st" style="--i: 2;" width="64" height="24" viewBox="0 0 64 24" fill="none" stroke="#161616" stroke-width="1.5" aria-hidden="true"><path d="M2 12h56M50 4l8 8-8 8"/></svg>
+              <div class="st" style="--i: 3; display: flex; flex-direction: column; gap: 6px; max-width: 300px;">
+                <span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #5E5E5A;">ON THE WALL</span>
+                <span style="font-size: 18px; line-height: 1.35;">{{ item.wall }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div class="wrap gridA" style="margin-top: 8px;">
+      <sc-for list="{{ doItems }}" as="item" hint-placeholder-count="9">
+        <button type="button" class="row {{ item.cls }}" onClick="{{ item.pick }}" aria-pressed="{{ item.pressed }}">
+          <span class="bar"><i></i></span>
+          <span style="display: flex; align-items: baseline; gap: 14px;">
+            <span class="mono" style="font-size: 12px;">{{ item.n }}</span>
+            <span class="disp" style="font-weight: 800; font-size: 34px; letter-spacing: -.02em;">{{ item.verb }}</span>
+          </span>
+          <span class="desc" style="font-size: 15px; line-height: 1.45; padding-left: 34px;">{{ item.line }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ============ RIBBON: rapid-fire loops ============ -->
+  <section aria-label="More clips" style="padding: 80px 0; overflow: hidden;">
+    <div class="track">
+      <sc-for list="{{ ribbon }}" as="r" hint-placeholder-count="12">
+        <div class="ph" style="width: 300px; aspect-ratio: 4 / 5; flex: none; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
+          <span class="tag" style="font-size: 10px;">Loop</span>
+          <span class="mono" style="font-size: 12px; line-height: 1.4; color: #3A3A37;">{{ r }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ============ BARRAGE B: things it does for you ============ -->
+  <section id="for" style="padding: 40px 0 120px;">
+    <div class="wrap">
+      <div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px;">
+        <h2 class="disp" style="margin: 0; font-weight: 800; font-size: 64px; line-height: .95; letter-spacing: -.03em;">Things it<br>does for you.</h2>
+        <p style="margin: 0; max-width: 420px; color: #5E5E5A; font-size: 16px; line-height: 1.5;">A room full of strangers' phones is messy. These are the parts you don't have to write.</p>
+      </div>
+      <div class="splitB">
+        <div class="listB">
+          <sc-for list="{{ forItems }}" as="item" hint-placeholder-count="8">
+            <button type="button" class="row {{ item.cls }}" onClick="{{ item.pick }}" aria-pressed="{{ item.pressed }}" style="width: 100%;">
+              <span class="bar"><i></i></span>
+              <span style="display: flex; align-items: baseline; gap: 14px;">
+                <span class="mono" style="font-size: 12px;">{{ item.n }}</span>
+                <span class="disp" style="font-weight: 600; font-size: 24px; letter-spacing: -.01em;">{{ item.verb }}</span>
+              </span>
+              <span class="desc" style="font-size: 15px; line-height: 1.45; padding-left: 34px;">{{ item.line }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div class="stage stageB">
+          <sc-for list="{{ forItems }}" as="item" hint-placeholder-count="1">
+            <div class="clip ph {{ item.cls }}" aria-hidden="{{ item.hidden }}">
+              <div style="position: absolute; inset: 0; padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="st" style="--i: 0;"><span class="tag">Clip {{ item.n }} · {{ item.len }}</span></div>
+                <div class="st" style="--i: 1; display: flex; flex-direction: column; gap: 8px; max-width: 460px;">
+                  <span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #5E5E5A;">SHOT</span>
+                  <span style="font-size: 18px; line-height: 1.4;">{{ item.shot }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MADE WITH IT: full-bleed ============ -->
+  <section class="ph" style="width: 100%; aspect-ratio: 16 / 7; display: flex; flex-direction: column; justify-content: flex-end; padding: 40px;">
+    <div class="rv" style="display: flex; flex-direction: column; gap: 14px; max-width: 760px;">
+      <span class="tag">Gary's Party Line · 20 s cut</span>
+      <h2 class="disp" style="margin: 0; font-weight: 800; font-size: 56px; line-height: .95; letter-spacing: -.03em;">Made with it: Gary's Party Line.</h2>
+      <p style="margin: 0; font-size: 17px; line-height: 1.5; max-width: 560px;">A full game built on the SDK, played by whole rooms at Wonderville. [One line on what it is and where to play it.]</p>
+    </div>
+  </section>
+
+  <!-- ============ ENGINES ============ -->
+  <section class="wrap" style="padding: 120px 40px;">
+    <h2 class="disp rv" style="margin: 0 0 32px; font-weight: 800; font-size: 40px; letter-spacing: -.02em;">Bring your engine.</h2>
+    <div class="engines">
+      <sc-for list="{{ engines }}" as="e" hint-placeholder-count="4">
+        <div class="rv" style="border: 1px solid #BDBDB8; padding: 24px; min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+          <span class="disp" style="font-weight: 600; font-size: 22px;">{{ e.name }}</span>
+          <span class="mono" style="font-size: 12px; color: #5E5E5A;">{{ e.status }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section id="access" style="background: #161616; color: #EDEDEA; padding: 120px 0;">
+    <div class="wrap rv" style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
+      <span class="mono" style="font-size: 12px; letter-spacing: .14em; color: #9A9A95;">CLOSED BETA</span>
+      <h2 class="disp" style="margin: 0; font-weight: 800; font-size: 72px; line-height: .92; letter-spacing: -.035em; max-width: 900px;">Want to blow wigs back in a new medium?</h2>
+      <p style="margin: 0; font-size: 18px; line-height: 1.5; max-width: 560px; color: #CFCFCB;">We're working hands-on with a small group of studios and creators. Tell us what you'd build.</p>
+      <a href="https://tally.so/r/WOoYxP" class="mono" style="font-size: 12px; letter-spacing: .12em; text-decoration: none; background: #EDEDEA; color: #161616; padding: 18px 28px; min-height: 52px; display: inline-flex; align-items: center;">REQUEST DEV KIT ACCESS</a>
+      <span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #8A8A86;">TAKES ABOUT 2 MINUTES · WE READ EVERY SUBMISSION</span>
+    </div>
+  </section>
+
+  <footer class="wrap" style="padding: 32px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #5E5E5A;">
+    <span>[existing site footer: socials, privacy, support]</span>
+    <span class="mono" style="font-size: 11px;">WIREFRAME · NOT FINAL COPY</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dwellMs":{"editor":"int","default":3200,"min":1500,"max":8000,"step":100,"unit":"ms","section":"Rhythm"},"autoplay":{"editor":"boolean","default":true,"section":"Rhythm"},"$preview":{"width":1440,"height":5600}}'>
+// Barrage A: player verbs. phone/wall double as the shot list.
+const DO_ITEMS = [
+  { verb: 'AIM',    len: '3 s', line: 'Point the phone and it lands where you point, on any phone.', phone: 'Held out like a flashlight, sweeping.', wall: 'A beam tracks it and lands on a target.' },
+  { verb: 'STEER',  len: '3 s', line: 'Tilt to steer. Orientation streams to your engine.', phone: 'Two hands, tilted like a wheel.', wall: 'A car carves through a corner.' },
+  { verb: 'BUMP',   len: '2 s', line: 'Two phones touch, and you get one event for both players.', phone: 'Two strangers knock phones.', wall: 'Their avatars collide and spark.' },
+  { verb: 'SHAKE',  len: '2 s', line: 'Shake detection, tuned so a stumble does not count.', phone: 'A fast shake overhead.', wall: 'Something bursts open.' },
+  { verb: 'DRAW',   len: '4 s', line: 'Touch strokes on the phone become lines on the wall.', phone: 'A finger traces a loop.', wall: 'The same loop draws itself big.' },
+  { verb: 'SNAP',   len: '3 s', line: 'Use the phone camera as an input.', phone: 'A selfie, framed and taken.', wall: 'The photo drops into the scene.' },
+  { verb: 'FREEZE', len: '3 s', line: 'Know who held still and who moved.', phone: 'A phone held dead still, then twitching.', wall: 'Red light. One player is out.' },
+  { verb: 'BUZZ',   len: '2 s', line: 'Haptics for one player, one team or the whole room.', phone: 'A close-up of a hand jolting.', wall: 'The hit that caused it.' },
+  { verb: 'TYPE',   len: '3 s', line: 'Text entry: names, answers, team names.', phone: 'Thumbs typing a name.', wall: 'The name falls into the pile.' }
+];
+
+// Barrage B: what the SDK handles. Mostly UI capture.
+const FOR_ITEMS = [
+  { verb: 'Scan to join',            len: '3 s', line: 'A QR on the wall puts a phone in the game.', shot: 'A phone scans the wall QR, and a new avatar slides into the lobby.' },
+  { verb: 'Teams and captains',      len: '4 s', line: 'Sides fill themselves, and a captain names the team.', shot: 'The team reveal: sides split, and the captain types a team name.' },
+  { verb: 'Every screen, one package', len: '3 s', line: 'Switch the phone UI instantly, with no reload.', shot: 'Five phones flip from lobby to game controls together.' },
+  { verb: 'Per-player screens',      len: '3 s', line: 'Each phone shows its own score, role and color.', shot: 'A row of phones, each with a different score and color.' },
+  { verb: 'Reconnect',               len: '4 s', line: 'A phone that sleeps comes back to the right screen.', shot: 'A phone locks, unlocks, and drops straight back into play.' },
+  { verb: 'Presence',                len: '3 s', line: 'Know who stepped away and who actually left.', shot: 'The roster: one player goes AWAY, another goes GONE.' },
+  { verb: 'Calibration',             len: '4 s', line: 'Per-device aim calibration, so pointing just works.', shot: 'A three-point calibration on the phone, then a dead-on aim.' },
+  { verb: 'Cloud or on-site relay',  len: '3 s', line: 'Run on our relay or your own box at the venue.', shot: 'A diagram cut: phones, relay, wall. [Needs a motion-graphic, not footage.]' }
+];
+
+const RIBBON = [
+  'Crowd reaction, wide', 'Hands on a phone, macro', 'Wall pixels, close', 'Kid holds the phone up high',
+  'Team side cheering', 'Phone vibrating on a table', 'Projector beam through haze', 'Lobby filling up',
+  'Two phones bump', 'Score flips on a phone', 'Name in lights', 'Walk-in through the venue door'
+];
+
+const ENGINES = [
+  { name: 'TouchDesigner', status: 'Shipping: Gary’s Party Line' },
+  { name: 'Unreal',        status: '[status?]' },
+  { name: 'Browser / JS',  status: '[status?]' },
+  { name: '[next engine]', status: '[status?]' }
+];
+
+const pad = (i) => String(i + 1).padStart(2, '0');
+
+class Component extends DCLogic {
+  componentDidMount() { this.restart(); }
+  componentDidUpdate(prev) {
+    if (prev.dwellMs !== this.props.dwellMs || prev.autoplay !== this.props.autoplay) this.restart();
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  dwell() { return this.props.dwellMs ?? 3200; }
+  restart() {
+    clearInterval(this.timer);
+    if (this.props.autoplay === false) return;
+    this.timer = setInterval(() => {
+      this.setState((s) => ({
+        a: ((s.a ?? 0) + 1) % DO_ITEMS.length,
+        b: ((s.b ?? 0) + 1) % FOR_ITEMS.length
+      }));
+    }, this.dwell());
+  }
+  shape(list, active, key) {
+    return list.map((it, i) => ({
+      ...it,
+      n: pad(i),
+      cls: i === active ? 'on' : '',
+      pressed: i === active ? 'true' : 'false',
+      hidden: i === active ? 'false' : 'true',
+      pick: () => { this.setState({ [key]: i }); this.restart(); }
+    }));
+  }
+  renderVals() {
+    const a = this.state?.a ?? 0;
+    const b = this.state?.b ?? 0;
+    return {
+      dwellCss: this.dwell() + 'ms',
+      doItems: this.shape(DO_ITEMS, a, 'a'),
+      forItems: this.shape(FOR_ITEMS, b, 'b'),
+      ribbon: RIBBON.concat(RIBBON),
+      engines: ENGINES
+    };
+  }
+}
+</script>
+</body>
+</html>

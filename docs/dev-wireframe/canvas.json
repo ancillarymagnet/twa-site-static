@@ -1,0 +1,79 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 5600,
+      "is_interactive": true,
+      "title": "/dev — feature barrage (wireframe)",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-06T18:35:09Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "file": "Main.dc.html",
+    "view": "focused"
+  },
+  "notes": {
+    "barrageA": {
+      "fill": "blue",
+      "maxH": 520,
+      "text": "BARRAGE A: things you can do. One full-bleed stage and a numbered list under it. Every 3.2 s the next row lights up, its bar fills, and the stage wipes to that clip. Click a row to jump there. Each row is a 2-4 s silent loop, and each stage caption doubles as the shot list (ON THE PHONE / ON THE WALL).",
+      "w": 360,
+      "x": 1520,
+      "y": 900
+    },
+    "barrageB": {
+      "fill": "blue",
+      "maxH": 520,
+      "text": "BARRAGE B: things it does for you. Same engine mirrored, with the list left and a 4:3 stage right, so the second pass reads as a new beat. These clips are mostly UI capture (lobby, team reveal, reconnect), not crowd footage.",
+      "w": 360,
+      "x": 1520,
+      "y": 2700
+    },
+    "open": {
+      "fill": "orange",
+      "maxH": 460,
+      "text": "OPEN: the engine list (is Unreal public yet?), the hero claim, whether Gary's Party Line gets its own band or folds into the hero, and how many clips we can actually shoot. Nine plus eight is a lot, and six plus six would still feel like a barrage.",
+      "w": 360,
+      "x": 1520,
+      "y": 4500
+    },
+    "ref": {
+      "fill": "gray",
+      "maxH": 420,
+      "text": "Reference: electronicmaterialsoffice.com. Kept: the full-bleed image and the steady swap rhythm. Dropped: the hardware and shop tropes (price, reserve, specs, accessories, what's in the box).",
+      "w": 360,
+      "x": 1520,
+      "y": 0
+    },
+    "ribbon": {
+      "fill": "green",
+      "maxH": 360,
+      "text": "RIBBON: a marquee of small loops running sideways between the two barrages. It keeps the pace up while the scroll goes vertical.",
+      "w": 360,
+      "x": 1520,
+      "y": 2250
+    },
+    "title": {
+      "kind": "title1",
+      "maxW": 1440,
+      "text": "/dev — the barrage rhythm",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html"
+  ],
+  "pages": [],
+  "title": "Dev Page Wireframe"
+}
