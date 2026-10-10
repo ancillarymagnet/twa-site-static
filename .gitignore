@@ -26,3 +26,6 @@ pnpm-debug.log*
 # playwright
 test-results/
 playwright-report/
+
+# Generated image explorations (large, local only)
+docs/gen/
