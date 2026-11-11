@@ -35,17 +35,6 @@ const fonts = [
 	{ before: 'Copyright 2018 The Lexend Project Authors (', url: 'https://github.com/googlefonts/lexend', after: '), with Reserved Font Name “RevReading Lexend”.' },
 ];
 
-// Credits still to gather before this page ships.
-const creditTodos = [
-	'Music: confirm the Braille track list covers every level and the match-clip audio',
-	'Award-card art: sources for each public-domain print and photo',
-	'Choice Words: the archive footage behind the towers',
-	"Gary's Parents Journey into the Godhead: characters, motion capture, environments",
-	"Gary's Driving School: models, textures",
-	'Sound effects and voice (Gary)',
-	'Any other fonts the cards, match clips or phone use (check against the six below)',
-	'The team: who made it',
-];
 ---
 
 <Layout
@@ -115,10 +104,6 @@ const creditTodos = [
 			<details class="gp-credits r">
 				<summary>Credits</summary>
 				<div class="gp-credits-body">
-					<section class="gp-todo">
-						<h2>To gather (stub only, not for the public page)</h2>
-						<ul>{creditTodos.map((t) => <li>{t}</li>)}</ul>
-					</section>
 					<section>
 						<h2>Music</h2>
 						<p>Park Lug, Claustrophobic Vibe Check, Stand Still, I Watch the TVs Well, Morose Weekend — <a href="https://braillesounds.bandcamp.com/" target="_blank" rel="noopener noreferrer">Braille</a>.</p>
@@ -233,9 +218,6 @@ const creditTodos = [
 	.gp-credits-body ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
 	.gp-credits h2 { font-size: 10px; margin-bottom: 4px; }
 	.gp-credits a { color: #d4d4d4; text-underline-offset: 2px; }
-	.gp-todo { padding: 10px 12px; border: 1px dashed var(--accent); border-radius: 4px; }
-	.gp-todo h2 { color: var(--accent); }
-	.gp-todo li::before { content: '☐ '; }
 
 	@media (prefers-reduced-motion: no-preference) {
 		.b { transition: opacity 360ms var(--out) var(--d), transform 360ms var(--out) var(--d); }
