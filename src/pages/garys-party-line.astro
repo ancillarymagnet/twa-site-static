@@ -89,7 +89,7 @@ const fonts = [
 			<h3 class="gp-sub r">Match clips</h3>
 			<div class="gp-tall">
 				{matchClips.map((c, i) => (
-					<video class="loop r" style={`--i: ${i}`} src={c.src} poster={c.poster} muted loop playsinline preload="none" aria-label="A match clip"></video>
+					<div class="r" style={`--i: ${i}`}><video class="loop" src={c.src} poster={c.poster} muted loop playsinline preload="none" aria-label="A match clip"></video></div>
 				))}
 			</div>
 
@@ -210,7 +210,8 @@ const fonts = [
 	.gp-clip figcaption { margin-top: 8px; font-size: 14px; color: #d4d4d4; }
 
 	.gp-tall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 760px; }
-	.gp-tall video { aspect-ratio: 9 / 16; border-radius: 6px; }
+	.gp-tall > div { min-width: 0; }
+	.gp-tall video { display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 6px; }
 
 	.gp-cards {
 		display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
