@@ -3,6 +3,7 @@
 // 2026-11-11: copy is Noah's (artifact comments). Media is cut from RECORD takes, TW_TAKEAWAYS
 // and the 11-11 playtest. Credits carry what wndrvl.astro has, plus a list still to gather.
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getEntry } from 'astro:content';
 
@@ -41,6 +42,12 @@ const fonts = [
 	title="Third Wave — Gary's Party Line"
 	description="Gary's Party Line: an outrageous collaborative/competitive party game for up to 50 players."
 >
+	<Header
+		status={siteData.topBar.status}
+		meta={siteData.topBar.meta}
+		ticker={siteData.ticker}
+	/>
+
 	<main class="gp" id="gp">
 		<script is:inline>
 			(function (main) {
