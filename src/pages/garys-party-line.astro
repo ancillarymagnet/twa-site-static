@@ -276,11 +276,28 @@ const fonts = [
 				const v = e.target as HTMLVideoElement;
 				if (e.isIntersecting && !reduced.matches) {
 					if (v.preload === 'none') v.preload = 'auto';
-					v.play().catch(() => {});
+					v.muted = true;
+					v.play().catch(() => armTapToPlay());
 				} else v.pause();
 			}
 		}, { threshold: 0.25 });
 		main.querySelectorAll('video.loop').forEach((v) => vids.observe(v));
+
+		// iOS refuses muted autoplay in Low Power Mode (every iOS browser is WebKit). A tap is a
+		// user gesture, so each tap starts the paused loops on screen (WebKit grants it per video).
+		let armed = false;
+		function armTapToPlay() {
+			if (armed) return;
+			armed = true;
+			const go = () => {
+				main!.querySelectorAll('video.loop').forEach((el) => {
+					const v = el as HTMLVideoElement;
+					const r = v.getBoundingClientRect();
+					if (v.paused && r.bottom > 0 && r.top < innerHeight) v.play().catch(() => {});
+				});
+			};
+			for (const t of ['touchend', 'click']) document.addEventListener(t, go, { passive: true });
+		}
 
 		// Build off on a same-tab link tap, then navigate.
 		document.addEventListener('click', (e) => {

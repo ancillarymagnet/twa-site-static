@@ -525,6 +525,17 @@
         if (visible) { if (!reduced) scenes[cur].querySelectorAll('video').forEach((v) => v.play().catch(() => {})); loop(); }
         else { clearTimeout(timer); scenes[cur].querySelectorAll('video').forEach((v) => v.pause()); }
       }, { threshold: 0.15 }).observe(sec);
+      // iOS refuses muted autoplay in Low Power Mode; a tap is a user gesture, so each tap
+      // starts the on-screen loops that are still paused (WebKit grants it per video).
+      if (!reduced) {
+        const kick = () => {
+          const vs = [...scenes[cur].querySelectorAll('video')];
+          const chipV = document.querySelector('.np video');
+          if (chipV) vs.push(chipV);
+          vs.forEach((v) => { const r = v.getBoundingClientRect(); if (v.paused && r.bottom > 0 && r.top < innerHeight) v.play().catch(() => {}); });
+        };
+        ['touchend', 'click'].forEach((t) => document.addEventListener(t, kick, { passive: true }));
+      }
       // Hero chip loop: pause when the hero is off screen.
       const chip = document.querySelector('.np video');
       if (chip) {
