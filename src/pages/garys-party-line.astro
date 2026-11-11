@@ -1,8 +1,7 @@
 ---
 // thirdwave.fun/garys-party-line: the game page for Gary's Party Line (code name LINE).
-// STUB, 2026-11-11. Media is real (cut from RECORD takes and TW_TAKEAWAYS); every
-// [COPY] block is a placeholder for Noah's words. Credits carry what wndrvl.astro has,
-// plus a list of credits still to gather.
+// 2026-11-11: copy is Noah's (artifact comments). Media is cut from RECORD takes, TW_TAKEAWAYS
+// and the 11-11 playtest. Credits carry what wndrvl.astro has, plus a list still to gather.
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import { getEntry } from 'astro:content';
@@ -13,14 +12,14 @@ const siteData = siteEntry.data;
 const V = '261111v01';
 const m = (name: string) => ({ src: `/gpl/gpl-${name}-${V}.mp4`, poster: `/gpl/gpl-${name}-${V}.webp` });
 
-// Working labels only (from the RECORD take names): Noah renames or cuts.
+// Labels and tags: Noah's copy (artifact comments, 2026-11-11).
 const play = [
-	{ ...m('courses'), label: 'Pick a course' },
-	{ ...m('the-rack'), label: 'Draw the line' },
-	{ ...m('course-map'), label: 'The course map' },
-	{ ...m('driving-school'), label: "Gary's Driving School" },
-	{ ...m('choice-words'), label: 'Choice Words' },
-	{ src: '/gpl/gpl-godhead-261111v02.mp4', poster: '/gpl/gpl-godhead-261111v02.webp', label: 'Parents: Journey into the Godhead' },
+	{ ...m('courses'), label: 'Pick a course', tag: 'Arcade mode lets players vote on which course to play next.' },
+	{ ...m('the-rack'), label: 'Draw the line', tag: 'Constantly-shifting dynamics explore the space of drawing-enabled team physics puzzling.' },
+	{ ...m('course-map'), label: 'The course map', tag: 'Each course explores a theme.' },
+	{ ...m('driving-school'), label: "Gary's Driving School", tag: "Gary's Driving School requires teams to divide and conquer to accomplish goals while trying not to get KO'd." },
+	{ src: '/gpl/gpl-choice-words-261111v02.mp4', poster: '/gpl/gpl-choice-words-261111v02.webp', label: 'Choice Words', tag: 'In Choice Words with Gary, drop words to your teammates as they try to balance the tallest tower.' },
+	{ src: '/gpl/gpl-godhead-261111v02.mp4', poster: '/gpl/gpl-godhead-261111v02.webp', label: "Gary's Parents Journey into the Godhead", tag: "Gary's Parents Journey Into the Godhead makes literal the metaphor of passage into another spacetime." },
 ];
 
 const matchClips = [1, 2, 3].map((i) => m(`match-clip-${i}`));
@@ -41,7 +40,7 @@ const creditTodos = [
 	'Music: confirm the Braille track list covers every level and the match-clip audio',
 	'Award-card art: sources for each public-domain print and photo',
 	'Choice Words: the archive footage behind the towers',
-	'Parents: Journey into the Godhead: characters, motion capture, environments',
+	"Gary's Parents Journey into the Godhead: characters, motion capture, environments",
 	"Gary's Driving School: models, textures",
 	'Sound effects and voice (Gary)',
 	'Any other fonts the cards, match clips or phone use (check against the six below)',
@@ -51,7 +50,7 @@ const creditTodos = [
 
 <Layout
 	title="Third Wave — Gary's Party Line"
-	description="Gary's Party Line: a party game for one big screen and everyone's phone."
+	description="Gary's Party Line: an outrageous collaborative competitive party game for up to 50 players."
 >
 	<main class="gp" id="gp">
 		<script is:inline>
@@ -67,13 +66,13 @@ const creditTodos = [
 
 		<div class="gp-top b" style="--d: 80ms">
 			<span class="gp-mark">Third Wave</span>
-			<span class="gp-place">A game for one screen and every phone</span>
+			<span class="gp-place">A game for one screen and up to 50 IRL players</span>
 		</div>
 
 		<div class="gp-col">
 			<h1 class="gp-h1 b" style="--d: 140ms">Gary's Party Line</h1>
-			<p class="gp-copy gp-lede b" style="--d: 220ms">[COPY] Lede: one or two lines on what the game is.</p>
-			<p class="gp-copy b" style="--d: 300ms">[COPY] How it plays: phones draw lines, teams, Gary, the courses. A short paragraph.</p>
+			<p class="gp-copy gp-lede b" style="--d: 220ms">An outrageous collaborative competitive party game for up to 50 players.</p>
+			<p class="gp-copy b" style="--d: 300ms">3 distinct courses explore the core drawing mechanic as teams self-organize to solve spatial puzzles. Break games break things up with driving, tower-building, and metaphysical interludes.</p>
 		</div>
 
 		<section class="gp-sec">
@@ -82,7 +81,7 @@ const creditTodos = [
 				{play.map((c, i) => (
 					<figure class="gp-clip r" style={`--i: ${i % 2}`}>
 						<video class="loop" src={c.src} poster={c.poster} muted loop playsinline preload="none" aria-label={c.label}></video>
-						<figcaption><span>{c.label}</span> <span class="gp-tag">[COPY] one line</span></figcaption>
+						<figcaption><span>{c.label}</span> <span class="gp-tag">{c.tag}</span></figcaption>
 					</figure>
 				))}
 			</div>
@@ -90,7 +89,7 @@ const creditTodos = [
 
 		<section class="gp-sec">
 			<h2 class="gp-label r">Takeaways</h2>
-			<p class="gp-copy gp-narrow r">[COPY] Every player leaves with something: a match clip of the game they played and an award card made for them.</p>
+			<p class="gp-copy gp-narrow r">Every player leaves with personalized takeaways - videos, stills, achievements, and awards.</p>
 
 			<h3 class="gp-sub r">Match clips</h3>
 			<div class="gp-tall">
@@ -109,7 +108,7 @@ const creditTodos = [
 
 		<section class="gp-sec gp-col">
 			<h2 class="gp-label r">Play it</h2>
-			<p class="gp-copy r">[COPY] Where to play it / book it / the call to action. Link or signup goes here.</p>
+			<p class="gp-copy r">Gary's Party Line is available to venues looking to keep 2-50 players losing their minds for hours on end. Sound like you? <a class="gp-cta" href="mailto:licensing@thirdwave.fun?subject=Gary's%20Party%20Line" onclick="window.twTrack && window.twTrack('licensing_interest')">Get in touch</a></p>
 		</section>
 
 		<div class="gp-col">
@@ -198,14 +197,15 @@ const creditTodos = [
 		line-height: 0.95; letter-spacing: -0.025em; text-transform: uppercase;
 	}
 
-	/* Placeholder copy: dashed and pink so nothing slips out unwritten. */
-	.gp-copy {
-		margin-top: 16px; padding: 10px 12px; font-size: 17px; line-height: 1.4; color: #d4d4d4;
-		border: 1px dashed var(--accent); border-radius: 4px;
-	}
+	:global(body) { background: var(--color-bg); color: var(--color-text); }
+
+	.gp-copy { margin-top: 16px; font-size: 17px; line-height: 1.45; color: #d4d4d4; max-width: 680px; }
+	.gp-cta { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+	.gp-cta:hover { color: #fff; }
 	.gp-lede { font-size: 20px; }
 	.gp-narrow { max-width: 680px; margin-bottom: 8px; }
-	.gp-tag { color: var(--accent); }
+	.gp-clip figcaption > span:first-child { display: block; color: var(--color-text); font-weight: 600; }
+	.gp-tag { display: block; margin-top: 2px; color: #a3a3a3; }
 
 	.gp-label { margin-bottom: 16px; padding-top: 16px; border-top: 1px solid var(--color-rule-strong); }
 	.gp-sub { margin: 32px 0 12px; color: var(--color-text); }
