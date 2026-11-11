@@ -1,0 +1,316 @@
+---
+// thirdwave.fun/garys-party-line: the game page for Gary's Party Line (code name LINE).
+// STUB, 2026-11-11. Media is real (cut from RECORD takes and TW_TAKEAWAYS); every
+// [COPY] block is a placeholder for Noah's words. Credits carry what wndrvl.astro has,
+// plus a list of credits still to gather.
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import { getEntry } from 'astro:content';
+
+const siteEntry = await getEntry('site', 'site');
+const siteData = siteEntry.data;
+
+const V = '261111v01';
+const m = (name: string) => ({ src: `/gpl/gpl-${name}-${V}.mp4`, poster: `/gpl/gpl-${name}-${V}.webp` });
+
+// Working labels only (from the RECORD take names): Noah renames or cuts.
+const play = [
+	{ ...m('courses'), label: 'Pick a course' },
+	{ ...m('the-rack'), label: 'Draw the line' },
+	{ ...m('course-map'), label: 'The course map' },
+	{ ...m('driving-school'), label: "Gary's Driving School" },
+	{ ...m('choice-words'), label: 'Choice Words' },
+	{ ...m('godhead'), label: 'Parents: Journey into the Godhead' },
+];
+
+const matchClips = [1, 2, 3].map((i) => m(`match-clip-${i}`));
+const awards = ['most', 'closer', 'stork', 'brick', 'assist', 'longest', 'butterfingers', 'least', 'witness'];
+
+// Same lines as wndrvl.astro (each font's OFL.txt, read 2026-10-02 from tw-controller-demo).
+const fonts = [
+	{ before: 'Copyright 2019 The Big Shoulders Project Authors (', url: 'https://github.com/xotypeco/big_shoulders', after: ')' },
+	{ before: 'Copyright 2020 The Anton Project Authors (', url: 'https://github.com/googlefonts/AntonFont.git', after: ')' },
+	{ before: 'Copyright 2025 The SUSE Project Authors (', url: 'https://github.com/SUSE/suse-font', after: ')' },
+	{ before: 'Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"', url: null, after: '' },
+	{ before: 'Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors (', url: 'https://github.com/googlefonts/atkinson-hyperlegible-next', after: ')' },
+	{ before: 'Copyright 2018 The Lexend Project Authors (', url: 'https://github.com/googlefonts/lexend', after: '), with Reserved Font Name “RevReading Lexend”.' },
+];
+
+// Credits still to gather before this page ships.
+const creditTodos = [
+	'Music: confirm the Braille track list covers every level and the match-clip audio',
+	'Award-card art: sources for each public-domain print and photo',
+	'Choice Words: the archive footage behind the towers',
+	'Parents: Journey into the Godhead: characters, motion capture, environments',
+	"Gary's Driving School: models, textures",
+	'Sound effects and voice (Gary)',
+	'Any other fonts the cards, match clips or phone use (check against the six below)',
+	'The team: who made it',
+];
+---
+
+<Layout
+	title="Third Wave — Gary's Party Line"
+	description="Gary's Party Line: a party game for one big screen and everyone's phone."
+>
+	<main class="gp" id="gp">
+		<script is:inline>
+			(function (main) {
+				main.classList.add('is-pre');
+				setTimeout(function () { main.classList.remove('is-pre'); }, 1500);
+			})(document.currentScript.parentElement);
+		</script>
+
+		<div class="gp-hero b" style="--d: 0ms">
+			<video class="loop" src={m('title').src} poster={m('title').poster} muted loop playsinline preload="metadata" aria-hidden="true"></video>
+		</div>
+
+		<div class="gp-top b" style="--d: 80ms">
+			<span class="gp-mark">Third Wave</span>
+			<span class="gp-place">A game for one screen and every phone</span>
+		</div>
+
+		<div class="gp-col">
+			<h1 class="gp-h1 b" style="--d: 140ms">Gary's Party Line</h1>
+			<p class="gp-copy gp-lede b" style="--d: 220ms">[COPY] Lede: one or two lines on what the game is.</p>
+			<p class="gp-copy b" style="--d: 300ms">[COPY] How it plays: phones draw lines, teams, Gary, the courses. A short paragraph.</p>
+		</div>
+
+		<section class="gp-sec">
+			<h2 class="gp-label r">Gameplay</h2>
+			<div class="gp-grid">
+				{play.map((c, i) => (
+					<figure class="gp-clip r" style={`--i: ${i % 2}`}>
+						<video class="loop" src={c.src} poster={c.poster} muted loop playsinline preload="none" aria-label={c.label}></video>
+						<figcaption><span>{c.label}</span> <span class="gp-tag">[COPY] one line</span></figcaption>
+					</figure>
+				))}
+			</div>
+		</section>
+
+		<section class="gp-sec">
+			<h2 class="gp-label r">Takeaways</h2>
+			<p class="gp-copy gp-narrow r">[COPY] Every player leaves with something: a match clip of the game they played and an award card made for them.</p>
+
+			<h3 class="gp-sub r">Match clips</h3>
+			<div class="gp-tall">
+				{matchClips.map((c, i) => (
+					<video class="loop r" style={`--i: ${i}`} src={c.src} poster={c.poster} muted loop playsinline preload="none" aria-label="A match clip"></video>
+				))}
+			</div>
+
+			<h3 class="gp-sub r">Award cards</h3>
+			<div class="gp-cards">
+				{awards.map((a, i) => (
+					<img class="r" style={`--i: ${i % 5}`} src={`/gpl/gpl-award-${a}-${V}.webp`} alt={`Award card: ${a}`} width="640" height="800" loading="lazy" decoding="async" />
+				))}
+			</div>
+		</section>
+
+		<section class="gp-sec gp-col">
+			<h2 class="gp-label r">Play it</h2>
+			<p class="gp-copy r">[COPY] Where to play it / book it / the call to action. Link or signup goes here.</p>
+		</section>
+
+		<div class="gp-col">
+			<details class="gp-credits r">
+				<summary>Credits</summary>
+				<div class="gp-credits-body">
+					<section class="gp-todo">
+						<h2>To gather (stub only, not for the public page)</h2>
+						<ul>{creditTodos.map((t) => <li>{t}</li>)}</ul>
+					</section>
+					<section>
+						<h2>Music</h2>
+						<p>Park Lug, Claustrophobic Vibe Check, Stand Still, I Watch the TVs Well, Morose Weekend — Braille.</p>
+					</section>
+					<section>
+						<h2>Light</h2>
+						<p>TD GI Component by Prismatic Visuals.</p>
+					</section>
+					<section>
+						<h2>Type</h2>
+						<ul>
+							{fonts.map((f) => (
+								<li>{f.before}{f.url && <a href={f.url} target="_blank" rel="noopener noreferrer">{f.url}</a>}{f.after}</li>
+							))}
+						</ul>
+						<p>Licensed under the SIL Open Font License, Version 1.1.</p>
+						<p>Noto Emoji images: Apache License 2.0.</p>
+					</section>
+					<section>
+						<h2>Licenses</h2>
+						<p>
+							<a href="https://openfontlicense.org" target="_blank" rel="noopener noreferrer">SIL Open Font License 1.1</a> ·
+							<a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache License 2.0</a>
+						</p>
+					</section>
+				</div>
+			</details>
+		</div>
+	</main>
+
+	<Footer
+		production={siteData.footer.production}
+		copyrightHolder={siteData.footer.copyrightHolder}
+		youtube={siteData.social.youtube}
+		instagram={siteData.social.instagram}
+	/>
+</Layout>
+
+<style>
+	/*
+	 * Motion. Above the fold (.b) builds in on load, staggered by --d (ease out) and builds
+	 * off on a same-tab link tap in reverse (ease in). Below the fold (.r) rises in when it
+	 * scrolls into view (staggered by --i) and fades back down when it leaves.
+	 * Reduced motion: everything just shows; videos stay on their posters.
+	 */
+	.gp {
+		--out: cubic-bezier(.33, 1, .68, 1);
+		--in: cubic-bezier(.32, 0, .67, 0);
+		--gutter: 22px;
+		--accent: #ff3ea5;
+		--accent-2: #2fb7ff;
+	}
+
+	.gp video, .gp img { display: block; width: 100%; height: auto; background: #111; }
+
+	.gp-hero { position: relative; width: 100%; height: min(56.25vw, 70vh); overflow: hidden; }
+	.gp-hero video { height: 100%; object-fit: cover; }
+
+	.gp-top {
+		display: flex; justify-content: space-between; align-items: center; gap: 12px;
+		padding: 16px max(var(--gutter), calc((100% - 1040px) / 2 + var(--gutter)));
+		border-bottom: 1px solid var(--color-rule-strong);
+	}
+	.gp-mark { font-family: var(--font-display); font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: -0.02em; }
+	.gp-place, .gp-label, .gp-sub, .gp-credits summary, .gp-credits h2 {
+		font-family: var(--font-label); font-weight: 700; font-size: 11px; letter-spacing: 0.16em;
+		text-transform: uppercase; color: var(--color-muted);
+	}
+
+	.gp-col { width: 100%; max-width: 720px; margin: 0 auto; padding: 36px var(--gutter) 0; }
+	.gp-sec { width: 100%; max-width: 1040px; margin: 0 auto; padding: 56px var(--gutter) 0; }
+	.gp-sec.gp-col { max-width: 720px; }
+
+	.gp-h1 {
+		font-family: var(--font-display); font-weight: 800; font-size: clamp(40px, 8vw, 72px);
+		line-height: 0.95; letter-spacing: -0.025em; text-transform: uppercase;
+	}
+
+	/* Placeholder copy: dashed and pink so nothing slips out unwritten. */
+	.gp-copy {
+		margin-top: 16px; padding: 10px 12px; font-size: 17px; line-height: 1.4; color: #d4d4d4;
+		border: 1px dashed var(--accent); border-radius: 4px;
+	}
+	.gp-lede { font-size: 20px; }
+	.gp-narrow { max-width: 680px; margin-bottom: 8px; }
+	.gp-tag { color: var(--accent); }
+
+	.gp-label { margin-bottom: 16px; padding-top: 16px; border-top: 1px solid var(--color-rule-strong); }
+	.gp-sub { margin: 32px 0 12px; color: var(--color-text); }
+
+	.gp-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+	@media (min-width: 720px) { .gp-grid { grid-template-columns: 1fr 1fr; } }
+	.gp-clip video { aspect-ratio: 16 / 9; border-radius: 4px; }
+	.gp-clip figcaption { margin-top: 8px; font-size: 14px; color: #d4d4d4; }
+
+	.gp-tall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 760px; }
+	.gp-tall video { aspect-ratio: 9 / 16; border-radius: 6px; }
+
+	.gp-cards {
+		display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+		padding-bottom: 12px; margin-right: calc(-1 * var(--gutter));
+	}
+	.gp .gp-cards img { flex: 0 0 auto; width: min(62vw, 240px); scroll-snap-align: start; border-radius: 6px; }
+
+	.gp-credits { margin: 64px 0 48px; border-top: 1px solid var(--color-rule-strong); }
+	.gp-credits summary { list-style: none; cursor: pointer; padding: 16px 0; color: var(--color-text); }
+	.gp-credits summary::-webkit-details-marker { display: none; }
+	.gp-credits summary::before { content: '▸' / ''; display: inline-block; margin-right: 8px; transition: transform 200ms var(--out); }
+	.gp-credits[open] summary::before { transform: rotate(90deg); }
+	.gp-credits-body { display: flex; flex-direction: column; gap: 18px; padding-bottom: 8px; font-size: 13px; line-height: 1.5; color: #b3b3b3; overflow-wrap: anywhere; }
+	.gp-credits-body ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+	.gp-credits h2 { font-size: 10px; margin-bottom: 4px; }
+	.gp-credits a { color: #d4d4d4; text-underline-offset: 2px; }
+	.gp-todo { padding: 10px 12px; border: 1px dashed var(--accent); border-radius: 4px; }
+	.gp-todo h2 { color: var(--accent); }
+	.gp-todo li::before { content: '☐ '; }
+
+	@media (prefers-reduced-motion: no-preference) {
+		.b { transition: opacity 360ms var(--out) var(--d), transform 360ms var(--out) var(--d); }
+		.is-pre .b { opacity: 0; transform: translateY(14px); }
+		.is-pre .gp-hero { transform: none; }
+		.is-pre ~ :global(.footer) { opacity: 0; }
+
+		.r {
+			opacity: 0; transform: translateY(18px);
+			transition: opacity 260ms var(--in), transform 260ms var(--in);
+		}
+		.r.is-in {
+			opacity: 1; transform: none;
+			transition: opacity 480ms var(--out) calc(70ms * var(--i, 0)), transform 480ms var(--out) calc(70ms * var(--i, 0));
+		}
+
+		.is-leaving .b, .is-leaving .r.is-in {
+			opacity: 0; transform: translateY(-6px);
+			transition: opacity 140ms var(--in) calc(220ms - var(--d, 0ms)), transform 140ms var(--in) calc(220ms - var(--d, 0ms));
+		}
+		.is-leaving ~ :global(.footer) { opacity: 0; transition: opacity 100ms var(--in); }
+
+		.gp-credits[open] .gp-credits-body > section { animation: gp-in 300ms var(--out) both; }
+		.gp-credits.is-closing .gp-credits-body > section { animation: gp-out 160ms var(--in) both; }
+	}
+	@keyframes gp-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+	@keyframes gp-out { from { opacity: 1; } to { opacity: 0; transform: translateY(-4px); } }
+</style>
+
+<script>
+	const main = document.getElementById('gp');
+	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	if (main) {
+		requestAnimationFrame(() => requestAnimationFrame(() => main.classList.remove('is-pre')));
+		window.addEventListener('pageshow', (e) => { if (e.persisted) main.classList.remove('is-leaving', 'is-pre'); });
+
+		// Scroll reveals: in on entering, out on leaving.
+		const reveal = new IntersectionObserver((entries) => {
+			for (const e of entries) e.target.classList.toggle('is-in', e.isIntersecting);
+		}, { threshold: 0.15 });
+		main.querySelectorAll('.r').forEach((el) => reveal.observe(el));
+
+		// Gif-style loops: play only while on screen; never under reduced motion.
+		const vids = new IntersectionObserver((entries) => {
+			for (const e of entries) {
+				const v = e.target as HTMLVideoElement;
+				if (e.isIntersecting && !reduced.matches) {
+					if (v.preload === 'none') v.preload = 'auto';
+					v.play().catch(() => {});
+				} else v.pause();
+			}
+		}, { threshold: 0.25 });
+		main.querySelectorAll('video.loop').forEach((v) => vids.observe(v));
+
+		// Build off on a same-tab link tap, then navigate.
+		document.addEventListener('click', (e) => {
+			const a = e.target instanceof Element ? e.target.closest('a[href]') : null;
+			if (!(a instanceof HTMLAnchorElement) || !a.closest('.gp, .footer')) return;
+			if (a.target === '_blank' || reduced.matches || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+			e.preventDefault();
+			if (main.classList.contains('is-leaving')) return;
+			main.classList.add('is-leaving');
+			setTimeout(() => { window.location.href = a.href; }, 400);
+		});
+
+		// Credits close: let the groups drop away first.
+		const credits = main.querySelector('.gp-credits');
+		if (credits instanceof HTMLDetailsElement) {
+			credits.querySelector('summary')?.addEventListener('click', (e) => {
+				if (!credits.open || reduced.matches) return;
+				e.preventDefault();
+				credits.classList.add('is-closing');
+				setTimeout(() => { credits.open = false; credits.classList.remove('is-closing'); }, 180);
+			});
+		}
+	}
+</script>
