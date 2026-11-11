@@ -195,6 +195,60 @@
     .foot-left{align-items:center;gap:14px}
     .social{gap:16px;font-size:11px;letter-spacing:.13em}
   }
+
+  /* NOW PLAYING — Gary's Party Line. Hero chip (replaces the Signups Open pill), a ticker item,
+     and the .gpl drop below the ticker whose art side is a 3-scene reel.
+     Motion: the copy rises in when scrolled to and sinks out when scrolled away; each reel scene
+     builds in (ease out, staggered) and builds off (ease in); cards fan in and fold out. */
+  .np{display:flex;align-items:center;gap:10px;background:rgba(10,10,10,.72);padding:6px 14px 6px 6px;text-decoration:none;border:1px solid rgba(255,255,255,.18);transition:border-color .2s ease}
+  .np:hover{border-color:#fff}
+  .np video{width:84px;aspect-ratio:16/9;object-fit:cover;display:block}
+  .np .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:#ff3ea5;box-shadow:0 0 10px rgba(255,62,165,.8);animation:np-pulse 1.6s ease-in-out infinite}
+  @keyframes np-pulse{50%{opacity:.3}}
+  .ticker a{color:inherit;text-decoration:none;display:flex;flex-shrink:0}
+  .ticker .hot{background:#ff3ea5;color:#000;padding:0 6px;margin:0 4px}
+  .gpl{display:grid;grid-template-columns:1.25fr 1fr;border-bottom:1px solid var(--rule)}
+  .gpl .stage{position:relative;aspect-ratio:16/9;background:#050505;border-right:1px solid var(--rule);z-index:1}
+  .gpl .scene{position:absolute;inset:0;visibility:hidden;overflow:hidden}
+  .gpl .scene.on,.gpl .scene.leaving{visibility:visible}
+  .gpl .scene video{display:block}
+  .gpl .full>video{width:100%;height:100%;object-fit:cover}
+  .gpl .tri{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--rule)}
+  .gpl .tri>video{width:100%;height:100%;object-fit:cover;min-width:0}
+  .gpl .fanscene{overflow:visible;background:radial-gradient(ellipse at 45% 60%,#2a1022 0%,#050505 70%)}
+  .gpl .fan{position:absolute;inset:0}
+  .gpl .fan>*{position:absolute;top:50%;width:24%;max-width:190px;transform:translateY(-55%);border-radius:5px;box-shadow:0 10px 30px rgba(0,0,0,.6);transform-origin:50% 110%}
+  .gpl .fan video{width:21%;max-width:170px;aspect-ratio:9/16;height:auto;left:39%;z-index:6;translate:0 -2%}
+  .gpl .ticks{position:absolute;top:12px;right:14px;display:flex;gap:6px;z-index:3}
+  .gpl .ticks i{width:18px;height:3px;background:rgba(255,255,255,.25);overflow:hidden;position:relative}
+  .gpl .ticks i.on::after{content:"";position:absolute;inset:0;background:#ff3ea5;transform-origin:left;animation:np-tick 6s linear both}
+  @keyframes np-tick{from{transform:scaleX(0)}}
+  .gpl .copy{position:relative;z-index:2;padding:52px 46px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+  .gpl .copy h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.03em;line-height:.86;font-size:54px}
+  .gpl .copy p{font-size:16px;line-height:1.6;color:#d4d4d4;max-width:40ch;text-wrap:balance}
+  @media (prefers-reduced-motion: no-preference){
+    .gpl .copy>*{transition:opacity 480ms cubic-bezier(.33,1,.68,1),transform 480ms cubic-bezier(.33,1,.68,1);transition-delay:calc(80ms * var(--i,0))}
+    .gpl.away .copy>*{opacity:0;transform:translateY(16px);transition:opacity 220ms cubic-bezier(.32,0,.67,0),transform 220ms cubic-bezier(.32,0,.67,0)}
+    .gpl .scene.on>video{animation:np-in 560ms cubic-bezier(.33,1,.68,1) both;animation-delay:calc(90ms * var(--c,0))}
+    .gpl .scene.leaving>video{animation:np-out 320ms cubic-bezier(.32,0,.67,0) both;animation-delay:calc(50ms * var(--c,0))}
+    .gpl .scene.on .fan>*{animation:np-fan-in 620ms cubic-bezier(.33,1,.68,1) both;animation-delay:calc(60ms + 90ms * var(--k))}
+    .gpl .scene.leaving .fan>*{animation:np-fan-out 300ms cubic-bezier(.32,0,.67,0) both;animation-delay:calc(40ms * (4 - var(--k)))}
+  }
+  @keyframes np-in{from{opacity:0;transform:scale(1.04) translateY(10px)}}
+  @keyframes np-out{to{opacity:0;transform:scale(.97) translateY(-8px)}}
+  @keyframes np-fan-in{from{opacity:0;translate:0 40px;rotate:0deg}}
+  @keyframes np-fan-out{to{opacity:0;translate:0 24px;rotate:0deg}}
+  @media (prefers-reduced-motion: reduce){ .np .dot{animation:none} }
+  @media (max-width:768px){
+    .np{padding:4px 10px 4px 4px;font-size:9px;letter-spacing:.12em;white-space:nowrap;gap:8px}
+    .np video{width:44px}
+    .gpl .fanscene{overflow:hidden}
+    .gpl{grid-template-columns:1fr}
+    .gpl .stage{border-right:0;border-bottom:1px solid var(--rule)}
+    .gpl .copy{padding:30px 22px 36px;gap:13px;align-items:center;text-align:center}
+    .gpl .copy h2{font-size:clamp(34px,11vw,44px)}
+    .gpl .copy p{font-size:15px}
+  }
 </style>
 <!-- Analytics: GA4 + Meta Pixel, geo-gated consent (see /tw-analytics.js) -->
 <script src="/tw-analytics.js" defer></script>
@@ -215,12 +269,40 @@
         <p class="tag" style="letter-spacing:.16em">Making places playable</p>
       </div>
       <div class="bottom">
-        <span class="pill tag"><span class="dot"></span>Signups Open</span>
+        <a class="np tag" href="/garys-party-line"><video src="/gpl/gpl-title-261111v02.mp4" poster="/gpl/gpl-title-261111v02.webp" muted loop playsinline autoplay aria-hidden="true"></video><span class="dot"></span><span>Now playing: Gary's Party Line&#xA0;&#x2197;&#xFE0E;</span></a>
         <a class="btn tag" href="#signup">Get Invited</a>
       </div>
     </div>
   </section>
-  <div class="ticker"><span class="track" aria-hidden="true">A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER · </span><span class="sr-only">A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER · </span></div>
+  <div class="ticker"><a href="/garys-party-line"><span class="track" aria-hidden="true">A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · <span class="hot">NOW PLAYING: GARY'S PARTY LINE ↗</span> · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · <span class="hot">NOW PLAYING: GARY'S PARTY LINE ↗</span> · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER · </span><span class="sr-only">Now playing: Gary's Party Line. A new medium · 100 players · one screen · not a game, not a movie · no goggles · no controllers · bring your phone · IRL 4 ever</span></a></div>
+
+  <!-- NOW PLAYING / Gary's Party Line (art side: a 3-scene reel, see the script at the end) -->
+  <section class="gpl" id="gpl">
+    <div class="stage">
+      <div class="ticks" aria-hidden="true"></div>
+      <div class="scene full"><video data-src="/gpl/gpl-wide-cuts-261111v02.mp4" poster="/gpl/gpl-wide-cuts-261111v02.webp" muted loop playsinline aria-hidden="true"></video></div>
+      <div class="scene tri">
+        <video data-src="/gpl/gpl-line-cuts-261111v01.mp4" poster="/gpl/gpl-line-cuts-261111v01.webp" muted loop playsinline aria-hidden="true" style="--c:0"></video>
+        <video data-src="/gpl/gpl-godhead-tall-261111v02.mp4" poster="/gpl/gpl-godhead-tall-261111v02.webp" muted loop playsinline aria-hidden="true" style="--c:1"></video>
+        <video data-src="/gpl/gpl-course-map-tall-261111v01.mp4" poster="/gpl/gpl-course-map-tall-261111v01.webp" muted loop playsinline aria-hidden="true" style="--c:2"></video>
+      </div>
+      <div class="scene fanscene">
+        <div class="fan">
+          <img src="/gpl/gpl-award-closer-261111v01.webp" alt="" loading="lazy" style="left:4%; rotate:-18deg; --k:0">
+          <img src="/gpl/gpl-award-stork-261111v01.webp" alt="" loading="lazy" style="left:18%; rotate:-9deg; --k:1">
+          <img src="/gpl/gpl-award-longest-261111v01.webp" alt="" loading="lazy" style="right:12%; rotate:9deg; --k:3">
+          <img src="/gpl/gpl-award-witness-261111v01.webp" alt="" loading="lazy" style="right:-4%; rotate:20deg; --k:2">
+          <video data-src="/gpl/gpl-match-clip-3-261111v01.mp4" poster="/gpl/gpl-match-clip-3-261111v01.webp" muted loop playsinline aria-hidden="true" style="--k:4"></video>
+        </div>
+      </div>
+    </div>
+    <div class="copy">
+      <div class="kick tag" style="--i:0">Now Playing</div>
+      <h2 style="--i:1">Gary's<br>Party Line</h2>
+      <p style="--i:2">An outrageous collaborative/competitive party game for up to 50&nbsp;players <span class="nb"><span class="sep">•</span>&nbsp;Draw&nbsp;lines,</span> drive karts, drop&nbsp;words <span class="nb"><span class="sep">•</span>&nbsp;Leave&nbsp;with</span> personalized clips and&nbsp;awards</p>
+      <a class="btn tag" href="/garys-party-line" style="--i:3">See the game</a>
+    </div>
+  </section>
 
   <!-- DEVELOPERS -->
   <section class="drop">
@@ -404,6 +486,52 @@
         tile.classList.add('is-playing');
       });
     });
+  </script>
+
+  <!-- NOW PLAYING reel: loads only the current scene and the next; runs only on screen;
+       reduced motion holds the first scene on its poster. -->
+  <script>
+    (function () {
+      const sec = document.getElementById('gpl');
+      if (!sec) return;
+      const stage = sec.querySelector('.stage');
+      const scenes = [...stage.querySelectorAll('.scene')];
+      const ticks = stage.querySelector('.ticks');
+      scenes.forEach(() => ticks.appendChild(document.createElement('i')));
+      const DUR = 6000;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const load = (s) => s.querySelectorAll('video[data-src]').forEach((v) => { v.src = v.dataset.src; v.removeAttribute('data-src'); });
+      let cur = -1, timer = 0, visible = false;
+      function show(n) {
+        const prev = scenes[cur];
+        if (prev) {
+          prev.classList.remove('on'); prev.classList.add('leaving');
+          setTimeout(() => { prev.classList.remove('leaving'); prev.querySelectorAll('video').forEach((v) => v.pause()); }, 420);
+        }
+        cur = n;
+        const s = scenes[n];
+        load(s); load(scenes[(n + 1) % scenes.length]);
+        setTimeout(() => {
+          s.classList.add('on');
+          if (!reduced) s.querySelectorAll('video').forEach((v) => { v.currentTime = 0; v.play().catch(() => {}); });
+        }, prev ? 260 : 0);
+        [...ticks.children].forEach((t, i) => { t.classList.remove('on'); if (i === n) { void t.offsetWidth; t.classList.add('on'); } });
+      }
+      function loop() { clearTimeout(timer); if (reduced || !visible) return; timer = setTimeout(() => { show((cur + 1) % scenes.length); loop(); }, DUR); }
+      show(0);
+      new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+        sec.classList.toggle('away', !visible);
+        if (visible) { if (!reduced) scenes[cur].querySelectorAll('video').forEach((v) => v.play().catch(() => {})); loop(); }
+        else { clearTimeout(timer); scenes[cur].querySelectorAll('video').forEach((v) => v.pause()); }
+      }, { threshold: 0.15 }).observe(sec);
+      // Hero chip loop: pause when the hero is off screen.
+      const chip = document.querySelector('.np video');
+      if (chip) {
+        if (reduced) { chip.removeAttribute('autoplay'); chip.pause(); }
+        else new IntersectionObserver(([e]) => { e.isIntersecting ? chip.play().catch(() => {}) : chip.pause(); }).observe(chip);
+      }
+    })();
   </script>
 </body>
 </html>
