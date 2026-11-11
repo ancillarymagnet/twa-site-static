@@ -9,7 +9,7 @@ const siteData = siteEntry.data;
 
 const PRIVACY_EMAIL = 'privacy@thirdwave.fun';
 const MAILTO_URL = `mailto:${PRIVACY_EMAIL}`;
-const LAST_UPDATED = 'June 24, 2026';
+const LAST_UPDATED = 'November 11, 2026';
 ---
 
 <Layout
@@ -150,6 +150,40 @@ const LAST_UPDATED = 'June 24, 2026';
 						websites.
 					</li>
 				</ul>
+				<h3>High-score boards</h3>
+				<p>
+					When you play a Third Wave game that keeps high scores, we record each
+					match: the venue, the cabinet, the time, the course, the team names and
+					the team scores and stats. We keep these match results with no time limit.
+					Team names, as a team&rsquo;s captain chose them or a house name when none
+					was chosen, are kept with the match whether or not anyone said yes. Apart
+					from a team name (below), your username is kept on the high-score boards
+					only if you say yes. When you set a record, your phone may ask you after
+					the match. A yes belongs to the username: we then keep that username with
+					its team, whether the team won, awards, game stats and best results, for
+					that match and for later games played under that username at any Third
+					Wave venue, until it is taken off. We keep the yes itself, with its time,
+					until then. If you say no, or do not answer, the boards keep nothing of
+					yours from that match. Your per-match details, and your daily totals with
+					the time of your last game that day, are deleted after 35 and 30 days.
+					After that we keep all-time totals and best results for each venue and for
+					all venues together, with the day each best was set and the day of the
+					latest game. Usernames and scores may be shown on screens at the venue
+					where they were played and at other Third Wave venues. After you say yes,
+					the end of a game of Gary&rsquo;s Party Line offers TAKE ME OFF THE
+					BOARDS. It takes your username and everything kept for it off every board
+					within a day, and you may be asked again at your next record. NEVER
+					INCLUDE ME does the same, and you are never asked again; we keep a coded
+					form of your username, and the day you chose this, so we can keep it off.
+					We can undo this if you ask, but what was taken off does not come back. A
+					team name a captain gave that is your username (capitals and spaces aside)
+					is blanked on past matches when your username is taken off, and on later
+					matches too after NEVER INCLUDE ME. Game pictures and videos, which are
+					made for every player, are deleted after about 14 days, and backups are
+					cleared of your username within 30 days. To take any username off,
+					including one you used before or one that never said yes, ask us at the
+					address below.
+				</p>
 			</section>
 
 			<section>
@@ -309,6 +343,13 @@ const LAST_UPDATED = 'June 24, 2026';
 					You can request deletion of your account and associated data at any time
 					via our <a href="/delete-account">account deletion page</a>.
 				</p>
+				<p>
+					Per-match high-score details are deleted after 35 days and daily totals
+					after 30 days; all-time totals and best results are kept with no time
+					limit, with only the day of each best and of the latest game. Usernames
+					are kept on the high-score boards only after a yes, until taken off; see
+					&ldquo;High-score boards&rdquo; above.
+				</p>
 			</section>
 
 			<section>
@@ -413,6 +454,14 @@ const LAST_UPDATED = 'June 24, 2026';
 		letter-spacing: -0.01em;
 		color: var(--color-text);
 		margin-bottom: 16px;
+	}
+
+	section h3 {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 17px;
+		color: var(--color-text);
+		margin: 28px 0 12px;
 	}
 
 	section p {
