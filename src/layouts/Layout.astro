@@ -5,6 +5,8 @@ export interface Props {
 	title: string;
 	description?: string;
 	socialDescription?: string;
+	/** Site-relative path to a 1200x630 share image; defaults to the Third Wave logo card. */
+	ogImage?: string;
 }
 
 function normalizeStringProp(
@@ -32,8 +34,12 @@ function normalizeStringProp(
 	return trimmed;
 }
 
-const { title: rawTitle, description: rawDescription, socialDescription: rawSocialDescription } =
-	Astro.props;
+const {
+	title: rawTitle,
+	description: rawDescription,
+	socialDescription: rawSocialDescription,
+	ogImage: rawOgImage,
+} = Astro.props;
 
 const title = normalizeStringProp('title', rawTitle);
 if (!title) {
@@ -64,7 +70,8 @@ let socialDescription = normalizeStringProp('socialDescription', rawSocialDescri
 });
 if (!socialDescription) socialDescription = description;
 
-const ogImagePath = '/images/tw_og_logo.jpg';
+const ogImagePath =
+	normalizeStringProp('ogImage', rawOgImage, { optional: true }) ?? '/images/tw_og_logo.jpg';
 
 let siteUrl: string | undefined;
 try {
