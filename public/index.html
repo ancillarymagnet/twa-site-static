@@ -199,7 +199,7 @@
   }
 
   /* NOW PLAYING — Gary's Party Line. A ticker item
-     and the .gpl drop below the ticker whose art side is a 3-scene reel.
+     and the .gpl drop below the ticker whose art side is a 4-scene reel.
      Motion: the copy rises in when scrolled to and sinks out when scrolled away; each reel scene
      builds in (ease out, staggered) and builds off (ease in); cards fan in and fold out. */
   .ticker a{color:inherit;text-decoration:none;display:flex;flex-shrink:0}
@@ -214,6 +214,11 @@
   .gpl .fan{position:absolute;inset:0}
   .gpl .fan>*{position:absolute;top:50%;width:24%;max-width:190px;transform:translateY(-55%);border-radius:5px;box-shadow:0 10px 30px rgba(0,0,0,.6);transform-origin:50% 110%}
   .gpl .fan video{width:21%;max-width:170px;aspect-ratio:9/16;height:auto;left:39%;z-index:6;translate:0 -2%}
+  /* Scene 4: phones in hands. Three portrait panels fill the 16:9 stage; each visit shows the
+     other triptych (data-set flips in the reel script). */
+  .gpl .phonescene .trip{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;visibility:hidden}
+  .gpl .phonescene[data-set="0"] .trip:nth-child(1),.gpl .phonescene[data-set="1"] .trip:nth-child(2){visibility:inherit}
+  .gpl .phonescene img{width:100%;height:100%;object-fit:cover;display:block}
   .gpl .ticks{position:absolute;top:12px;right:14px;display:flex;gap:6px;z-index:3}
   .gpl .ticks i{width:18px;height:3px;background:rgba(255,255,255,.25);overflow:hidden;position:relative}
   .gpl .ticks i.on::after{content:"";position:absolute;inset:0;background:#ff3ea5;transform-origin:left;animation:np-tick 6s linear both}
@@ -228,11 +233,15 @@
     .gpl .scene.leaving>video{animation:np-out 320ms cubic-bezier(.32,0,.67,0) both;animation-delay:calc(50ms * var(--c,0))}
     .gpl .scene.on .fan>*{animation:np-fan-in 620ms cubic-bezier(.33,1,.68,1) both;animation-delay:calc(60ms + 90ms * var(--k))}
     .gpl .scene.leaving .fan>*{animation:np-fan-out 300ms cubic-bezier(.32,0,.67,0) both;animation-delay:calc(40ms * (4 - var(--k)))}
+    .gpl .scene.on .trip>img{animation:np-phone-in 560ms cubic-bezier(.33,1,.68,1) both;animation-delay:calc(60ms + 110ms * var(--k))}
+    .gpl .scene.leaving .trip>img{animation:np-phone-out 280ms cubic-bezier(.32,0,.67,0) both;animation-delay:calc(45ms * (2 - var(--k)))}
   }
   @keyframes np-in{from{opacity:0;transform:scale(1.04) translateY(10px)}}
   @keyframes np-out{to{opacity:0;transform:scale(.97) translateY(-8px)}}
   @keyframes np-fan-in{from{opacity:0;translate:0 40px;rotate:0deg}}
   @keyframes np-fan-out{to{opacity:0;translate:0 24px;rotate:0deg}}
+  @keyframes np-phone-in{from{opacity:0;transform:translateY(32px) scale(1.03)}}
+  @keyframes np-phone-out{to{opacity:0;transform:translateY(18px)}}
   @media (max-width:768px){
     .gpl .fanscene{overflow:hidden}
     .gpl{grid-template-columns:1fr}
@@ -267,7 +276,7 @@
   </section>
   <div class="ticker"><a href="/garys-party-line"><span class="track" aria-hidden="true">A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · <span class="hot">NOW PLAYING: GARY'S PARTY LINE ↗</span> · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER · A NEW MEDIUM · 100 PLAYERS · ONE SCREEN · <span class="hot">NOW PLAYING: GARY'S PARTY LINE ↗</span> · NOT A GAME, NOT A MOVIE · NO GOGGLES · NO CONTROLLERS · BRING YOUR PHONE · IRL 4 EVER · </span><span class="sr-only">Now playing: Gary's Party Line. A new medium · 100 players · one screen · not a game, not a movie · no goggles · no controllers · bring your phone · IRL 4 ever</span></a></div>
 
-  <!-- NOW PLAYING / Gary's Party Line (art side: a 3-scene reel, see the script at the end) -->
+  <!-- NOW PLAYING / Gary's Party Line (art side: a 4-scene reel, see the script at the end) -->
   <section class="gpl" id="gpl">
     <a class="stage" href="/garys-party-line" aria-label="See Gary's Party Line">
       <div class="ticks" aria-hidden="true"></div>
@@ -280,6 +289,18 @@
           <img src="/gpl/gpl-award-longest-261111v01.webp" alt="" loading="lazy" style="right:12%; rotate:9deg; --k:3">
           <img src="/gpl/gpl-award-witness-261112v02.webp" alt="" loading="lazy" style="right:-4%; rotate:20deg; --k:2">
           <video data-src="/gpl/gpl-match-clip-3-261111v02.mp4" poster="/gpl/gpl-match-clip-3-261111v02.webp" muted loop playsinline aria-hidden="true" style="--k:4"></video>
+        </div>
+      </div>
+      <div class="scene phonescene" data-set="1">
+        <div class="trip">
+          <img src="/gpl/gpl-phone-draw-261112v01.webp" alt="" loading="lazy" style="--k:0">
+          <img src="/gpl/gpl-phone-gary-261112v01.webp" alt="" loading="lazy" style="--k:1">
+          <img src="/gpl/gpl-phone-takeaways-261112v01.webp" alt="" loading="lazy" style="--k:2">
+        </div>
+        <div class="trip">
+          <img src="/gpl/gpl-phone-driving-school-261112v01.webp" alt="" loading="lazy" style="--k:0">
+          <img src="/gpl/gpl-phone-choice-words-261112v01.webp" alt="" loading="lazy" style="--k:1">
+          <img src="/gpl/gpl-phone-team-reveal-261112v01.webp" alt="" loading="lazy" style="--k:2">
         </div>
       </div>
     </a>
@@ -497,6 +518,7 @@
         }
         cur = n;
         const s = scenes[n];
+        if (s.dataset.set) s.dataset.set = s.dataset.set === '0' ? '1' : '0';
         load(s); load(scenes[(n + 1) % scenes.length]);
         setTimeout(() => {
           s.classList.add('on');
