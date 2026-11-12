@@ -25,7 +25,22 @@ const play = [
 
 // Clip 3 v02: the 13:17 Noclip match (v01 showed a sim winning).
 const matchClips = [{ src: '/gpl/gpl-match-clip-1-261112v02.mp4', poster: '/gpl/gpl-match-clip-1-261112v02.webp' }, m('match-clip-2'), { src: '/gpl/gpl-match-clip-3-261111v02.mp4', poster: '/gpl/gpl-match-clip-3-261111v02.webp' }];
-const awards = ['most', 'closer', 'stork', 'brick', 'assist', 'longest', 'butterfingers', 'least', 'witness'];
+// Award cards from every game. Each swap brings in a card from a different game than the one leaving.
+// The first four are the row's opening hand: one per game.
+const award = (file: string, alt: string) => ({ src: `/gpl/gpl-award-${file}.webp`, alt: `Award card: ${alt}`, game: alt.split(', from ')[1] });
+const awards = [
+	award('driving-school-first-blood-261112v01', "First Blood, from Gary's Driving School"),
+	award('most-261111v01', 'Heavy Hand, from Draw the Line'),
+	award('choice-words-top-word-261112v01', 'Top Word, from Choice Words'),
+	award('godhead-enlightened-261112v01', 'Enlightened, from the Godhead'),
+	award('closer-261111v01', 'Closer, from Draw the Line'),
+	award('stork-261111v01', 'Stork, from Draw the Line'),
+	award('brick-261111v01', 'Brick Wall, from Draw the Line'),
+	award('longest-261111v01', 'Longest Line, from Draw the Line'),
+	award('butterfingers-261112v02', 'Butterfingers, from Draw the Line'),
+	award('witness-261112v02', 'Witness, from Draw the Line'),
+];
+const SLOTS = 4;
 
 // Same lines as wndrvl.astro (each font's OFL.txt, read 2026-10-02 from tw-controller-demo).
 const fonts = [
@@ -95,9 +110,9 @@ const fonts = [
 			</div>
 
 			<h3 class="gp-sub r">Award cards</h3>
-			<div class="gp-cards">
-				{awards.map((a, i) => (
-					<img class="r" style={`--i: ${i % 5}`} src={`/gpl/gpl-award-${a}-${V}.webp`} alt={`Award card: ${a}`} width="640" height="800" loading="lazy" decoding="async" />
+			<div class="gp-cards" data-deck={JSON.stringify(awards)}>
+				{awards.slice(0, SLOTS).map((a, i) => (
+					<div class="gp-slot r" style={`--i: ${i}`}><img src={a.src} alt={a.alt} width="640" height="800" loading="lazy" decoding="async" /></div>
 				))}
 			</div>
 		</section>
@@ -214,11 +229,18 @@ const fonts = [
 	.gp-tall > div { min-width: 0; }
 	.gp-tall video { display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 6px; }
 
-	.gp-cards {
-		display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
-		padding-bottom: 12px; margin-right: calc(-1 * var(--gutter));
-	}
-	.gp .gp-cards img { flex: 0 0 auto; width: min(62vw, 240px); scroll-snap-align: start; border-radius: 6px; }
+	/* Award cards: a row that fits the width (4 across, 3 under 720px, 2 under 480px). Each slot
+	 * swaps its card by itself, one slot at a time, so the games keep mixing. */
+	.gp-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 1000px; }
+	@media (max-width: 720px) { .gp-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } .gp-slot:nth-child(4) { display: none; } }
+	@media (max-width: 480px) { .gp-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .gp-slot:nth-child(3) { display: none; } }
+	.gp-slot { position: relative; aspect-ratio: 4 / 5; }
+	.gp .gp-slot :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+	/* Build off: the old card tips and drops away (ease in). Build in: the new card drops in from
+	 * above with a small overshoot (ease out back), starting as the old one clears. Script adds
+	 * the new <img>, which has no Astro scope attribute, hence :global. */
+	.gp-slot :global(img.is-out) { animation: gp-card-out 300ms cubic-bezier(.32, 0, .67, 0) both; }
+	.gp-slot :global(img.is-new) { animation: gp-card-in 560ms cubic-bezier(.34, 1.5, .64, 1) 140ms both; }
 
 	.gp-credits { margin: 64px 0 48px; border-top: 1px solid var(--color-rule-strong); }
 	.gp-credits summary { list-style: none; cursor: pointer; padding: 16px 0; color: var(--color-text); }
@@ -254,6 +276,8 @@ const fonts = [
 		.gp-credits[open] .gp-credits-body > section { animation: gp-in 300ms var(--out) both; }
 		.gp-credits.is-closing .gp-credits-body > section { animation: gp-out 160ms var(--in) both; }
 	}
+	@keyframes gp-card-out { to { opacity: 0; transform: translateY(22px) rotate(-4deg) scale(.94); } }
+	@keyframes gp-card-in { from { opacity: 0; transform: translateY(-26px) rotate(3deg) scale(.96); } }
 	@keyframes gp-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 	@keyframes gp-out { from { opacity: 1; } to { opacity: 0; transform: translateY(-4px); } }
 </style>
@@ -299,6 +323,47 @@ const fonts = [
 				});
 			};
 			for (const t of ['touchend', 'click']) document.addEventListener(t, go, { passive: true });
+		}
+
+		// Award cards: every 1.7 s one visible slot swaps its card for the next one in the deck that
+		// is not showing and comes from another game. Runs only while on screen and the tab is visible.
+		const cards = main.querySelector<HTMLElement>('.gp-cards');
+		if (cards && !reduced.matches) {
+			const deck: { src: string; alt: string; game: string }[] = JSON.parse(cards.dataset.deck || '[]');
+			const slots = [...cards.querySelectorAll<HTMLElement>('.gp-slot')];
+			let turn = 0, tick = 0, onScreen = false, timer = 0;
+			const lastShown: Record<string, number> = {}, dealt: Record<string, number> = {};
+			const order = [0, 2, 1, 3];
+			const swap = async () => {
+				const live = slots.filter((s) => s.offsetParent !== null);
+				const showing = new Set(slots.map((s) => s.querySelector('img:not(.is-out)')?.getAttribute('src')));
+				const slot = order.map((i) => slots[i]).filter((s) => live.includes(s))[turn++ % live.length];
+				const old = slot.querySelector('img:not(.is-out)');
+				const leaving = deck.find((d) => d.src === old?.getAttribute('src'))?.game;
+				// The game shown least recently (other than the one leaving) goes next, and each game
+				// deals its own cards in turn, so every card comes round.
+				const games = [...new Set(deck.map((d) => d.game))]
+					.filter((g) => g !== leaving && deck.some((d) => d.game === g && !showing.has(d.src)))
+					.sort((x, y) => (lastShown[x] ?? -1) - (lastShown[y] ?? -1));
+				const game = games[0] ?? leaving;
+				const hand = deck.filter((d) => d.game === game && !showing.has(d.src));
+				if (!game || !hand.length) return;
+				const card = hand[(dealt[game] = (dealt[game] ?? -1) + 1) % hand.length];
+				lastShown[game] = tick++;
+				const img = new Image(640, 800);
+				img.src = card.src; img.alt = card.alt; img.decoding = 'async';
+				try { await img.decode(); } catch { return; }
+				img.className = 'is-new';
+				old?.classList.add('is-out');
+				slot.append(img);
+				setTimeout(() => { old?.remove(); img.classList.remove('is-new'); }, 760);
+			};
+			const run = () => {
+				clearInterval(timer);
+				if (onScreen && !document.hidden) timer = window.setInterval(swap, 1700);
+			};
+			new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; run(); }, { threshold: 0.3 }).observe(cards);
+			document.addEventListener('visibilitychange', run);
 		}
 
 		// Build off on a same-tab link tap, then navigate.
