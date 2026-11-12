@@ -23,8 +23,10 @@ const play = [
 	{ src: '/gpl/gpl-courses-261111v02.mp4', poster: '/gpl/gpl-courses-261111v02.webp', label: 'Pick a course', tag: 'Arcade mode lets players vote on which course to play next.' },
 ];
 
-// Clip 3 v02: the 13:17 Noclip match (v01 showed a sim winning).
-const matchClips = [{ src: '/gpl/gpl-match-clip-1-261112v02.mp4', poster: '/gpl/gpl-match-clip-1-261112v02.webp' }, m('match-clip-2'), { src: '/gpl/gpl-match-clip-3-261111v02.mp4', poster: '/gpl/gpl-match-clip-3-261111v02.webp' }];
+// Clip 3 v02: the 13:17 Noclip match (v01 showed a sim winning). Clip 4: the 11-12 13:53 named-player
+// match (rory beats k8lyn, lucha look), captured with the sims' chat muted.
+const clip = (file: string) => ({ src: `/gpl/gpl-${file}.mp4`, poster: `/gpl/gpl-${file}.webp` });
+const matchClips = [clip('match-clip-1-261112v02'), m('match-clip-2'), clip('match-clip-3-261111v02'), clip('match-clip-4-261112v01')];
 // Award cards from every game. Each swap brings in a card from a different game than the one leaving.
 // The first four are the row's opening hand: one per game.
 const award = (file: string, alt: string) => ({ src: `/gpl/gpl-award-${file}.webp`, alt: `Award card: ${alt}`, game: alt.split(', from ')[1] });
@@ -225,7 +227,8 @@ const fonts = [
 	.gp-clip video { aspect-ratio: 16 / 9; border-radius: 4px; }
 	.gp-clip figcaption { margin-top: 8px; font-size: 14px; color: #d4d4d4; }
 
-	.gp-tall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 760px; }
+	.gp-tall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 1000px; }
+	@media (max-width: 560px) { .gp-tall { grid-template-columns: repeat(2, 1fr); } }
 	.gp-tall > div { min-width: 0; }
 	.gp-tall video { display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 6px; }
 
