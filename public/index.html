@@ -212,8 +212,8 @@
   .gpl .full>video{width:100%;height:100%;object-fit:cover}
   .gpl .fanscene{overflow:visible;background:radial-gradient(ellipse at 45% 60%,#2a1022 0%,#050505 70%)}
   .gpl .fan{position:absolute;inset:0}
-  .gpl .fan>*{position:absolute;top:50%;width:24%;max-width:190px;transform:translateY(-55%);border-radius:5px;box-shadow:0 10px 30px rgba(0,0,0,.6);transform-origin:50% 110%}
-  .gpl .fan video{width:21%;max-width:170px;aspect-ratio:9/16;height:auto;left:39%;z-index:6;translate:0 -2%}
+  .gpl .fan>*{position:absolute;top:50%;width:30%;transform:translateY(-52%);border-radius:5px;box-shadow:0 10px 30px rgba(0,0,0,.6);transform-origin:50% 110%}
+  .gpl .fan video{width:25%;aspect-ratio:9/16;height:auto;left:37.5%;z-index:6;translate:0 -2%}
   /* Scene 4: phones in hands. Three portrait panels fill the 16:9 stage; each visit shows the
      other triptych (data-set flips in the reel script). */
   .gpl .phonescene .trip{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;visibility:hidden}
@@ -221,7 +221,7 @@
   .gpl .phonescene img{width:100%;height:100%;object-fit:cover;display:block}
   .gpl .ticks{position:absolute;top:12px;right:14px;display:flex;gap:6px;z-index:3}
   .gpl .ticks i{width:18px;height:3px;background:rgba(255,255,255,.25);overflow:hidden;position:relative}
-  .gpl .ticks i.on::after{content:"";position:absolute;inset:0;background:#ff3ea5;transform-origin:left;animation:np-tick 6s linear both}
+  .gpl .ticks i.on::after{content:"";position:absolute;inset:0;background:#ff3ea5;transform-origin:left;animation:np-tick var(--dur,6s) linear both}
   @keyframes np-tick{from{transform:scaleX(0)}}
   .gpl .copy{position:relative;z-index:2;padding:52px 46px;display:flex;flex-direction:column;justify-content:center;gap:16px}
   .gpl .copy h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-0.03em;line-height:.86;font-size:54px}
@@ -284,14 +284,14 @@
       <div class="scene full"><video data-src="/gpl/gpl-home-cuts-261112v02.mp4" poster="/gpl/gpl-home-cuts-261112v02.webp" muted loop playsinline aria-hidden="true"></video></div>
       <div class="scene fanscene">
         <div class="fan">
-          <img src="/gpl/gpl-award-closer-261111v01.webp" alt="" loading="lazy" style="left:4%; rotate:-18deg; --k:0">
-          <img src="/gpl/gpl-award-stork-261111v01.webp" alt="" loading="lazy" style="left:18%; rotate:-9deg; --k:1">
-          <img src="/gpl/gpl-award-longest-261111v01.webp" alt="" loading="lazy" style="right:12%; rotate:9deg; --k:3">
-          <img src="/gpl/gpl-award-witness-261112v02.webp" alt="" loading="lazy" style="right:-4%; rotate:20deg; --k:2">
+          <img src="/gpl/gpl-award-closer-261111v01.webp" alt="" loading="lazy" style="left:-3%; rotate:-14deg; --k:0">
+          <img src="/gpl/gpl-award-stork-261111v01.webp" alt="" loading="lazy" style="left:14%; rotate:-7deg; --k:1">
+          <img src="/gpl/gpl-award-longest-261111v01.webp" alt="" loading="lazy" style="right:14%; rotate:7deg; --k:3">
+          <img src="/gpl/gpl-award-witness-261112v02.webp" alt="" loading="lazy" style="right:-3%; rotate:14deg; --k:2">
           <video data-src="/gpl/gpl-match-clip-3-261111v02.mp4" poster="/gpl/gpl-match-clip-3-261111v02.webp" muted loop playsinline aria-hidden="true" style="--k:4"></video>
         </div>
       </div>
-      <div class="scene phonescene" data-set="1">
+      <div class="scene phonescene" data-set="1" data-dur="3000">
         <div class="trip">
           <img src="/gpl/gpl-phone-draw-261112v01.webp" alt="" loading="lazy" style="--k:0">
           <img src="/gpl/gpl-phone-gary-261112v01.webp" alt="" loading="lazy" style="--k:1">
@@ -506,7 +506,7 @@
       const scenes = [...stage.querySelectorAll('.scene')];
       const ticks = stage.querySelector('.ticks');
       scenes.forEach(() => ticks.appendChild(document.createElement('i')));
-      const DUR = 6000;
+      const DUR = 6000, dur = (n) => +scenes[n].dataset.dur || DUR;
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const load = (s) => s.querySelectorAll('video[data-src]').forEach((v) => { v.src = v.dataset.src; v.removeAttribute('data-src'); });
       let cur = -1, timer = 0, visible = false;
@@ -524,9 +524,9 @@
           s.classList.add('on');
           if (!reduced) s.querySelectorAll('video').forEach((v) => { v.currentTime = 0; v.play().catch(() => {}); });
         }, prev ? 260 : 0);
-        [...ticks.children].forEach((t, i) => { t.classList.remove('on'); if (i === n) { void t.offsetWidth; t.classList.add('on'); } });
+        [...ticks.children].forEach((t, i) => { t.classList.remove('on'); if (i === n) { t.style.setProperty('--dur', dur(n) / 1000 + 's'); void t.offsetWidth; t.classList.add('on'); } });
       }
-      function loop() { clearTimeout(timer); if (reduced || !visible) return; timer = setTimeout(() => { show((cur + 1) % scenes.length); loop(); }, DUR); }
+      function loop() { clearTimeout(timer); if (reduced || !visible) return; timer = setTimeout(() => { show((cur + 1) % scenes.length); loop(); }, dur(cur)); }
       show(0);
       new IntersectionObserver(([e]) => {
         visible = e.isIntersecting;
