@@ -5,6 +5,7 @@
     • EU / EEA / UK / Switzerland visitors  → pixels load ONLY after explicit
       opt-in via the consent banner (GDPR / UK-GDPR / ePrivacy / FADP).
     • Everyone else                         → pixels load immediately.
+    • Global Privacy Control (GPC) on       → pixels never load, anywhere.
     • The choice is stored in localStorage so the banner is shown at most once.
     • Geo is read from Cloudflare's edge endpoint /cdn-cgi/trace (no extra deps).
     • Fail-safe: if geo lookup fails or the country is unknown, we GATE (treat
@@ -155,6 +156,11 @@
 	function decide() {
 		// Inert until at least one real ID is configured.
 		if (isPlaceholder(GA4_ID) && isPlaceholder(META_PIXEL_ID)) return;
+
+		// Global Privacy Control is a legal opt-out of sale/sharing (CCPA/CPRA
+		// and other US states). It wins over any stored choice, and is not
+		// stored itself, so turning GPC off restores the visitor's prior state.
+		if (navigator.globalPrivacyControl === true) return;
 
 		var prior = read();
 		if (prior === 'granted') { loadPixels(); return; }
