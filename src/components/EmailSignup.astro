@@ -24,6 +24,10 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 			/>
 			<button type="submit" class="submit-btn" id="submit-btn">{buttonText}</button>
 		</div>
+		<label class="agree">
+			<input type="checkbox" id="agree-input" required />
+			<span>I agree to the <a href="/privacy">Privacy Policy</a> and to get e-mails from Third Wave.</span>
+		</label>
 		<p class="form-message" id="form-message" role="status" aria-live="polite"></p>
 	</form>
 
@@ -128,6 +132,34 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 	.submit-btn:hover { opacity: 0.85; }
 	.submit-btn:disabled { cursor: progress; opacity: 0.7; }
 
+	.agree {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		max-width: 480px;
+		width: 100%;
+		margin-top: 12px;
+		font-family: var(--font-sans);
+		font-size: 13px;
+		line-height: 1.45;
+		color: #b3b3b3;
+		cursor: pointer;
+	}
+
+	.agree input {
+		flex-shrink: 0;
+		width: 16px;
+		height: 16px;
+		margin: 1px 0 0;
+		accent-color: var(--color-text);
+	}
+
+	.agree a {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
 	.form-message {
 		margin-top: 12px;
 		font-family: var(--font-label);
@@ -195,6 +227,7 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 	const emailInput = document.getElementById('email-input');
 	const submitBtn = document.getElementById('submit-btn');
 	const message = document.getElementById('form-message');
+	const agreeInput = document.getElementById('agree-input');
 
 	const isPlausibleEmail = (value) => /^[^@\s]+@[^@\s]+$/.test(value);
 
@@ -221,6 +254,12 @@ const { placeholder, buttonText, description, cueText = 'See it in motion' } = A
 			}
 
 			emailInput.removeAttribute('aria-invalid');
+
+			if (agreeInput && !agreeInput.checked) {
+				message.textContent = 'Check the box to agree first.';
+				agreeInput.focus();
+				return;
+			}
 
 			message.textContent = 'Submitting…';
 			const previousButtonText = submitBtn.textContent ?? '';

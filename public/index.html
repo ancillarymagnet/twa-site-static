@@ -109,6 +109,9 @@
   .join .submit-btn{background:#fff;border:0;color:#000;padding:0 28px;font-family:var(--font-sans);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:opacity .2s ease;flex-shrink:0}
   .join .submit-btn:hover{opacity:.85}
   .join .submit-btn:disabled{cursor:progress;opacity:.7}
+  .join .agree{display:flex;align-items:flex-start;gap:10px;width:100%;margin-top:12px;font-family:var(--font-sans);font-size:13px;line-height:1.45;color:var(--dim);text-align:left;cursor:pointer}
+  .join .agree input{flex-shrink:0;width:16px;height:16px;margin:1px 0 0;accent-color:#fff}
+  .join .agree a{color:#fff;text-decoration:underline;text-underline-offset:2px}
   .join .form-message{margin-top:12px;font-family:var(--font-sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);min-height:1em}
   #signup:target .form-group{animation:join-flash 1.4s ease-out 1}
   @keyframes join-flash{0%,35%{border-color:#fff}100%{border-color:#444}}
@@ -355,6 +358,7 @@
         <input type="email" placeholder="you@example.com" required class="email-input" id="email-input" aria-describedby="form-message" aria-label="Email address" />
         <button type="submit" class="submit-btn" id="submit-btn">Get Invited</button>
       </div>
+      <label class="agree"><input type="checkbox" id="agree-input" required /><span>I agree to the <a href="/privacy">Privacy Policy</a> and to get e-mails from Third Wave.</span></label>
       <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
     </form>
   </section>
@@ -409,6 +413,7 @@
     const emailInput = document.getElementById('email-input');
     const submitBtn = document.getElementById('submit-btn');
     const message = document.getElementById('form-message');
+    const agreeInput = document.getElementById('agree-input');
 
     const isPlausibleEmail = (value) => /^[^@\s]+@[^@\s]+$/.test(value);
 
@@ -435,6 +440,12 @@
         }
 
         emailInput.removeAttribute('aria-invalid');
+
+        if (agreeInput && !agreeInput.checked) {
+          message.textContent = 'Check the box to agree first.';
+          agreeInput.focus();
+          return;
+        }
 
         message.textContent = 'Submitting…';
         const previousButtonText = submitBtn.textContent ?? '';

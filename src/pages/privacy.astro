@@ -9,7 +9,7 @@ const siteData = siteEntry.data;
 
 const PRIVACY_EMAIL = 'privacy@thirdwave.fun';
 const MAILTO_URL = `mailto:${PRIVACY_EMAIL}`;
-const LAST_UPDATED = 'November 11, 2026';
+const LAST_UPDATED = 'November 17, 2026';
 ---
 
 <Layout
@@ -299,14 +299,161 @@ const LAST_UPDATED = 'November 11, 2026';
 					</dd>
 				</dl>
 				<p>
-					We do not sell your Personal Information and will not do so in the future
-					without providing you with notice. We may disclose your Personal
-					Information for the following purposes, which are not a sale: (i) if you
-					direct us to share your Personal Information, (ii) disclosures as part of
-					a merger or asset sale, and (iii) as otherwise required or permitted by
-					applicable law. Similarly, we do not offer financial incentives
-					associated with our collection, use, or disclosure of your Personal
-					Information.
+					We have not sold Personal Information for money in the past 12 months,
+					and we do not intend to. We do let Meta collect information through the
+					Meta Pixel on our Site (see &ldquo;Cookies and similar technologies&rdquo;
+					below) so we can measure and advertise our Services. Under California and
+					some other US state laws, that may count as &ldquo;selling&rdquo; or
+					&ldquo;sharing&rdquo; Personal Information for targeted advertising. In
+					the past 12 months the categories involved were identifiers (such as
+					cookie IDs and IP address) and internet activity (such as pages viewed and
+					clicks to sign up or contact us), disclosed to Meta Platforms, Inc. You can
+					opt out at any time; see &ldquo;Your privacy choices&rdquo; below. Google
+					Analytics processes data for us as our service provider under
+					Google&rsquo;s data processing terms, and we have turned off Google&rsquo;s
+					use of that data for its own purposes.
+				</p>
+				<p>
+					We may also disclose your Personal Information for the following purposes,
+					which are not a sale: (i) if you direct us to share your Personal
+					Information, (ii) disclosures as part of a merger or asset sale, and (iii)
+					as otherwise required or permitted by applicable law. We do not offer
+					financial incentives associated with our collection, use, or disclosure of
+					your Personal Information.
+				</p>
+			</section>
+
+			<section>
+				<h2>Cookies and similar technologies</h2>
+				<p>
+					Cookies are small files a website stores in your browser. Our Site uses
+					these:
+				</p>
+				<dl>
+					<dt>Google Analytics (Google LLC) &mdash; <code>_ga</code>, <code>_ga_*</code></dt>
+					<dd>
+						Measures how visitors use the Site: pages viewed, time on page, the
+						device and browser used, and approximate location from your IP address.
+						Kept for up to 2 years. Google processes this data as our service
+						provider.
+					</dd>
+
+					<dt>Meta Pixel (Meta Platforms, Inc.) &mdash; <code>_fbp</code>, <code>_fbc</code></dt>
+					<dd>
+						Measures visits and actions such as signing up for our list or clicking
+						to contact us, so we can measure and target advertising on Meta&rsquo;s
+						platforms. Meta may also use this information for its own purposes under
+						its own privacy policy. Kept for up to 90 days.
+					</dd>
+
+					<dt>Your privacy choice &mdash; <code>tw-consent</code></dt>
+					<dd>
+						Remembers whether you allowed or declined the cookies above, so we do
+						not ask again. Stored in your browser until you clear it.
+					</dd>
+
+					<dt>Our host (Cloudflare, Inc.)</dt>
+					<dd>
+						May set cookies that are strictly necessary to protect the Site from
+						abuse. These cannot be turned off.
+					</dd>
+				</dl>
+				<p>
+					If you visit from the European Economic Area, the United Kingdom or
+					Switzerland, the Google Analytics and Meta Pixel cookies are not set unless
+					you accept them. Everywhere else they are set when you visit, and you can
+					turn them off at any time; see &ldquo;Your privacy choices&rdquo; below.
+					You can also block or delete cookies in your browser&rsquo;s settings.
+				</p>
+			</section>
+
+			<section id="your-privacy-choices">
+				<h2>Your privacy choices</h2>
+				<p>
+					Use the <a href="/privacy#your-privacy-choices" data-tw-choices>Your
+					Privacy Choices</a> link at the bottom of any page on our Site to turn
+					analytics and advertising cookies on or off. Turning them off opts you out
+					of the sale or sharing of your Personal Information for targeted
+					advertising, and, if you are in the European Economic Area, the United
+					Kingdom or Switzerland, withdraws your consent. We then stop loading
+					Google Analytics and the Meta Pixel and delete their cookies. Your choice
+					applies to the browser and device you make it on.
+				</p>
+				<p>
+					We honor the Global Privacy Control (GPC) signal. If your browser sends
+					it, we treat it as a request to opt out of sale and sharing, and we do not
+					load Google Analytics or the Meta Pixel.
+				</p>
+				<p>
+					You can also ask us to opt you out by e-mailing
+					<a href={MAILTO_URL}>{PRIVACY_EMAIL}</a>.
+				</p>
+			</section>
+
+			<section>
+				<h2>Your rights under California and other US state laws</h2>
+				<p>
+					If you live in California, or in another US state with a consumer privacy
+					law (including Colorado, Connecticut, Delaware, Oregon, Texas, Virginia
+					and others), you have the following rights, subject to some exceptions:
+				</p>
+				<dl>
+					<dt>Right to know and access</dt>
+					<dd>
+						To know what Personal Information we have collected about you, where it
+						came from, why we collected it, who we disclosed it to, and to get a
+						copy of it.
+					</dd>
+
+					<dt>Right to delete</dt>
+					<dd>To ask us to delete Personal Information we collected from you.</dd>
+
+					<dt>Right to correct</dt>
+					<dd>To ask us to correct inaccurate Personal Information about you.</dd>
+
+					<dt>Right to opt out of sale and sharing</dt>
+					<dd>
+						To opt out of the sale of your Personal Information and its sharing or
+						processing for targeted advertising; see &ldquo;Your privacy
+						choices&rdquo; above.
+					</dd>
+
+					<dt>Right to limit use of sensitive Personal Information</dt>
+					<dd>
+						We do not use or disclose sensitive Personal Information for any purpose
+						that would give rise to this right.
+					</dd>
+
+					<dt>Right to non-discrimination</dt>
+					<dd>
+						We will not deny you Services, charge you a different price, or give you
+						a different quality of Services because you used any of these rights.
+					</dd>
+				</dl>
+				<p>
+					<strong>How to make a request.</strong> E-mail us at
+					<a href={MAILTO_URL}>{PRIVACY_EMAIL}</a>, or use our
+					<a href="/delete-account">account deletion page</a> to delete your
+					account. We will confirm we received your request within 10 business days
+					and respond within 45 days; if we need more time (up to another 45 days)
+					we will tell you why. We will ask for information to verify your identity,
+					such as confirming the e-mail address you used with us. You may use an
+					authorized agent to make a request for you; we may ask the agent for proof
+					that you authorized them, and ask you to verify your identity directly.
+				</p>
+				<p>
+					<strong>Appeals.</strong> If we decline your request, you may appeal by
+					replying to our decision or e-mailing <a href={MAILTO_URL}>{PRIVACY_EMAIL}</a>
+					with &ldquo;Appeal&rdquo; in the subject line. We will answer within the
+					time your state&rsquo;s law requires. If you disagree with the outcome,
+					you may contact your state&rsquo;s Attorney General.
+				</p>
+				<p>
+					<strong>California &ldquo;Shine the Light&rdquo;.</strong> California
+					residents may ask us once a year, free of charge, for information about
+					Personal Information we disclosed to third parties for their direct
+					marketing purposes in the prior calendar year. E-mail
+					<a href={MAILTO_URL}>{PRIVACY_EMAIL}</a>.
 				</p>
 			</section>
 
@@ -522,6 +669,18 @@ const LAST_UPDATED = 'November 11, 2026';
 
 	a:hover {
 		opacity: 0.7;
+	}
+
+	code {
+		font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+		font-size: 0.88em;
+		font-weight: 400;
+		color: #b3b3b3;
+	}
+
+	strong {
+		font-weight: 600;
+		color: var(--color-text);
 	}
 
 	@media (max-width: 820px) {
