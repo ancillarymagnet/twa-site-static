@@ -150,6 +150,8 @@
   .foot-legal{display:flex;flex-wrap:wrap;gap:16px}
   .foot-privacy{font-family:var(--font-sans);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#555;text-decoration:none;transition:color .2s ease}
   .foot-privacy:hover{color:#b3b3b3}
+  .foot-choices{display:inline-flex;align-items:center;gap:6px}
+  .foot-ccpa{flex-shrink:0}
 
   @media (max-width: 768px){
     /* Size the hero from viewport WIDTH (vw), not height — width never changes when a browser
@@ -395,6 +397,7 @@
       <span class="foot-legal">
         <a class="foot-privacy" href="/privacy">Privacy Policy</a>
         <a class="foot-privacy" href="/support">Support</a>
+        <a class="foot-privacy foot-choices" href="/privacy#your-privacy-choices" data-tw-choices>Your Privacy Choices <svg class="foot-ccpa" viewBox="0 0 30 14" width="26" height="12" aria-hidden="true"><path d="M7.4 12.8h8.1L18.7 1.2H7.4a5.8 5.8 0 0 0 0 11.6z" fill="#fff"/><path d="M22.6 0H7.4a7 7 0 0 0 0 14h15.2a7 7 0 0 0 0-14zM1.2 7a6.2 6.2 0 0 1 6.2-6.2h11.3L15.4 13.2H7.4A6.2 6.2 0 0 1 1.2 7z" fill="#06f"/><path d="M24.4 4l.9.9L23.2 7l2.1 2.1-.9.9-2.1-2.1-2.1 2.1-.9-.9L21.4 7l-2.1-2.1.9-.9 2.1 2.1z" fill="#fff"/><path d="M12.2 4.4l.9.9-4.1 4.1-2.4-2.4.9-.9 1.5 1.5z" fill="#06f"/></svg></a>
       </span>
     </div>
     <span class="social"><a href="https://youtube.com/@thirdwavearcade" target="_blank" rel="noopener noreferrer">YouTube&#xA0;&#x2197;&#xFE0E;</a><a href="https://instagram.com/thirdwavearcade" target="_blank" rel="noopener noreferrer">Instagram&#xA0;&#x2197;&#xFE0E;</a></span>
