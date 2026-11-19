@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const URL = '/wndrvl';
+const URL = '/arcade-next';
 
 // Every check opens the real page, never the 404.
 async function open(page, options) {
@@ -68,4 +68,10 @@ test('elements build in staggered', async ({ page }) => {
   const late = await page.locator('.wv-links .wv-row').last().evaluate((el) => +getComputedStyle(el).opacity);
   expect(early).toBeLessThan(1);
   expect(late).toBe(1);
+});
+
+test('the old Wonderville address is gone', async ({ page }) => {
+  // Noah, 2026-11-18: /wndrvl is not redirected; it 404s.
+  const res = await page.goto('/wndrvl');
+  expect(res?.status()).toBe(404);
 });

@@ -1,5 +1,6 @@
 ---
-// thirdwave.fun/wndrvl: the page the Wonderville CTA screen's QR opens.
+// thirdwave.fun/arcade-next: the page Gary's Party Line's CTA screen and its QR open, at every venue (was /wndrvl,
+// renamed 2026-11-18 so no venue's name is in it; /wndrvl now 404s, Noah's call).
 // Signup first, under the moire band; then links out; then credits for LINE.
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
@@ -40,7 +41,7 @@ const fonts = [
 ---
 
 <Layout
-	title="Third Wave — Wonderville"
+	title="Third Wave — Play New Games"
 	description="Get invited to play the next new game from Third Wave."
 	socialDescription="Play new games. Sign up to find out where we'll be next."
 >
@@ -61,7 +62,6 @@ const fonts = [
 
 		<div class="wv-top">
 			<span class="wv-mark">Third Wave</span>
-			<span class="wv-place">Wonderville</span>
 		</div>
 
 		<div class="wv-col">
@@ -181,7 +181,7 @@ const fonts = [
 		to { transform: translateX(3.7037%); }
 	}
 
-	/* Top line: wordmark left, place right, hairline under. */
+	/* Top line: the wordmark, hairline under. */
 	.wv-top {
 		display: flex;
 		justify-content: space-between;
@@ -201,14 +201,6 @@ const fonts = [
 		text-transform: uppercase;
 	}
 
-	.wv-place {
-		font-family: var(--font-label);
-		font-weight: 700;
-		font-size: 11px;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-	}
 
 	.wv-col {
 		width: 100%;
