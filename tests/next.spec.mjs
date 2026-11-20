@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const URL = '/wndrvl';
+const URL = '/next';
 
 // Every check opens the real page, never the 404.
 async function open(page, options) {
@@ -27,19 +27,10 @@ test('renders the page the QR opens', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-test('credits every font with its own copyright line', async ({ page }) => {
+test("carries no game credits (they are LINE's, on garys-party-line)", async ({ page }) => {
   await open(page);
-  await page.locator('details summary').click();
-  for (const line of [
-    'Copyright 2019 The Big Shoulders Project Authors',
-    'Copyright 2020 The Anton Project Authors',
-    'Copyright 2025 The SUSE Project Authors',
-    'Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"',
-    'Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors',
-    'Copyright 2018 The Lexend Project Authors',
-  ]) {
-    await expect(page.getByText(line, { exact: false })).toHaveCount(1);
-  }
+  await expect(page.locator('details')).toHaveCount(0);
+  await expect(page.getByText('Copyright', { exact: false })).toHaveCount(0);
 });
 
 test('no horizontal scroll on a small phone', async ({ page }) => {
@@ -68,4 +59,10 @@ test('elements build in staggered', async ({ page }) => {
   const late = await page.locator('.wv-links .wv-row').last().evaluate((el) => +getComputedStyle(el).opacity);
   expect(early).toBeLessThan(1);
   expect(late).toBe(1);
+});
+
+test('the old Wonderville address is gone', async ({ page }) => {
+  // Noah, 2026-11-18: /wndrvl is not redirected; it 404s.
+  const res = await page.goto('/wndrvl');
+  expect(res?.status()).toBe(404);
 });

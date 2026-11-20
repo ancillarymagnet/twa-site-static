@@ -95,6 +95,10 @@
 				n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
 				s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
 			}(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+			// Limited Data Use: in the US states Meta covers, Meta geolocates the
+			// visitor and processes these events as our service provider (no
+			// "sale"/"sharing"). Elsewhere it has no effect. Must precede init.
+			window.fbq('dataProcessingOptions', ['LDU'], 0, 0);
 			window.fbq('init', META_PIXEL_ID);
 			window.fbq('track', 'PageView');
 		}

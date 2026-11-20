@@ -1,6 +1,7 @@
 ---
-// thirdwave.fun/wndrvl: the page the Wonderville CTA screen's QR opens.
-// Signup first, under the moire band; then links out; then credits for LINE.
+// thirdwave.fun/next: the page Gary's Party Line's CTA screen and its QR open, at every venue (was /wndrvl,
+// renamed 2026-11-19 so no venue's name is in it; /wndrvl now 404s, Noah's call).
+// Signup first, under the moire band; then links out. No game credits: those are LINE's (garys-party-line).
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import EmailSignup from '../components/EmailSignup.astro';
@@ -27,20 +28,10 @@ const links = [
 	...(SURVEY_URL ? [{ text: 'Say how it went.', href: SURVEY_URL, newTab: true }] : []),
 ];
 
-// Each font's copyright line from its own OFL.txt, verbatim (read 2026-10-02 from
-// tw-controller-demo). A URL in a line renders as a link.
-const fonts = [
-	{ before: 'Copyright 2019 The Big Shoulders Project Authors (', url: 'https://github.com/xotypeco/big_shoulders', after: ')' },
-	{ before: 'Copyright 2020 The Anton Project Authors (', url: 'https://github.com/googlefonts/AntonFont.git', after: ')' },
-	{ before: 'Copyright 2025 The SUSE Project Authors (', url: 'https://github.com/SUSE/suse-font', after: ')' },
-	{ before: 'Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"', url: null, after: '' },
-	{ before: 'Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors (', url: 'https://github.com/googlefonts/atkinson-hyperlegible-next', after: ')' },
-	{ before: 'Copyright 2018 The Lexend Project Authors (', url: 'https://github.com/googlefonts/lexend', after: '), with Reserved Font Name “RevReading Lexend”.' },
-];
 ---
 
 <Layout
-	title="Third Wave — Wonderville"
+	title="Third Wave — Play New Games"
 	description="Get invited to play the next new game from Third Wave."
 	socialDescription="Play new games. Sign up to find out where we'll be next."
 >
@@ -61,7 +52,6 @@ const fonts = [
 
 		<div class="wv-top">
 			<span class="wv-mark">Third Wave</span>
-			<span class="wv-place">Wonderville</span>
 		</div>
 
 		<div class="wv-col">
@@ -97,37 +87,6 @@ const fonts = [
 				))}
 			</ul>
 
-			<details class="wv-credits">
-				<summary>Credits</summary>
-				<div class="wv-credits-body">
-					<section class="wv-credit" style="--i: 0">
-						<h2>Music</h2>
-						<p>Park Lug, Claustrophobic Vibe Check, Stand Still, I Watch the TVs Well, Morose Weekend — Braille.</p>
-					</section>
-					<section class="wv-credit" style="--i: 1">
-						<h2>Light</h2>
-						<p>TD GI Component by Prismatic Visuals.</p>
-					</section>
-					<section class="wv-credit" style="--i: 2">
-						<h2>Type</h2>
-						<ul>
-							{fonts.map((f) => (
-								<li>{f.before}{f.url && <a href={f.url} target="_blank" rel="noopener noreferrer">{f.url}</a>}{f.after}</li>
-							))}
-						</ul>
-						<p>Licensed under the SIL Open Font License, Version 1.1.</p>
-						<p>Noto Emoji images: Apache License 2.0.</p>
-					</section>
-					<section class="wv-credit" style="--i: 3">
-						<h2>Licenses</h2>
-						<p class="wv-licenses">
-							<a href="https://openfontlicense.org" target="_blank" rel="noopener noreferrer">SIL Open Font License 1.1&#xA0;&#x2197;&#xFE0E;</a>
-							<span aria-hidden="true">·</span>
-							<a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache License 2.0&#xA0;&#x2197;&#xFE0E;</a>
-						</p>
-					</section>
-				</div>
-			</details>
 		</div>
 	</main>
 
@@ -181,7 +140,7 @@ const fonts = [
 		to { transform: translateX(3.7037%); }
 	}
 
-	/* Top line: wordmark left, place right, hairline under. */
+	/* Top line: the wordmark, hairline under. */
 	.wv-top {
 		display: flex;
 		justify-content: space-between;
@@ -201,14 +160,6 @@ const fonts = [
 		text-transform: uppercase;
 	}
 
-	.wv-place {
-		font-family: var(--font-label);
-		font-weight: 700;
-		font-size: 11px;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-	}
 
 	.wv-col {
 		width: 100%;
@@ -260,7 +211,7 @@ const fonts = [
 		margin-top: 0;
 	}
 
-	/* The site footer gets the credits summary's beat. It is main's sibling, so it does not
+	/* The site footer comes in last. It is main's sibling, so it does not
 	   inherit --out/--in from .wv: the curves are spelled out. */
 	.wv ~ :global(.footer) {
 		transition: opacity 280ms cubic-bezier(.33, 1, .68, 1) 620ms;
@@ -300,81 +251,6 @@ const fonts = [
 		font-size: 14px;
 	}
 
-	/* Credits: closed by default. */
-	.wv-credits {
-		margin-top: 40px;
-		border-top: 1px solid var(--color-rule-strong);
-		transition: opacity 280ms var(--out) 620ms;
-	}
-
-	.wv-credits summary {
-		list-style: none;
-		cursor: pointer;
-		padding: 16px 0;
-		font-family: var(--font-label);
-		font-weight: 700;
-		font-size: 11px;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-	}
-
-	.wv-credits summary::-webkit-details-marker { display: none; }
-
-	.wv-credits summary::before {
-		content: '▸' / '';
-		display: inline-block;
-		margin-right: 8px;
-		transition: transform 200ms var(--out);
-	}
-
-	.wv-credits[open] summary::before { transform: rotate(90deg); }
-
-	.wv-credits-body {
-		display: flex;
-		flex-direction: column;
-		gap: 18px;
-		padding-bottom: 8px;
-		font-size: 13px;
-		line-height: 1.5;
-		color: #b3b3b3;
-		overflow-wrap: anywhere;
-	}
-
-	.wv-credit h2 {
-		margin-bottom: 4px;
-		font-family: var(--font-label);
-		font-weight: 700;
-		font-size: 10px;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-	}
-
-	.wv-credit ul {
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		margin-bottom: 4px;
-	}
-
-	.wv-credit a {
-		color: #d4d4d4;
-		text-decoration: underline;
-		text-decoration-color: var(--color-dim);
-		text-underline-offset: 2px;
-	}
-
-	.wv-credit a:hover { color: var(--color-text); }
-
-	.wv-licenses {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px 10px;
-	}
-
-	.wv-licenses a { text-decoration: none; }
-
 	@media (prefers-reduced-motion: no-preference) {
 		/* Pre-build-in state. */
 		.is-pre .wv-band { opacity: 0; }
@@ -384,20 +260,15 @@ const fonts = [
 		.is-pre .wv-signup { opacity: 0; transform: translateY(12px); }
 		.is-pre .wv-signup :global(.submit-btn) { transform: scale(0.96); }
 		.is-pre .wv-row { opacity: 0; transform: translateY(8px); }
-		.is-pre .wv-credits { opacity: 0; }
 		.is-pre ~ :global(.footer) { opacity: 0; }
 
-		/* Footer leaves with the credits, first. */
+		/* Footer leaves first. */
 		.is-leaving ~ :global(.footer) {
 			opacity: 0;
 			transition: opacity 100ms cubic-bezier(.32, 0, .67, 0) 0ms;
 		}
 
-		/* Build-off: credits first, links in reverse, then up the page, band last (done by 380 ms). */
-		.is-leaving .wv-credits {
-			opacity: 0;
-			transition: opacity 100ms var(--in) 0ms;
-		}
+		/* Build-off: links in reverse, then up the page, band last (done by 380 ms). */
 		.is-leaving .wv-row {
 			opacity: 0;
 			transform: translateY(-6px);
@@ -429,36 +300,16 @@ const fonts = [
 			opacity: 0;
 			transition: opacity 200ms var(--in) 180ms;
 		}
-
-		/* Credits open: each group rises in, staggered. Close: they drop away together. */
-		.wv-credits[open] .wv-credit {
-			animation: wv-credit-in 300ms var(--out) calc(40ms * var(--i)) both;
-		}
-		.wv-credits.is-closing .wv-credit {
-			animation: wv-credit-out 160ms var(--in) both;
-		}
-	}
-
-	@keyframes wv-credit-in {
-		from { opacity: 0; transform: translateY(6px); }
-		to { opacity: 1; transform: none; }
-	}
-
-	@keyframes wv-credit-out {
-		from { opacity: 1; transform: none; }
-		to { opacity: 0; transform: translateY(-4px); }
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.wv-band img { animation: none; transform: none; }
-		.wv-credits summary::before { transition: none; }
 	}
 </style>
 
 <script>
 	const main = document.getElementById('wv');
 	const band = main?.querySelector('.wv-band');
-	const credits = main?.querySelector('.wv-credits');
 	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 	if (main) {
@@ -495,26 +346,6 @@ const fonts = [
 			}, { once: true });
 			setTimeout(go, 400);
 			main.classList.add('is-leaving');
-		});
-	}
-
-	// Credits close: let the groups drop away before the details shuts.
-	if (credits instanceof HTMLDetailsElement) {
-		const summary = credits.querySelector('summary');
-		summary?.addEventListener('click', (e) => {
-			if (!credits.open || reduced.matches) return;
-			e.preventDefault();
-			if (credits.classList.contains('is-closing')) return;
-			credits.classList.add('is-closing');
-			let done = false;
-			const close = () => {
-				if (done) return;
-				done = true;
-				credits.open = false;
-				credits.classList.remove('is-closing');
-			};
-			credits.addEventListener('animationend', close, { once: true });
-			setTimeout(close, 300);
 		});
 	}
 </script>
